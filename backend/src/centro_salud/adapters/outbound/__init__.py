@@ -1,0 +1,1 @@
+"""Conexiones externas. Implementación pendiente."""
