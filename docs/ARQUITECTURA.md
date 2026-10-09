@@ -17,7 +17,7 @@ Este documento resume la arquitectura. La justificación, los contratos, los esc
 ```mermaid
 flowchart LR
     U[Recepción / Caja / Profesional / Administrador] --> W[Aplicación web: React JS]
-    W -->|API REST sobre HTTPS| A[Backend API: FastAPI]
+    W -->|API REST sobre HTTPS| A[Backend API: Spring Boot]
     A -->|Lee y persiste| D[(PostgreSQL)]
     A -->|Métricas, logs y trazas| O[SigNoz]
 ```
@@ -28,7 +28,7 @@ La interfaz React reemplaza a Flutter. Se elimina la CLI administrativa. Las fun
 
 ```mermaid
 flowchart LR
-    H[Adaptador HTTP: FastAPI] --> A[Casos de uso]
+    H[Adaptador HTTP: Spring Boot] --> A[Casos de uso]
     A --> D[Dominio]
     A --> P[Puertos de aplicación]
     I[Adaptadores de persistencia, identidad y telemetría] -->|Implementan| P

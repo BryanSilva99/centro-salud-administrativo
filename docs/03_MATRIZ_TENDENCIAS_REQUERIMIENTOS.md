@@ -59,7 +59,7 @@ Elegir funciones pequeñas de superposición de intervalos, validación de pago,
 
 Documentar mutaciones generadas, detectadas, supervivientes, equivalentes, excluidas y no ejecutables. Para una superviviente que altera el comportamiento, mejorar la prueba y repetir la comprobación. Si no hay supervivientes relevantes, presentar ese resultado sin fabricar defectos.
 
-El candidato inicial de ejecución es mutmut para Python; su compatibilidad se verificará al configurar el entorno. La selección del Radar corresponde a Mutation testing, no a mutmut. No se cambiará el backend para utilizar cargo-mutants.
+El candidato de ejecución es PIT para Java; su compatibilidad se verificará al configurar Spring Boot y las pruebas. La selección del Radar corresponde a Mutation testing, no a PIT. No se cambia el backend para utilizar cargo-mutants.
 
 **Guardar:** informe, versión de código, pruebas y explicación de resultados. **Responsabilidad:** dominio y pruebas. **Límite:** las mutaciones no demuestran por sí solas integridad transaccional ni ausencia de carreras.
 
@@ -119,6 +119,6 @@ Las seis tendencias deben aportar evidencia en P8, conforme a la meta del proyec
 
 ## 7. Referencias y decisiones pendientes de arquitectura
 
-La [evaluación](03_EVALUACION_DE_TENDENCIAS.md) conserva las alternativas comparadas. Fuentes de detalle: [Mutation testing](https://www.thoughtworks.com/radar/techniques/mutation-testing), [Axe-core](https://github.com/dequelabs/axe-core), [mutmut](https://mutmut.readthedocs.io/en/latest/) y [SigNoz](https://www.thoughtworks.com/radar/platforms/signoz).
+La [evaluación](03_EVALUACION_DE_TENDENCIAS.md) conserva las alternativas comparadas. Fuentes de detalle: [Mutation testing](https://www.thoughtworks.com/radar/techniques/mutation-testing), [Axe-core](https://github.com/dequelabs/axe-core), [PIT](https://pitest.org/) y [SigNoz](https://www.thoughtworks.com/radar/platforms/signoz).
 
 El ADD deberá concretar autenticación, límites de confianza, persistencia transaccional, instrumentación, estructura de componentes React y entorno de ejecución de pruebas. Estas decisiones no requieren nuevas funcionalidades de negocio para justificar las tendencias seleccionadas.

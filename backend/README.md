@@ -1,10 +1,25 @@
-# Backend
+# Backend · Java y Spring Boot
 
-Estructura prevista de un monolito modular con arquitectura hexagonal. Los archivos Python contienen únicamente documentación de paquetes: no hay funciones, clases, rutas ni inicialización de servicios.
+Monolito modular con arquitectura hexagonal. Estado: únicamente estructura.
 
-- `src/centro_salud/modules/`: módulos del negocio y casos de uso.
-- `src/centro_salud/adapters/`: entradas HTTP y conexiones externas.
-- `src/centro_salud/bootstrap/`: futura composición de dependencias.
-- `tests/`: ubicación prevista de verificaciones, sin pruebas implementadas.
+```text
+src/main/java/pe/centrosalud/
+  modules/                    Áreas del negocio
+    <modulo>/domain/          Reglas y entidades en Java puro
+    <modulo>/application/
+      usecases/               Casos de uso
+      ports/                  Contratos requeridos por los casos de uso
+  adapters/inbound/http/      Futuros controladores Spring
+  adapters/outbound/postgres/ Futura persistencia
+  adapters/outbound/telemetry/Futura observabilidad
+  bootstrap/                 Futura composición de dependencias
+src/main/resources/          Futura configuración
+src/test/java/pe/centrosalud/ Ubicación de pruebas futuras
+src/test/resources/          Recursos de pruebas futuros
+```
 
-FastAPI pertenecerá al adaptador HTTP; PostgreSQL al adaptador de persistencia. Ninguno debe importarse desde el dominio.
+Los archivos `package-info.java` solo declaran y describen paquetes. No hay clases, interfaces de negocio, endpoints, anotaciones de Spring, repositorios ni métodos implementados.
+
+Las versiones de Java y Spring Boot, la herramienta de construcción y sus dependencias se fijarán al autorizar la preparación ejecutable. No hay `pom.xml`, configuración Gradle ni aplicación de arranque en esta etapa.
+
+Los modelos del dominio no tendrán anotaciones JPA ni dependencias de Spring. Las futuras entidades de persistencia y su traducción pertenecerán al adaptador PostgreSQL. Las transacciones se coordinarán sin introducir dependencias del framework en el dominio.

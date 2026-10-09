@@ -12,7 +12,7 @@ Las diapositivas 6 y 7 definen los drivers como el subconjunto de requerimientos
 
 Tomar como entrada los documentos 01 y 02. La matriz 03 vincula tendencias y requerimientos, pero no sustituye la matriz de elementos y drivers. Agrupar funcionalidad por módulo o usuario y elegir requisitos representativos, evitando convertir cada RF en un driver separado.
 
-Distinguir restricciones del curso (nube, arquitectura permitida y seis tendencias) de decisiones del proyecto (FastAPI, PostgreSQL y monolito modular), que todavía necesitan justificación. La elección confirmada de tendencias condiciona el diseño, pero una marca no sustituye la descripción de la necesidad.
+Distinguir restricciones del curso (nube, arquitectura permitida y seis tendencias) de decisiones del proyecto (Spring Boot, PostgreSQL y monolito modular), que todavía necesitan justificación. La elección confirmada de tendencias condiciona el diseño, pero una marca no sustituye la descripción de la necesidad.
 
 ## Escenarios de atributos de calidad
 

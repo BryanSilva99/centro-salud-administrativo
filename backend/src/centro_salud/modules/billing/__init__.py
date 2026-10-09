@@ -1,1 +1,0 @@
-"""Caja. Implementación pendiente."""

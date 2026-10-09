@@ -33,7 +33,7 @@ La prioridad indica influencia en esta iteración, no permiso para omitir un req
 | D-09 | Rastrear operaciones y diagnosticar fallos. Auditabilidad y observabilidad. | RF-28; RN-17; RNF-05 | Alta | Separar auditoría transaccional de negocio y telemetría técnica correlacionada. |
 | D-10 | Cumplir restricciones de arquitectura, nube y tendencias. Restricción de diseño. | Lineamientos del proyecto; matriz de tendencias; RNF-06 | Obligatoria | Arquitectura hexagonal, despliegue preparado para nube y evidencia de las seis tendencias en su función correspondiente. |
 
-FastAPI, PostgreSQL y el monolito modular son decisiones del proyecto, no tecnologías impuestas por el profesor. React y SigNoz forman parte de la selección de tendencias acordada.
+Spring Boot, PostgreSQL y el monolito modular son decisiones del proyecto, no tecnologías impuestas por el profesor. React y SigNoz forman parte de la selección de tendencias acordada.
 
 ## 4. Cuatro escenarios de atributos de calidad
 
@@ -126,8 +126,8 @@ Reportes y auditoría comparten el agrupamiento E-06 para esta vista, pero son c
 
 | Decisión | Elección y motivo | Consecuencia o límite |
 |---|---|---|
-| DA-01 · Estructura de ejecución | Monolito modular: una API FastAPI, módulos con contratos explícitos y PostgreSQL compartido. Facilita transacciones que abarcan cita, caja y auditoría, y reduce complejidad operativa. | Los módulos comparten despliegue y recursos. Se prohíben escrituras directas en tablas de otro módulo; extraer servicios exigiría revisar contratos y consistencia. |
-| DA-02 · Organización interna | Arquitectura hexagonal: dominio, casos de uso, puertos y adaptadores. El dominio no importa React, FastAPI ni el controlador de PostgreSQL. | Requiere límites verificables. No se crearán abstracciones duplicadas sin necesidad. |
+| DA-01 · Estructura de ejecución | Monolito modular: una API Spring Boot, módulos con contratos explícitos y PostgreSQL compartido. Facilita transacciones que abarcan cita, caja y auditoría, y reduce complejidad operativa. | Los módulos comparten despliegue y recursos. Se prohíben escrituras directas en tablas de otro módulo; extraer servicios exigiría revisar contratos y consistencia. |
+| DA-02 · Organización interna | Arquitectura hexagonal: dominio, casos de uso, puertos y adaptadores. El dominio no importa React, Spring Boot ni el controlador de PostgreSQL. | Requiere límites verificables. No se crearán abstracciones duplicadas sin necesidad. |
 | DA-03 · Acceso | Sesiones persistidas y revocables, con cookie segura de sesión; backend autoriza acción y recurso en cada solicitud. Contraseñas con hash adaptativo y sal; nunca reversibles. | Validar origen y protección CSRF en operaciones de escritura. La cookie será HttpOnly y Secure en despliegue HTTPS. Algoritmo, parámetros y configuración exacta se concretan antes de implementar identidad. |
 | DA-04 · Consistencia | Una transacción por operación de negocio; reglas en dominio y protección concurrente en persistencia. Auditoría de una modificación confirmada se guarda en la misma transacción. | Fallar la auditoría obligatoria revierte la escritura. Los bloqueos se toman en orden consistente y duran solo lo necesario; no se realizan llamadas externas dentro de ellos. |
 | DA-05 · Dinero e historial | Importes PEN con dos decimales, movimientos originales conservados y anulaciones mediante compensación vinculada. Cierre de caja persistido e inmutable. | No se usa punto flotante para dinero. Los reportes diferencian cargos, recaudación, saldo y fondo inicial. Corregir una operación no borra su historia. |
@@ -153,7 +153,7 @@ Los nombres siguientes son contratos de diseño; las rutas HTTP definitivas se p
 
 | Interfaz | Consumidor y proveedor | Operaciones y datos esenciales | Reglas del contrato |
 |---|---|---|---|
-| I-01 · API de aplicación | React → adaptador HTTP FastAPI | Solicitudes estructuradas JSON; identificadores, datos de formulario y versión del registro cuando corresponda. Respuestas con resultado, identificador y versión actual. | HTTPS, validación de entrada y autenticación salvo inicio/restablecimiento permitido. Errores con código estable, mensaje comprensible y correlación; sin trazas internas. |
+| I-01 · API de aplicación | React → adaptador HTTP Spring Boot | Solicitudes estructuradas JSON; identificadores, datos de formulario y versión del registro cuando corresponda. Respuestas con resultado, identificador y versión actual. | HTTPS, validación de entrada y autenticación salvo inicio/restablecimiento permitido. Errores con código estable, mensaje comprensible y correlación; sin trazas internas. |
 | I-02 · Identidad y políticas | React y casos de uso → identidad | Iniciar/cerrar sesión, cambiar/restablecer contraseña, gestionar cuentas; `autorizar(actor, acción, recurso)`. | Obtener el actor desde la sesión, nunca desde un rol enviado por el navegador. Inactividad de 30 minutos y duración absoluta de 8 horas según RN-02; consultas automáticas no renuevan actividad. Desactivar o restablecer invalida sesiones. |
 | I-03 · Datos maestros y disponibilidad | React y citas → gestión administrativa | Crear/actualizar paciente; consultar servicio, profesional y consultorio; consultar/proteger disponibilidad; registrar bloqueos. Datos: ID, versión, período, compatibilidades, duración y tarifa vigente. | Entidades activas y compatibles; controlar documento único y actualizaciones perdidas. La disponibilidad consultada es informativa hasta confirmar la transacción de reserva. |
 | I-04 · Citas y atención | React y caja → citas | Reservar, reprogramar, cancelar, registrar llegada/ausencia, iniciar/finalizar; consultar resumen cobrable. Reserva recibe paciente, servicio, profesional, consultorio e inicio; calcula fin y copia tarifa/duración en servidor. | Aplicar RN-06 a RN-12 y autorización por recurso. Cambio de servicio requiere nueva cita. Caja recibe identidad y condiciones de cobro, no acceso irrestricto a datos del paciente. |
@@ -178,7 +178,7 @@ Los nombres siguientes son contratos de diseño; las rutas HTTP definitivas se p
 ```mermaid
 flowchart LR
     U[Usuarios internos] -->|HTTPS| W[Web React]
-    W -->|HTTPS / JSON| A[API FastAPI: monolito modular]
+    W -->|HTTPS / JSON| A[API Spring Boot: monolito modular]
     A -->|Conexión privada autenticada| D[(PostgreSQL)]
     A -.->|Telemetría asíncrona| O[SigNoz]
     D -->|Proceso de copia diario| B[(Almacenamiento separado de copias)]
@@ -213,7 +213,7 @@ Todos los casos de uso verifican identidad y políticas y utilizan puertos de pe
 
 ```mermaid
 flowchart LR
-    H[Adaptador HTTP / FastAPI] --> U[Casos de uso]
+    H[Adaptador HTTP / Spring Boot] --> U[Casos de uso]
     U --> D[Dominio: entidades y reglas]
     U --> P[Puertos de aplicación]
     A[Adaptadores PostgreSQL y telemetría] -->|Implementan| P
@@ -297,6 +297,6 @@ Los asuntos abiertos tienen límites explícitos y no invalidan la descomposici�
 
 ## 12. Cierre de la primera iteración
 
-Se completa la primera iteración **a nivel de diseño**: entradas revisadas, objetivo definido, drivers priorizados, cuatro escenarios medibles, elementos seleccionados, conceptos justificados, responsabilidades e interfaces asignadas, vistas elaboradas y cobertura evaluada. La decisión central es un monolito modular con arquitectura hexagonal, interfaz React, API FastAPI, persistencia PostgreSQL y observabilidad SigNoz.
+Se completa la primera iteración **a nivel de diseño**: entradas revisadas, objetivo definido, drivers priorizados, cuatro escenarios medibles, elementos seleccionados, conceptos justificados, responsabilidades e interfaces asignadas, vistas elaboradas y cobertura evaluada. La decisión central es un monolito modular con arquitectura hexagonal, interfaz React, API Spring Boot, persistencia PostgreSQL y observabilidad SigNoz.
 
 La siguiente iteración debe refinar el flujo de reserva y admisión —modelo de datos, estados, contratos y concurrencia— y el núcleo transversal de identidad, transacciones y auditoría que también utilizará caja. El objetivo es convertir el diseño en un primer recorrido implementable y verificable, conservando caja y el resto de requisitos P8 en la planificación. La presentación parcial requerirá además software en ejecución y evidencias; el documento ADD por sí solo no completa esa entrega.

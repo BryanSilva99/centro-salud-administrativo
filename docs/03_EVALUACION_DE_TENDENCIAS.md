@@ -15,7 +15,7 @@ Se evalúa cada opción según:
 1. Necesidad existente que atiende, evitando agregar funciones solo para justificarla.
 2. Relación con requerimientos funcionales, calidad o proceso de desarrollo.
 3. Evidencia concreta que podrá mostrarse en la presentación.
-4. Complejidad razonable para React, FastAPI y PostgreSQL y para trabajo individual o grupal.
+4. Complejidad razonable para React, Spring Boot y PostgreSQL y para trabajo individual o grupal.
 5. Aporte distinto de las otras tendencias seleccionadas.
 
 Una tendencia no necesita generar una pantalla para ser útil. Las pruebas, seguridad y observabilidad tienen valor verificable. Tampoco basta instalar una herramienta o nombrarla en un requisito para demostrar aporte.
@@ -66,7 +66,7 @@ La técnica introduce alteraciones pequeñas en una copia del código y ejecuta 
 
 **Evidencia:** código y pruebas de referencia, informe de mutaciones detectadas y supervivientes, análisis de los casos restantes y mejora de una prueba insuficiente. No exigir un porcentaje universal sin revisar mutaciones equivalentes, exclusiones y errores de ejecución. No reemplaza las pruebas de concurrencia ni las transacciones de base de datos.
 
-**Viabilidad:** mutmut es un candidato para el dominio Python, con ejecución POSIX según su documentación [4]. Antes de fijar versiones, hacer una prueba acotada de compatibilidad con Python y pytest elegidos. No cambiar el backend a Rust para usar cargo-mutants: la tendencia seleccionada es la técnica, no esa herramienta. Limitar inicialmente las mutaciones al dominio para contener tiempos y evitar ruido de infraestructura.
+**Viabilidad:** PIT es el candidato para pruebas de mutación del dominio Java [4]. Su integración y compatibilidad con el entorno de pruebas se verificarán cuando se autorice implementar. La tendencia seleccionada es Mutation testing; PIT es una herramienta auxiliar y no ocupa una séptima posición en el Radar. Limitar inicialmente las mutaciones al dominio, evitando ruido de infraestructura.
 
 ### 4.3 OpenAI Codex: desarrollo asistido verificable
 
@@ -112,7 +112,7 @@ Construir formularios y componentes reutilizables para pacientes, agenda, admisi
 | Techniques | Passkeys (4, Adopt) | Aporta a autenticación, pero cambia registro de credenciales, recuperación y parte de RF-01/RF-03. No se añade esa complejidad sin una necesidad de autenticación más específica. |
 | Techniques | Semantic layer (14, Trial) | Potencialmente útil para indicadores; el volumen de reportes actual no justifica introducir una capa adicional como una de las seis prioridades. |
 | Tools | Dev Containers (73, Trial) | Alternativa válida si se prioriza reproducibilidad sobre accesibilidad automatizada. Puede mantenerse en el proyecto sin ocupar una de las seis posiciones. |
-| Tools | cargo-mutants (71, Trial) | No corresponde al backend Python. No se cambia el lenguaje del negocio para acomodar una herramienta de pruebas. |
+| Tools | cargo-mutants (71, Trial) | No corresponde al backend Java. No se cambia el lenguaje del negocio para acomodar una herramienta de pruebas. |
 | Tools | Figma Make (74, Trial) | Útil para prototipos; aporta menos evidencia sobre el comportamiento de la aplicación terminada que Axe-core en este alcance. |
 | Platforms | Apache APISIX (43, Trial) | Gateway útil para políticas de tráfico y acceso [8]. Con una API y sin integraciones externas previstas, añade una pieza cuya necesidad es menor que observar las operaciones. No sustituye permisos por paciente, cita o pago. |
 | Platforms | ClickStack (51, Assess) | Alternativa de observabilidad; no se identifica una necesidad diferencial que justifique cambiar SigNoz. |
@@ -137,7 +137,7 @@ Acciones incorporadas tras adoptar la selección:
 1. [Thoughtworks, Technology Radar Vol. 34, abril de 2026, PDF oficial](https://www.thoughtworks.com/content/dam/thoughtworks/documents/radar/2026/04/tr_technology_radar_vol_34_en.pdf). Categorías, números y anillos: páginas impresas 12 y 13.
 2. [Thoughtworks: Mutation testing](https://www.thoughtworks.com/radar/techniques/mutation-testing).
 3. [Thoughtworks: Axe-core](https://www.thoughtworks.com/radar/tools/axe-core).
-4. [Documentación de mutmut](https://mutmut.readthedocs.io/en/latest/).
+4. [Documentación de PIT](https://pitest.org/).
 5. [Repositorio oficial de Axe-core: alcance y revisión manual](https://github.com/dequelabs/axe-core).
 6. [Thoughtworks: SigNoz](https://www.thoughtworks.com/radar/platforms/signoz).
 7. [Thoughtworks: Browser-based component testing](https://www.thoughtworks.com/radar/techniques/browser-based-component-testing).

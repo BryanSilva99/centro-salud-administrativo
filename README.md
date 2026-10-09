@@ -18,7 +18,7 @@ La guía para revisar el proyecto es [Organización del código](docs/ORGANIZACI
 ## Decisiones de arquitectura
 
 - Interfaz prevista: React.
-- API prevista: FastAPI, dentro de un único backend modular.
+- API prevista: Java con Spring Boot, dentro de un único backend modular.
 - Persistencia prevista: PostgreSQL mediante adaptadores.
 - Observabilidad prevista: SigNoz; separada de la auditoría del negocio.
 - Reglas y casos de uso independientes de las pantallas y de la base de datos.

@@ -124,7 +124,7 @@ La mejora de tiempos y productividad se evaluará mediante mediciones. Se distin
 
 ## 10. Orientación tecnológica
 
-La base tecnológica definida es React para la interfaz web, FastAPI para el backend y PostgreSQL para persistencia, con SigNoz para observabilidad. Se plantea arquitectura hexagonal y diseño nativo para nube.
+La base tecnológica definida es React para la interfaz web, Spring Boot para el backend y PostgreSQL para persistencia, con SigNoz para observabilidad. Se plantea arquitectura hexagonal y diseño nativo para nube.
 
 Las tendencias seleccionadas son Zero Trust Architecture, Mutation testing, OpenAI Codex, Axe-core, SigNoz y React JS. Su aplicación prevista y evidencia se definen en la [matriz de tendencias frente a requerimientos](03_MATRIZ_TENDENCIAS_REQUERIMIENTOS.md). Las decisiones técnicas se desarrollarán en el ADD.
 

@@ -44,5 +44,5 @@ Incluye caja y auditoría desde el núcleo. Reportes detallados y exportación C
 - **React JS** (Lenguajes y frameworks): Interfaz interna para pacientes, agenda, admisión, caja y reportes.
 
 ## Base tecnológica
-React + FastAPI + PostgreSQL + SigNoz. Arquitectura hexagonal y diseño nativo para nube.
+React + Spring Boot + PostgreSQL + SigNoz. Arquitectura hexagonal y diseño nativo para nube.
 Selección confirmada; aplicación pendiente. Véanse [contexto](01_CONTEXTO_Y_PROBLEMA.md), [requerimientos](02_REQUERIMIENTOS_DEL_SISTEMA.md) y [matriz](03_MATRIZ_TENDENCIAS_REQUERIMIENTOS.md).

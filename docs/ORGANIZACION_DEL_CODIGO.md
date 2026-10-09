@@ -2,11 +2,13 @@
 
 Estado: estructura preparada para revisión; ninguna función implementada.
 
+Backend en Java con Spring Boot y frontend en React, según la elección del usuario. El dominio se mantendrá independiente de Spring y JPA.
+
 ## Vista general
 
 ```text
 backend/
-  src/centro_salud/
+  src/main/java/pe/centrosalud/
     modules/
       identity/             Identidad y acceso
       administration/       Pacientes y recursos del centro
@@ -15,11 +17,11 @@ backend/
       reporting/            Consultas e indicadores
       audit/                Auditoría del negocio
     adapters/
-      inbound/http/         Entrada HTTP prevista con FastAPI
+      inbound/http/         Entrada HTTP prevista con Spring Boot
       outbound/postgres/    Persistencia y transacciones
       outbound/telemetry/   Instrumentación técnica
     bootstrap/              Conexión de contratos y adaptadores
-  tests/
+  src/test/java/pe/centrosalud/
     unit/
     integration/
     architecture/
@@ -39,12 +41,12 @@ docs/
 
 ## Organización dentro de cada módulo
 
-Cada módulo contiene `domain/`, `application/use_cases/` y `application/ports/`.
+Cada módulo contiene `domain/`, `application/usecases/` y `application/ports/`.
 
 | Ubicación | Qué contendrá | Qué no debe contener |
 |---|---|---|
-| domain | Entidades, estados y reglas del módulo | FastAPI, SQL, React, solicitudes HTTP |
-| application/use_cases | Coordinación de autorización, reglas, transacción y auditoría | Detalles del framework o del controlador de base de datos |
+| domain | Entidades, estados y reglas del módulo | Spring Boot, SQL, React, solicitudes HTTP |
+| application/usecases | Coordinación de autorización, reglas, transacción y auditoría | Detalles del framework o del controlador de base de datos |
 | application/ports | Contratos necesarios para ejecutar los casos de uso | Implementaciones concretas PostgreSQL o SigNoz |
 | adapters/inbound/http | Rutas, esquemas de entrada y traducción de errores | Reglas de negocio duplicadas |
 | adapters/outbound/postgres | Repositorios, restricciones y unidad de trabajo | Decisiones de interfaz o permisos basados en botones |
@@ -85,6 +87,6 @@ Una reserva entrará por HTTP, invocará un caso de uso de `appointments`, compr
 
 ## Estado y límite actual
 
-Los archivos `__init__.py` solo identifican paquetes y contienen una descripción. Los `.gitkeep` permiten conservar carpetas vacías en Git. No hay clases, funciones, endpoints, modelos de tablas, componentes React, datos de demostración ni pruebas ejecutables.
+Los archivos `package-info.java` solo declaran paquetes Java y documentan su responsabilidad. No contienen clases, métodos ni anotaciones de Spring. Los `.gitkeep` permiten conservar carpetas vacías en Git. No hay clases, funciones, endpoints, modelos de tablas, componentes React, datos de demostración ni pruebas ejecutables.
 
 Antes de comenzar la implementación, el usuario decidirá qué parte desarrollar. No se presupone autorización por la fecha de entrega.
