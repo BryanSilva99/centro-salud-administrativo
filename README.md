@@ -1,6 +1,6 @@
 # Sistema administrativo para un centro de salud
 
-**Estado: esqueleto arquitectónico. No contiene funcionalidades implementadas.**
+**Estado: arquitectura y base técnica preparadas. No contiene funcionalidades de negocio implementadas.**
 
 Sistema interno para gestionar pacientes, recursos, citas, admisión, seguimiento administrativo de atención, caja, reportes y auditoría. Se contemplan dos grupos de usuarios y cuatro roles: recepción/admisión, caja, administrador y profesional de salud.
 
@@ -23,7 +23,7 @@ La guía para revisar el proyecto es [Organización del código](docs/ORGANIZACI
 - Observabilidad prevista: SigNoz; separada de la auditoría del negocio.
 - Reglas y casos de uso independientes de las pantallas y de la base de datos.
 
-Estas decisiones todavía no están implementadas. No hay dependencias instalables declaradas, comandos de arranque, servidores ni pruebas ejecutables en este repositorio.
+Las dependencias y puntos de arranque están preparados. Consulta [Inicio del desarrollo](docs/INICIO_DESARROLLO.md) para instalar, compilar y configurar el entorno. La autenticación y las funcionalidades siguen pendientes.
 
 ## Documentación
 

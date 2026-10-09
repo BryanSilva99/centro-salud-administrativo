@@ -1,6 +1,6 @@
 # Organización del código
 
-Estado: estructura preparada para revisión; ninguna función implementada.
+Estado: estructura y configuración técnica preparadas; ninguna funcionalidad de negocio implementada.
 
 Backend en Java con Spring Boot y frontend en React, según la elección del usuario. El dominio se mantendrá independiente de Spring y JPA.
 
@@ -87,6 +87,6 @@ Una reserva entrará por HTTP, invocará un caso de uso de `appointments`, compr
 
 ## Estado y límite actual
 
-Los archivos `package-info.java` solo declaran paquetes Java y documentan su responsabilidad. No contienen clases, métodos ni anotaciones de Spring. Los `.gitkeep` permiten conservar carpetas vacías en Git. No hay clases, funciones, endpoints, modelos de tablas, componentes React, datos de demostración ni pruebas ejecutables.
+Los archivos `package-info.java` solo declaran paquetes Java y documentan su responsabilidad. No contienen clases, métodos ni anotaciones de Spring. Los `.gitkeep` permiten conservar carpetas vacías en Git. Se añadieron el arranque técnico de Spring Boot, una configuración de acceso cerrado y una entrada React vacía. No hay endpoints, modelos de tablas, pantallas, datos de demostración ni pruebas funcionales. Dependencias y comandos: [Inicio del desarrollo](INICIO_DESARROLLO.md).
 
 Antes de comenzar la implementación, el usuario decidirá qué parte desarrollar. No se presupone autorización por la fecha de entrega.

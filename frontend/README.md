@@ -1,6 +1,6 @@
 # Frontend
 
-Estructura prevista para React. No hay componentes, pantallas ni llamadas HTTP implementados.
+Base React, Vite y TypeScript preparada. La entrada es vacía: no hay pantallas ni llamadas HTTP implementadas. Ver [guía de preparación](../docs/INICIO_DESARROLLO.md).
 
 - `src/app/`: futura composición, navegación y proveedores.
 - `src/features/`: organización por área funcional.
