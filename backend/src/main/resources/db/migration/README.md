@@ -9,3 +9,7 @@ Flyway aplica y registra las migraciones al arrancar. Hibernate usa `ddl-auto=va
 `V3__credenciales_cuenta.sql` añade un hash opcional con formato validado. Las cuentas sin hash no pueden superar la verificación. No añade contraseñas ni datos de demostración.
 
 `V4__control_acceso.sql` añade versión de acceso con revocación por cambio de hash/estado y almacenamiento del límite de intentos. No crea cuentas de demostración.
+
+`V5__roles_cuenta.sql` añade roles por cuenta sin asignaciones automáticas. Sus cambios se leen en cada solicitud; no se confía en los roles antiguos guardados en la sesión.
+
+V5–V6 añaden roles, versión de edición, bloqueo y auditoría de roles. V7 añade auditoría de cuentas e incrementa la versión de edición al cambiar identificador o estado. No se modifican migraciones aplicadas.

@@ -1,7 +1,8 @@
 package pe.centrosalud.adapters.inbound.http.identity;
 
 import java.time.Clock;
-import java.util.List;
+import pe.centrosalud.modules.identity.application.ports.ConsultarRoles;
+import org.springframework.security.core.Authentication;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
@@ -27,25 +28,27 @@ public class AuthController {
     private final SecurityContextRepository contexts;
     private final SessionAuthenticationStrategy sessionStrategy;
     private final Clock clock;
+    private final ConsultarRoles roles;
 
     public AuthController(IniciarSesion iniciar, ConsultarCuenta consultar, SecurityContextRepository contexts,
-                          SessionAuthenticationStrategy sessionStrategy, Clock clock) {
+                          SessionAuthenticationStrategy sessionStrategy, Clock clock, ConsultarRoles roles) {
         this.iniciar = iniciar;
         this.consultar = consultar;
         this.contexts = contexts;
         this.sessionStrategy = sessionStrategy;
         this.clock = clock;
+        this.roles = roles;
     }
 
     @GetMapping("/csrf")
     public TokenCsrf csrf(CsrfToken token) { return new TokenCsrf(token.getHeaderName(), token.getToken()); }
 
     @PostMapping("/login")
-    public CuentaController.CuentaResponse login(@Valid @RequestBody LoginRequest body,
+    public SesionResponse login(@Valid @RequestBody LoginRequest body,
                                                 HttpServletRequest request, HttpServletResponse response) {
         var acceso = iniciar.ejecutar(body.getIdentificador(), body.getContrasena());
         var principal = new PrincipalSesion(acceso.cuenta().id(), acceso.versionAcceso());
-        var authentication = UsernamePasswordAuthenticationToken.authenticated(principal, null, List.of());
+        var authentication = UsernamePasswordAuthenticationToken.authenticated(principal, null, AutorizacionSesion.authorities(roles.deCuenta(principal.id())));
         sessionStrategy.onAuthentication(authentication, request, response);
         var session = request.getSession(true);
         session.setMaxInactiveInterval((int) VigenciaSesion.INACTIVIDAD.toSeconds());
@@ -56,13 +59,13 @@ public class AuthController {
         SecurityContextHolder.setContext(context);
         contexts.saveContext(context, request, response);
         var cuenta = acceso.cuenta();
-        return new CuentaController.CuentaResponse(cuenta.id(), cuenta.identificador(), cuenta.activa());
+        return SesionResponse.de(cuenta, authentication);
     }
 
     @GetMapping("/me")
-    public CuentaController.CuentaResponse me(@AuthenticationPrincipal PrincipalSesion principal) {
+    public SesionResponse me(@AuthenticationPrincipal PrincipalSesion principal, Authentication authentication) {
         var cuenta = consultar.ejecutar(principal.id());
-        return new CuentaController.CuentaResponse(cuenta.id(), cuenta.identificador(), cuenta.activa());
+        return SesionResponse.de(cuenta, authentication);
     }
 
     /** El futuro frontend invocará esto por interacción, nunca por un temporizador automático. */

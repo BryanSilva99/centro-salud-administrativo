@@ -322,3 +322,10 @@ Se implementaron sesiones JDBC con cookie HttpOnly y SameSite Strict, Secure por
 El control de intentos persiste una ventana móvil en PostgreSQL con bloqueo por identificador: cinco fallos en 15 minutos producen bloqueo de 15 minutos, sin revelar su causa. Los fallos se confirman en una transacción independiente. Una versión de acceso incrementada ante cambio de estado o hash revoca sesiones anteriores; cada solicitud autenticada valida tiempos, estado y versión.
 
 Se verificaron 37 pruebas, incluidas HTTP real, concurrencia de diez intentos y revocación. Los roles, autorización por recurso, recuperación de acceso y auditoría administrativa aún no están implementados. Las rutas de negocio permanecen denegadas. Detalles y límites operativos: [Login, paso 3](LOGIN_PASO_3.md).
+
+
+### Cierre de identidad de sesión y autorización del login
+
+V5 incorpora REC, CAJ, ADM y PRO combinables, sin herencia implícita. La autorización de sesión se reconstruye desde PostgreSQL en cada solicitud. El permiso CUENTAS_CONSULTAR habilita únicamente a ADM la consulta administrativa existente; los endpoints no declarados permanecen denegados. Las restricciones de recurso de otros módulos deberán implementarse con sus casos de uso. El contrato de login y `/me` publica roles y permisos actuales sin secretos.
+
+Validación: 42 pruebas backend, 12 frontend, compilación y prueba de las 16 combinaciones de roles. Alcance y evidencia: [Login completo](LOGIN_COMPLETO.md). No acredita implementación de CRUD de usuarios/roles ni recuperación de acceso.

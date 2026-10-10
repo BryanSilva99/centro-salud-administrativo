@@ -1,6 +1,6 @@
 # Sistema administrativo para un centro de salud
 
-**Estado: base técnica, consulta de Cuenta y verificación interna de credenciales implementadas. Login, consulta de sesión y logout están implementados; las rutas de negocio siguen cerradas hasta implementar permisos.**
+**Estado: base técnica, consulta de Cuenta y verificación interna de credenciales implementadas. Login, consulta de sesión y logout están implementados; la consulta administrativa de cuentas exige ADM; las demás rutas de negocio siguen cerradas.**
 
 Sistema interno para gestionar pacientes, recursos, citas, admisión, seguimiento administrativo de atención, caja, reportes y auditoría. Se contemplan dos grupos de usuarios y cuatro roles: recepción/admisión, caja, administrador y profesional de salud.
 
@@ -23,7 +23,7 @@ La guía para revisar el proyecto es [Organización del código](docs/ORGANIZACI
 - Observabilidad prevista: SigNoz; separada de la auditoría del negocio.
 - Reglas y casos de uso independientes de las pantallas y de la base de datos.
 
-Las dependencias y puntos de arranque están preparados. Consulta [Inicio del desarrollo](docs/INICIO_DESARROLLO.md) para instalar, compilar y configurar el entorno. La autenticación HTTP por sesión está implementada; El formulario React ya está conectado al login. Roles y el resto de funcionalidades siguen pendientes. Ver [recorrido de Cuenta](docs/CUENTA_PASO_1.md).
+Las dependencias y puntos de arranque están preparados. Consulta [Inicio del desarrollo](docs/INICIO_DESARROLLO.md) para instalar, compilar y configurar el entorno. La autenticación HTTP por sesión está implementada; El formulario React ya está conectado al login. Los roles de sesión ya se aplican. La gestión de usuarios/roles y el resto de funcionalidades siguen pendientes. Ver [recorrido de Cuenta](docs/CUENTA_PASO_1.md).
 
 ## Documentación
 
@@ -38,3 +38,11 @@ Se excluyen los PDF del profesor, respaldos locales, credenciales y datos de dem
 Paso actual de identidad: [Verificación de credenciales](docs/CREDENCIALES_PASO_2.md). El paso posterior de sesiones está disponible en [Login con sesión persistida](docs/LOGIN_PASO_3.md).
 
 Interfaz y cuenta local de prueba: [Login React, paso 4](docs/LOGIN_PASO_4_REACT.md).
+
+Funcionalidad de login y autorización de sesión: [entrega y criterios verificados](docs/LOGIN_COMPLETO.md).
+
+Administración de roles implementada: [uso, arquitectura y validación](docs/ROLES_ADMINISTRACION.md).
+
+Gestión de cuentas: creación, edición y activación/desactivación disponibles para ADM. [Alcance real, explicación y pruebas](docs/GESTION_CUENTAS.md).
+
+RF-02 incluye el vínculo único con una ficha profesional y su auditoría. Ver [flujo y puntos de modificación](docs/GESTION_CUENTAS.md).

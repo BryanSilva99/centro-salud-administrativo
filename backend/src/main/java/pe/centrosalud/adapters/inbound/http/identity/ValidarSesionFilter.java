@@ -3,6 +3,8 @@ package pe.centrosalud.adapters.inbound.http.identity;
 import java.io.IOException;
 import java.time.Clock;
 import java.time.Instant;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import pe.centrosalud.modules.identity.application.ports.ConsultarRoles;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -18,9 +20,11 @@ public final class ValidarSesionFilter extends OncePerRequestFilter {
     public static final String ACTIVIDAD = "IDENTITY_ACTIVIDAD";
     private final ConsultarEstadoAcceso estados;
     private final Clock clock;
+    private final ConsultarRoles roles;
 
-    public ValidarSesionFilter(ConsultarEstadoAcceso estados, Clock clock) {
+    public ValidarSesionFilter(ConsultarEstadoAcceso estados, ConsultarRoles roles, Clock clock) {
         this.estados = estados;
+        this.roles = roles;
         this.clock = clock;
     }
 
@@ -36,6 +40,14 @@ public final class ValidarSesionFilter extends OncePerRequestFilter {
                     && VigenciaSesion.vigente(Instant.ofEpochMilli(inicio), Instant.ofEpochMilli(actividad), clock.instant())) {
                 valida = estados.buscarEstado(principal.id())
                         .filter(e -> e.activa() && e.version() == principal.versionAcceso()).isPresent();
+                if (valida) {
+                    // No confiar en los roles serializados al hacer login: leer los vigentes.
+                    var actual = UsernamePasswordAuthenticationToken.authenticated(principal, null,
+                            AutorizacionSesion.authorities(roles.deCuenta(principal.id())));
+                    var context = SecurityContextHolder.createEmptyContext();
+                    context.setAuthentication(actual);
+                    SecurityContextHolder.setContext(context);
+                }
             }
             if (!valida) {
                 if (session != null) session.invalidate();

@@ -17,6 +17,7 @@ export function App() {
     }).catch(() => { if (!controller.signal.aborted) setState({ kind: 'unavailable' }); });
     return () => controller.abort();
   }, [retry]);
+  const refresh = useCallback((cuenta: Cuenta) => setState({ kind: 'authenticated', cuenta }), []);
   const exit = useCallback((notice: string) => setState({ kind: 'anonymous', notice }), []);
 
   return <div className="app-shell">
@@ -33,7 +34,7 @@ export function App() {
         {state.kind === 'loading' && <section className="access-card"><h1>Comprobando sesión</h1><p role="status">Un momento, por favor…</p></section>}
         {state.kind === 'unavailable' && <section className="access-card"><h1>No pudimos conectar</h1><p className="intro" role="alert">Comprueba tu conexión e inténtalo nuevamente.</p><button className="primary-button" onClick={() => setRetry(value => value + 1)}>Volver a intentar</button></section>}
         {state.kind === 'anonymous' && <LoginForm notice={state.notice} onLogin={cuenta => setState({ kind: 'authenticated', cuenta })} />}
-        {state.kind === 'authenticated' && <SessionView cuenta={state.cuenta} onExit={exit} />}
+        {state.kind === 'authenticated' && <SessionView cuenta={state.cuenta} onExit={exit} onRefresh={refresh} />}
       </div>
     </main>
     <footer>Centro de Salud <span aria-hidden="true">·</span> Sistema de gestión administrativa</footer>

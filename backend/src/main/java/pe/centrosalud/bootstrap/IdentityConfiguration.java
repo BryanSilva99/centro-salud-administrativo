@@ -11,6 +11,17 @@ import pe.centrosalud.modules.identity.application.ports.HashContrasenas;
 @Configuration
 public class IdentityConfiguration {
     @Bean
+    pe.centrosalud.modules.identity.application.usecases.GestionarCuentas gestionarCuentas(
+            pe.centrosalud.modules.identity.application.ports.UnidadAcceso unidad, HashContrasenas hashes, pe.centrosalud.modules.administration.application.ports.FichasProfesionales fichas) {
+        return new pe.centrosalud.modules.identity.application.usecases.GestionarCuentas(unidad, hashes, fichas);
+    }
+
+    @Bean
+    pe.centrosalud.modules.identity.application.roles.CambiarRoles cambiarRoles(pe.centrosalud.modules.identity.application.ports.UnidadAcceso unidad) {
+        return new pe.centrosalud.modules.identity.application.roles.CambiarRoles(unidad);
+    }
+
+    @Bean
     java.time.Clock clock() { return java.time.Clock.systemUTC(); }
 
     @Bean

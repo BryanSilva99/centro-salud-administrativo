@@ -190,4 +190,67 @@ class SesionHttpTest {
         assertThrows(CredencialesInvalidas.class, () -> intentos.verificar(nombre,
                 () -> new AccesoVerificado(new Cuenta(id, nombre, true), 0)));
     }
+    private void asignarRoles(String... roles) {
+        jdbc.update("DELETE FROM cuenta_roles WHERE cuenta_id = ?", id);
+        for (String rol : roles) jdbc.update("INSERT INTO cuenta_roles(cuenta_id, rol) VALUES (?, ?)", id, rol);
+    }
+
+    @Test void lasDieciseisCombinacionesRespetanLaAutorizacionSinHerenciaImplicita() throws Exception {
+        String[] catalogo = {"REC", "CAJ", "ADM", "PRO"};
+        for (int mascara = 0; mascara < 16; mascara++) {
+            List<String> seleccion = new ArrayList<>();
+            for (int bit = 0; bit < catalogo.length; bit++) if ((mascara & (1 << bit)) != 0) seleccion.add(catalogo[bit]);
+            asignarRoles(seleccion.toArray(String[]::new));
+            renovarCsrf();
+            var acceso = login(nombre, clave);
+            assertEquals(200, acceso.statusCode());
+            assertEquals(seleccion.stream().sorted().toList(), read(acceso.body(), "$.roles"));
+            boolean admin = seleccion.contains("ADM");
+            assertEquals(admin ? List.of("CUENTAS_CONSULTAR", "CUENTAS_GESTIONAR", "ROLES_GESTIONAR") : List.of(), read(acceso.body(), "$.permisos"));
+            assertEquals(admin ? 200 : 403, enviar("GET", "/api/cuentas/" + id, null, false).statusCode());
+            assertEquals(admin ? 404 : 403, enviar("GET", "/api/cuentas/" + UUID.randomUUID(), null, false).statusCode());
+            assertEquals(403, enviar("GET", "/api/pacientes", null, false).statusCode());
+        }
+    }
+
+    @Test void losCambiosDeRolSeAplicanEnLaSiguienteSolicitudConLaMismaCookie() throws Exception {
+        asignarRoles("ADM");
+        assertEquals(200, login(nombre, clave).statusCode());
+        String original = cookie();
+        assertEquals(200, enviar("GET", "/api/cuentas/" + id, null, false).statusCode());
+        asignarRoles("REC", "CAJ");
+        var me = enviar("GET", "/api/auth/me", null, false);
+        assertEquals(200, me.statusCode());
+        assertEquals(List.of("CAJ", "REC"), read(me.body(), "$.roles"));
+        assertEquals(List.of(), read(me.body(), "$.permisos"));
+        assertEquals(403, enviar("GET", "/api/cuentas/" + id, null, false).statusCode());
+        assertEquals(original, cookie());
+        asignarRoles("ADM", "PRO");
+        assertEquals(200, enviar("GET", "/api/cuentas/" + id, null, false).statusCode());
+        assertEquals(original, cookie());
+    }
+
+    @Test void elClienteNoPuedeElegirSusRolesNiPermisosAlHacerLogin() throws Exception {
+        asignarRoles("REC");
+        String body = "{\"identificador\":\"" + nombre + "\",\"contrasena\":\"" + clave
+                + "\",\"roles\":[\"ADM\"],\"permisos\":[\"CUENTAS_CONSULTAR\"]}";
+        var acceso = enviar("POST", "/api/auth/login", body, true);
+        assertEquals(200, acceso.statusCode());
+        assertEquals(List.of("REC"), read(acceso.body(), "$.roles"));
+        assertEquals(List.of(), read(acceso.body(), "$.permisos"));
+        assertEquals(403, enviar("GET", "/api/cuentas/" + id, null, false).statusCode());
+    }
+
+    @Test void unAdministradorConSesionVencidaTampocoPuedeLeerCuentas() throws Exception {
+        asignarRoles("ADM");
+        assertEquals(200, login(nombre, clave).statusCode());
+        reloj.avanzar(1800);
+        assertEquals(401, enviar("GET", "/api/cuentas/" + id, null, false).statusCode());
+    }
+
+    @Test void rechazaRolesNoReconocidosEnPostgres() {
+        assertThrows(org.springframework.dao.DataIntegrityViolationException.class,
+                () -> jdbc.update("INSERT INTO cuenta_roles(cuenta_id, rol) VALUES (?, ?)", id, "XYZ"));
+    }
+
 }

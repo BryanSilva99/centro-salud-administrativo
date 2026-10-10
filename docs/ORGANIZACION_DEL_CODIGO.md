@@ -1,6 +1,6 @@
 # Organización del código
 
-Estado: estructura técnica y primera consulta de Cuenta implementadas. Ver [recorrido de Cuenta](CUENTA_PASO_1.md).
+Estado: consulta de Cuenta, login, gestión de cuentas y administración de roles implementados. Ver [login](LOGIN_COMPLETO.md) y [gestión de cuentas y roles](GESTION_CUENTAS.md).
 
 Backend en Java con Spring Boot y frontend en React, según la elección del usuario. El dominio se mantendrá independiente de Spring y JPA.
 
@@ -87,6 +87,6 @@ Una reserva entrará por HTTP, invocará un caso de uso de `appointments`, compr
 
 ## Estado y límite actual
 
-Los archivos `package-info.java` solo declaran paquetes Java y documentan su responsabilidad. No contienen clases, métodos ni anotaciones de Spring. Los `.gitkeep` permiten conservar carpetas vacías en Git. Se añadieron el arranque técnico de Spring Boot, una configuración de acceso cerrado y una entrada React vacía. Cuenta ya tiene dominio, caso de uso, puerto, persistencia JPA, controlador de consulta y pruebas. Su endpoint administrativo sigue cerrado por seguridad. Se implementó login HTTP con sesiones, límite de intentos y pruebas; ver [paso 3](LOGIN_PASO_3.md). No hay pantallas ni datos permanentes de demostración. Dependencias y comandos: [Inicio del desarrollo](INICIO_DESARROLLO.md).
+Identidad y acceso contiene login React/HTTP, sesiones, límite de intentos, consulta/creación/edición/activación/desactivación de cuentas, asignación de roles y auditoría, con pruebas. Los módulos de profesionales, pacientes, citas y caja conservan su estructura preparada; esto no implica que estén implementados. RF-02 incluye el vínculo con fichas profesionales básicas del módulo administrativo. RF-03 sigue fuera de este alcance.
 
-Antes de comenzar la implementación, el usuario decidirá qué parte desarrollar. No se presupone autorización por la fecha de entrega.
+La cuenta de desarrollo y sus credenciales se mantienen en archivos locales ignorados por Git. Ver [gestión de cuentas](GESTION_CUENTAS.md) para el recorrido por capas y [Inicio del desarrollo](INICIO_DESARROLLO.md) para comandos. Solo se amplía la implementación con autorización del usuario.

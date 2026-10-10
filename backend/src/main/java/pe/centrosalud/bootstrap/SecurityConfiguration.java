@@ -1,6 +1,7 @@
 package pe.centrosalud.bootstrap;
 
 import java.time.Clock;
+import pe.centrosalud.modules.identity.application.ports.ConsultarRoles;
 import java.util.List;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -33,7 +34,7 @@ public class SecurityConfiguration {
     }
 
     @Bean SecurityFilterChain securityFilterChain(HttpSecurity http, SecurityContextRepository contexts,
-            HttpSessionCsrfTokenRepository csrf, ConsultarEstadoAcceso estados, Clock clock) throws Exception {
+            HttpSessionCsrfTokenRepository csrf, ConsultarEstadoAcceso estados, ConsultarRoles roles, Clock clock) throws Exception {
         return http
                 .securityContext(context -> context.securityContextRepository(contexts).requireExplicitSave(true))
                 .csrf(config -> config.csrfTokenRepository(csrf))
@@ -42,6 +43,15 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/auth/me").authenticated()
                         .requestMatchers(HttpMethod.POST, "/api/auth/activity").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/api/cuentas", "/api/cuentas/{id}/roles", "/api/cuentas/{id}/roles/auditoria").hasAuthority("ROLES_GESTIONAR")
+                        .requestMatchers(HttpMethod.GET, "/api/profesionales/fichas", "/api/profesionales/fichas/{id}").hasAuthority("CUENTAS_GESTIONAR")
+                        .requestMatchers(HttpMethod.POST, "/api/profesionales/fichas").hasAuthority("CUENTAS_GESTIONAR")
+                        .requestMatchers(HttpMethod.PUT, "/api/cuentas/{id}/profesional").hasAuthority("CUENTAS_GESTIONAR")
+                        .requestMatchers(HttpMethod.POST, "/api/cuentas").hasAuthority("CUENTAS_GESTIONAR")
+                        .requestMatchers(HttpMethod.PUT, "/api/cuentas/{id}").hasAuthority("CUENTAS_GESTIONAR")
+                        .requestMatchers(HttpMethod.GET, "/api/cuentas/{id}/auditoria").hasAuthority("CUENTAS_GESTIONAR")
+                        .requestMatchers(HttpMethod.PUT, "/api/cuentas/{id}/roles").hasAuthority("ROLES_GESTIONAR")
+                        .requestMatchers(HttpMethod.GET, "/api/cuentas/{id}").hasAuthority("CUENTAS_CONSULTAR")
                         .anyRequest().denyAll())
                 .exceptionHandling(errors -> errors
                         .authenticationEntryPoint((request, response, exception) -> {
@@ -60,7 +70,7 @@ public class SecurityConfiguration {
                 .logout(logout -> logout.logoutUrl("/api/auth/logout")
                         .invalidateHttpSession(true).clearAuthentication(true).deleteCookies("SESSION")
                         .logoutSuccessHandler((request, response, authentication) -> response.setStatus(204)))
-                .addFilterBefore(new ValidarSesionFilter(estados, clock), AnonymousAuthenticationFilter.class)
+                .addFilterBefore(new ValidarSesionFilter(estados, roles, clock), AnonymousAuthenticationFilter.class)
                 .build();
     }
 }
