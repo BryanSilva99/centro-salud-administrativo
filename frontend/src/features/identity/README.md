@@ -1,3 +1,7 @@
-# Identidad y acceso
+# Identidad
 
-Ubicación prevista de las pantallas y componentes de esta área (RF-01 a RF-03). Sin implementación.
+- `api/`: contratos HTTP de autenticación y CSRF.
+- `components/`: formulario de acceso y vista de sesión iniciada.
+- `hooks/`: comprobación de sesión y actividad del usuario.
+
+La autorización de operaciones y recursos corresponde al backend. React no almacena contraseñas ni sesión en localStorage. Detalles: `docs/LOGIN_PASO_4_REACT.md` en la raíz del proyecto.

@@ -1,0 +1,15 @@
+{
+  "name": "centro-salud-local-db",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "db": "node postgres.mjs",
+    "cuenta": "node crear-cuenta.mjs"
+  },
+  "dependencies": {
+    "embedded-postgres": "18.4.0-beta.17"
+  },
+  "allowScripts": {
+    "@embedded-postgres/linux-x64@18.4.0-beta.17": true
+  }
+}

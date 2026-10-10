@@ -18,7 +18,7 @@ src/test/java/pe/centrosalud/ Ubicación de pruebas futuras
 src/test/resources/          Recursos de pruebas futuros
 ```
 
-Los archivos `package-info.java` solo declaran y describen paquetes. Se añadieron únicamente el arranque de Spring Boot y una configuración preventiva que deniega acceso. No hay entidades, casos de uso, endpoints ni repositorios implementados.
+Los archivos `package-info.java` solo declaran y describen paquetes. Se añadieron el arranque de Spring Boot y una configuración preventiva que deniega acceso. Se implementó el primer recorrido de consulta de Cuenta: dominio, puerto, caso de uso, adaptador JPA y controlador. Ver [explicación](../docs/CUENTA_PASO_1.md).
 
 Base: Java 21, Spring Boot 4.1.1 y Maven Wrapper 3.9.16. Ver [guía de preparación](../docs/INICIO_DESARROLLO.md) para configurar PostgreSQL y ejecutar el proyecto.
 

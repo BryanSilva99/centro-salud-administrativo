@@ -1,0 +1,47 @@
+package pe.centrosalud.adapters.inbound.http.identity;
+
+import java.io.IOException;
+import java.time.Clock;
+import java.time.Instant;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.filter.OncePerRequestFilter;
+import pe.centrosalud.modules.identity.application.ports.ConsultarEstadoAcceso;
+import pe.centrosalud.modules.identity.domain.VigenciaSesion;
+
+/** Se registra solo en la cadena de Spring Security, no como filtro servlet global. */
+public final class ValidarSesionFilter extends OncePerRequestFilter {
+    public static final String INICIO = "IDENTITY_INICIO";
+    public static final String ACTIVIDAD = "IDENTITY_ACTIVIDAD";
+    private final ConsultarEstadoAcceso estados;
+    private final Clock clock;
+
+    public ValidarSesionFilter(ConsultarEstadoAcceso estados, Clock clock) {
+        this.estados = estados;
+        this.clock = clock;
+    }
+
+    @Override protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
+                                              FilterChain chain) throws ServletException, IOException {
+        var authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.isAuthenticated()) {
+            var session = request.getSession(false);
+            boolean valida = false;
+            if (session != null && authentication.getPrincipal() instanceof PrincipalSesion principal
+                    && session.getAttribute(INICIO) instanceof Long inicio
+                    && session.getAttribute(ACTIVIDAD) instanceof Long actividad
+                    && VigenciaSesion.vigente(Instant.ofEpochMilli(inicio), Instant.ofEpochMilli(actividad), clock.instant())) {
+                valida = estados.buscarEstado(principal.id())
+                        .filter(e -> e.activa() && e.version() == principal.versionAcceso()).isPresent();
+            }
+            if (!valida) {
+                if (session != null) session.invalidate();
+                SecurityContextHolder.clearContext();
+            }
+        }
+        chain.doFilter(request, response);
+    }
+}

@@ -300,3 +300,25 @@ Los asuntos abiertos tienen límites explícitos y no invalidan la descomposici�
 Se completa la primera iteración **a nivel de diseño**: entradas revisadas, objetivo definido, drivers priorizados, cuatro escenarios medibles, elementos seleccionados, conceptos justificados, responsabilidades e interfaces asignadas, vistas elaboradas y cobertura evaluada. La decisión central es un monolito modular con arquitectura hexagonal, interfaz React, API Spring Boot, persistencia PostgreSQL y observabilidad SigNoz.
 
 La siguiente iteración debe refinar el flujo de reserva y admisión —modelo de datos, estados, contratos y concurrencia— y el núcleo transversal de identidad, transacciones y auditoría que también utilizará caja. El objetivo es convertir el diseño en un primer recorrido implementable y verificable, conservando caja y el resto de requisitos P8 en la planificación. La presentación parcial requerirá además software en ejecución y evidencias; el documento ADD por sí solo no completa esa entrega.
+
+
+### Concreción de DA-03: verificación de credenciales (9 de octubre de 2026)
+
+Se implementa PBKDF2-HMAC-SHA256 con sal aleatoria de 16 bytes, 600 000 iteraciones y salida de 256 bits mediante Spring Security. El formato persistido lleva prefijo `{pbkdf2-sha256-v1}` para identificar estos parámetros; no se utiliza cifrado reversible. Antes de despliegue se medirá su coste bajo carga y se planificará una nueva versión si se cambian los parámetros. Esta decisión no acredita cumplimiento completo de RNF-02.
+
+Se aplica el mínimo de 12 caracteres de RNF-02 al generar una credencial y se fija un máximo de 128 puntos de código Unicode. La contraseña no se recorta ni normaliza. La búsqueda del identificador es exacta, sensible a mayúsculas, coherente con la restricción única vigente. No se impone formato de correo ni se convierte el identificador a minúsculas.
+
+La verificación devuelve el mismo error para cuenta ausente, contraseña incorrecta, credencial no asignada o cuenta inactiva. Se realiza trabajo de hash también para una cuenta ausente mediante un hash simulado; reduce diferencias de tiempo, sin garantizar tiempos idénticos de extremo a extremo. Las credenciales no se incluyen en el DTO de cuenta ni en mensajes de error.
+
+La verificación aún no crea sesiones, roles ni cookies. Continúan pendientes la limitación de intentos (5 en 15 minutos), la política completa de sesiones, los controladores de autenticación y la recuperación de acceso. La política HTTP continúa denegando todo.
+
+Referencia: [API oficial de Pbkdf2PasswordEncoder](https://docs.spring.io/spring-security/reference/api/java/org/springframework/security/crypto/password/Pbkdf2PasswordEncoder.html). Los parámetros se fijan explícitamente; no son los valores por defecto del framework.
+
+
+### Concreción posterior de DA-03: sesiones y límite de intentos
+
+Se implementaron sesiones JDBC con cookie HttpOnly y SameSite Strict, Secure por defecto (excepto desarrollo HTTP configurado explícitamente); CSRF requerido en login, actividad y logout; renovación del ID y del CSRF al autenticar; contexto guardado explícitamente con Spring Security. La vigencia es 30 minutos de inactividad y 8 horas absolutas. La consulta de sesión no cuenta como interacción; una operación explícita registra actividad del usuario.
+
+El control de intentos persiste una ventana móvil en PostgreSQL con bloqueo por identificador: cinco fallos en 15 minutos producen bloqueo de 15 minutos, sin revelar su causa. Los fallos se confirman en una transacción independiente. Una versión de acceso incrementada ante cambio de estado o hash revoca sesiones anteriores; cada solicitud autenticada valida tiempos, estado y versión.
+
+Se verificaron 37 pruebas, incluidas HTTP real, concurrencia de diez intentos y revocación. Los roles, autorización por recurso, recuperación de acceso y auditoría administrativa aún no están implementados. Las rutas de negocio permanecen denegadas. Detalles y límites operativos: [Login, paso 3](LOGIN_PASO_3.md).

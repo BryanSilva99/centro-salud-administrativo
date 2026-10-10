@@ -1,6 +1,6 @@
 # Organización del código
 
-Estado: estructura y configuración técnica preparadas; ninguna funcionalidad de negocio implementada.
+Estado: estructura técnica y primera consulta de Cuenta implementadas. Ver [recorrido de Cuenta](CUENTA_PASO_1.md).
 
 Backend en Java con Spring Boot y frontend en React, según la elección del usuario. El dominio se mantendrá independiente de Spring y JPA.
 
@@ -87,6 +87,6 @@ Una reserva entrará por HTTP, invocará un caso de uso de `appointments`, compr
 
 ## Estado y límite actual
 
-Los archivos `package-info.java` solo declaran paquetes Java y documentan su responsabilidad. No contienen clases, métodos ni anotaciones de Spring. Los `.gitkeep` permiten conservar carpetas vacías en Git. Se añadieron el arranque técnico de Spring Boot, una configuración de acceso cerrado y una entrada React vacía. No hay endpoints, modelos de tablas, pantallas, datos de demostración ni pruebas funcionales. Dependencias y comandos: [Inicio del desarrollo](INICIO_DESARROLLO.md).
+Los archivos `package-info.java` solo declaran paquetes Java y documentan su responsabilidad. No contienen clases, métodos ni anotaciones de Spring. Los `.gitkeep` permiten conservar carpetas vacías en Git. Se añadieron el arranque técnico de Spring Boot, una configuración de acceso cerrado y una entrada React vacía. Cuenta ya tiene dominio, caso de uso, puerto, persistencia JPA, controlador de consulta y pruebas. Su endpoint administrativo sigue cerrado por seguridad. Se implementó login HTTP con sesiones, límite de intentos y pruebas; ver [paso 3](LOGIN_PASO_3.md). No hay pantallas ni datos permanentes de demostración. Dependencias y comandos: [Inicio del desarrollo](INICIO_DESARROLLO.md).
 
 Antes de comenzar la implementación, el usuario decidirá qué parte desarrollar. No se presupone autorización por la fecha de entrega.
