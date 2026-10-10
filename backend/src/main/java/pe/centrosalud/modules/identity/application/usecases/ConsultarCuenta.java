@@ -7,14 +7,14 @@ import pe.centrosalud.modules.identity.domain.Cuenta;
 
 /** Consulta administrativa; no verifica credenciales ni concede acceso. */
 public final class ConsultarCuenta {
-    private final ConsultarCuentas cuentas;
+  private final ConsultarCuentas cuentas;
 
-    public ConsultarCuenta(ConsultarCuentas cuentas) {
-        this.cuentas = Objects.requireNonNull(cuentas);
-    }
+  public ConsultarCuenta(ConsultarCuentas cuentas) {
+    this.cuentas = Objects.requireNonNull(cuentas);
+  }
 
-    public Cuenta ejecutar(UUID id) {
-        Objects.requireNonNull(id, "La consulta requiere un ID");
-        return cuentas.buscarPorId(id).orElseThrow(CuentaNoEncontrada::new);
-    }
+  public Cuenta ejecutar(UUID id) {
+    Objects.requireNonNull(id, "La consulta requiere un ID");
+    return cuentas.buscarPorId(id).orElseThrow(CuentaNoEncontrada::new);
+  }
 }
