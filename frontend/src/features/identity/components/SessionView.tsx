@@ -3,7 +3,7 @@ import { auth, type Cuenta } from '../api/auth';
 import { ApiError } from '../../../shared/api/http';
 import { useSessionActivity } from '../hooks/useSessionActivity';
 
-export function SessionView({ cuenta, onExit }: { cuenta: Cuenta; onExit: (message: string) => void }) {
+export function SessionView({ cuenta, onExit, onOpenBilling }: { cuenta: Cuenta; onExit: (message: string) => void; onOpenBilling?: () => void }) {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
   const [connected, setConnected] = useState(true);
@@ -28,6 +28,11 @@ export function SessionView({ cuenta, onExit }: { cuenta: Cuenta; onExit: (messa
     <p className="notice">Las funciones administrativas estarán disponibles cuando se habiliten los módulos y permisos correspondientes.</p>
     {!connected && <p className="error" role="status">No pudimos comprobar la sesión. Revisa tu conexión; volveremos a comprobarla.</p>}
     {error && <p className="error" role="alert">{error}</p>}
+    {onOpenBilling && (
+      <button type="button" className="primary-button billing-button" data-no-activity onClick={onOpenBilling}>
+        Ir a Caja
+      </button>
+    )}
     <button type="button" className="primary-button" data-no-activity disabled={busy} onClick={logout}>{busy ? 'Cerrando sesión…' : 'Cerrar sesión'}</button>
     <p className="access-help">Cierra tu sesión cuando termines, especialmente en equipos compartidos.</p>
   </section>;

@@ -2,9 +2,10 @@ import { useCallback, useEffect, useState } from 'react';
 import { auth, type Cuenta } from '../features/identity/api/auth';
 import { LoginForm } from '../features/identity/components/LoginForm';
 import { SessionView } from '../features/identity/components/SessionView';
+import { BillingView } from '../features/billing/components/BillingView';
 import './styles.css';
 
-type State = { kind: 'loading' } | { kind: 'unavailable' } | { kind: 'anonymous'; notice: string } | { kind: 'authenticated'; cuenta: Cuenta };
+type State = { kind: 'loading' } | { kind: 'unavailable' } | { kind: 'anonymous'; notice: string } | { kind: 'authenticated'; cuenta: Cuenta; verBilling: boolean };
 
 export function App() {
   const [state, setState] = useState<State>({ kind: 'loading' });
@@ -13,7 +14,7 @@ export function App() {
     const controller = new AbortController();
     setState({ kind: 'loading' });
     auth.me(controller.signal).then(cuenta => {
-      if (!controller.signal.aborted) setState(cuenta ? { kind: 'authenticated', cuenta } : { kind: 'anonymous', notice: '' });
+      if (!controller.signal.aborted) setState(cuenta ? { kind: 'authenticated', cuenta, verBilling: false } : { kind: 'anonymous', notice: '' });
     }).catch(() => { if (!controller.signal.aborted) setState({ kind: 'unavailable' }); });
     return () => controller.abort();
   }, [retry]);
@@ -32,8 +33,15 @@ export function App() {
       <div className="form-panel">
         {state.kind === 'loading' && <section className="access-card"><h1>Comprobando sesión</h1><p role="status">Un momento, por favor…</p></section>}
         {state.kind === 'unavailable' && <section className="access-card"><h1>No pudimos conectar</h1><p className="intro" role="alert">Comprueba tu conexión e inténtalo nuevamente.</p><button className="primary-button" onClick={() => setRetry(value => value + 1)}>Volver a intentar</button></section>}
-        {state.kind === 'anonymous' && <LoginForm notice={state.notice} onLogin={cuenta => setState({ kind: 'authenticated', cuenta })} />}
-        {state.kind === 'authenticated' && <SessionView cuenta={state.cuenta} onExit={exit} />}
+        {state.kind === 'anonymous' && <LoginForm notice={state.notice} onLogin={cuenta => setState({ kind: 'authenticated', cuenta, verBilling: false })} />}
+        {state.kind === 'authenticated' && state.verBilling && <BillingView />}
+        {state.kind === 'authenticated' && !state.verBilling && (
+          <SessionView
+            cuenta={state.cuenta}
+            onExit={exit}
+            onOpenBilling={() => setState({ ...state, verBilling: true })}
+          />
+        )}
       </div>
     </main>
     <footer>Centro de Salud <span aria-hidden="true">·</span> Sistema de gestión administrativa</footer>
