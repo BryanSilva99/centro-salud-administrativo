@@ -37,19 +37,23 @@ export function CrearCuentaForm({ busy, onBusy, onSaved, onExpired }: Props) {
       else setError(errorCuenta(e) + (e instanceof ApiError && e.status === 0 ? ' Antes de repetir el alta, busca el identificador para comprobar si se creó.' : ''));
     } finally { setContrasena(''); setConfirmacion(''); enviando.current = false; onBusy(false); }
   }
-  return <form aria-label="Crear cuenta" onSubmit={e => { e.preventDefault(); void crear(); }}>
-    <h3>Nueva cuenta</h3>
-    <fieldset disabled={busy}><legend>Acceso inicial</legend>
+  return <form className="panel-card account-form" aria-label="Crear cuenta" onSubmit={e => { e.preventDefault(); void crear(); }}>
+    <h2>Nueva cuenta</h2>
+    <fieldset className="initial-access" disabled={busy}><legend>Acceso inicial</legend>
+      <div className="identity-field">
       <label htmlFor="nueva-identidad">Identificador de la nueva cuenta</label>
       <input id="nueva-identidad" required maxLength={254} autoComplete="off" value={identificador} onChange={e => setIdentificador(e.target.value)} aria-describedby="formato-identificador" />
       <p id="formato-identificador" className="access-help">Letras, números, punto, guion, guion bajo o @, sin espacios. Se distinguen mayúsculas y minúsculas.</p>
+      </div><div>
       <label htmlFor="nueva-clave">Contraseña inicial</label>
       <input id="nueva-clave" type="password" autoComplete="new-password" required maxLength={256} value={contrasena} onChange={e => setContrasena(e.target.value)} aria-describedby="politica-inicial" />
       <p id="politica-inicial" className="access-help">Entre 12 y 128 caracteres. No se podrá consultar después de guardarla.</p>
+      </div><div>
       <label htmlFor="confirmar-clave">Confirmar contraseña inicial</label>
       <input id="confirmar-clave" type="password" autoComplete="new-password" required maxLength={256} value={confirmacion} onChange={e => setConfirmacion(e.target.value)} />
+      </div>
     </fieldset>
-    <fieldset disabled={busy}><legend>Roles iniciales</legend>{(Object.keys(nombres) as Rol[]).map(rol => <label className="role-option" key={rol}><input type="checkbox" checked={roles.includes(rol)} onChange={e => setRoles(actuales => e.target.checked ? [...actuales, rol] : actuales.filter(r => r !== rol))} />{nombres[rol]}</label>)}</fieldset>
+    <fieldset className="initial-roles" disabled={busy}><legend>Roles iniciales</legend>{(Object.keys(nombres) as Rol[]).map(rol => <label className="role-option" key={rol}><input type="checkbox" checked={roles.includes(rol)} onChange={e => setRoles(actuales => e.target.checked ? [...actuales, rol] : actuales.filter(r => r !== rol))} />{nombres[rol]}</label>)}</fieldset>
     <p className="access-help">La cuenta se creará activa. Sin roles podrá iniciar sesión, pero no realizar operaciones de negocio.</p>
     {error && <p role="alert" className="error">{error}</p>}
     <button className="primary-button" disabled={busy}>{busy ? 'Creando cuenta…' : 'Crear cuenta'}</button>
@@ -70,8 +74,8 @@ export function EditarCuentaForm({ cuenta, busy, onBusy, onSaved, onExpired }: P
       else { setError(errorCuenta(e)); setConflicto(e instanceof ApiError && e.code === 'CONFLICTO'); }
     } finally { enviando.current = false; onBusy(false); }
   }
-  return <form aria-label="Editar cuenta" onSubmit={e => { e.preventDefault(); void guardar(); }}>
-    <h3>Datos de acceso</h3>
+  return <form className="panel-card account-form" aria-label="Editar cuenta" onSubmit={e => { e.preventDefault(); void guardar(); }}>
+    <h2>Datos de acceso</h2>
     <fieldset disabled={busy || conflicto}><legend>Identificador y estado</legend>
       <label htmlFor="editar-identidad">Identificador de acceso</label>
       <input id="editar-identidad" required maxLength={254} autoComplete="off" value={identificador} onChange={e => setIdentificador(e.target.value)} />

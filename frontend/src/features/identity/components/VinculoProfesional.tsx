@@ -62,8 +62,8 @@ export function VinculoProfesional({ cuenta, busy, onBusy, onSaved, onExpired }:
     } finally { onBusy(false); }
   }
   const opciones = actual && !fichas.some(ficha => ficha.id === actual.id) ? [actual, ...fichas] : fichas;
-  return <section aria-label="Vínculo profesional">
-    <h3>Ficha profesional</h3>
+  return <section className="panel-card" aria-label="Vínculo profesional">
+    <h2>Ficha profesional</h2>
     <p>Selecciona la ficha que corresponde a esta cuenta. Para cambiarla o retirarla, guarda el vínculo.</p>
     {error && <p role="alert" className="error">{error}</p>}
     <form onSubmit={event => { event.preventDefault(); setConsulta(busqueda); setRecarga(valor => valor + 1); }}>

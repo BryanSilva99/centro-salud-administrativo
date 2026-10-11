@@ -26,6 +26,7 @@ Antes de implementar cambios, consultar:
 - `docs/ORGANIZACION_DEL_CODIGO.md`
 - Documentación de requisitos relacionada con la funcionalidad.
 - Código existente del módulo afectado.
+- Para trabajo de interfaz: [sistema visual](docs/ui-ux/DESIGN_SYSTEM.md), [catálogo y plan](docs/ui-ux/CATALOGO_VISTAS.md), [patrones UX](docs/ui-ux/PATRONES_UX.md) y [referencias Figma](docs/ui-ux/FIGMA_REFERENCIAS.md). Figma guía la apariencia; los requisitos y el backend vigente determinan el comportamiento. No inventar valores visuales pendientes ni funcionalidades del mockup.
 
 El código existente es una referencia de convenciones, no una garantía de que cada decisión anterior sea correcta.
 

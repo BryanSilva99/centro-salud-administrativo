@@ -27,16 +27,14 @@ export function LoginForm({ onLogin, notice }: { onLogin: (cuenta: Cuenta) => vo
   }
 
   return <section className="access-card" aria-labelledby="login-title">
-    <p className="eyebrow">Acceso del personal</p>
-    <h1 id="login-title">Bienvenido de nuevo</h1>
-    <p className="intro">Ingresa con tu cuenta para acceder al sistema del centro de salud.</p>
+    <h1 id="login-title">Iniciar sesión</h1>
+    <p className="intro">Acceso exclusivo para personal autorizado.</p>
     {notice && <p className="notice" role="status">{notice}</p>}
     <form onSubmit={submit} aria-busy={busy}>
       <label htmlFor="identificador">Identificador</label>
       <input id="identificador" name="identificador" autoComplete="username" autoCapitalize="none"
         spellCheck={false} required maxLength={254} value={identificador} disabled={busy}
         aria-describedby="identifier-help" onChange={e => setIdentificador(e.target.value)} />
-      <p className="field-help" id="identifier-help">Usa el identificador asignado a tu cuenta.</p>
       <label htmlFor="contrasena">Contraseña</label>
       <div className="password-field">
         <input id="contrasena" name="contrasena" type={visible ? 'text' : 'password'} autoComplete="current-password"
@@ -44,9 +42,10 @@ export function LoginForm({ onLogin, notice }: { onLogin: (cuenta: Cuenta) => vo
         <button className="visibility-button" type="button" aria-label={visible ? 'Ocultar contraseña' : 'Mostrar contraseña'}
           aria-pressed={visible} disabled={busy} onClick={() => setVisible(!visible)}>{visible ? 'Ocultar' : 'Mostrar'}</button>
       </div>
+      <p className="field-help" id="identifier-help">Usa el identificador asignado a tu cuenta.</p>
       {error && <p className="error" role="alert" tabIndex={-1} ref={errorRef}>{error}</p>}
-      <button className="primary-button" type="submit" disabled={busy}>{busy ? 'Ingresando…' : 'Iniciar sesión'}<span aria-hidden="true">→</span></button>
+      <button className="primary-button" type="submit" disabled={busy}>{busy ? 'Ingresando…' : 'Iniciar sesión'}</button>
     </form>
-    <p className="access-help">¿Necesitas acceso? Comunícate con la administración del centro.</p>
+    <p className="access-help">¿Problemas para acceder? Contacta al administrador.</p>
   </section>;
 }

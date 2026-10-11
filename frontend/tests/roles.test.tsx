@@ -12,6 +12,7 @@ function install(save: (options: RequestInit) => Response) {
     if (url.endsWith('/csrf')) return response(200, { headerName: 'X-CSRF-TOKEN', token: 'csrf-prueba' });
     if (url.endsWith('/me')) return response(200, admin);
     if (options.method === 'PUT') return save(options);
+    if (url.includes('/auditoria') && !url.includes('/roles/auditoria')) return response(200, { elementos: [], hayMas: false });
     if (url.includes('/auditoria')) return response(200, { elementos: [{ id: 'cambio', actorId: 'administrador-prueba', anteriores: [], nuevos: ['REC'], fecha: '2026-10-10T10:00:00Z' }], hayMas: false });
     if (url.includes('?busqueda=')) return response(200, { elementos: [cuenta], hayMas: false });
     return response(200, cuenta);
@@ -66,4 +67,30 @@ describe('Administración de roles', () => {
     const result=await axe.run(container, { rules: { 'color-contrast': { enabled: false } } });
     expect(result.violations).toEqual([]);
   });
+  it('permite volver del detalle al directorio y abrir el alta con foco en el título', async () => {
+    install(() => response(200, cuenta));
+    render(<RolesPanel gestionarCuentas onRefresh={vi.fn()} onExpired={vi.fn()} />);
+    await seleccionar();
+    expect(screen.queryByRole('table')).not.toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: 'Volver al directorio' }));
+    expect(await screen.findByRole('table')).toBeVisible();
+    fireEvent.click(screen.getByRole('button', { name: 'Nueva cuenta' }));
+    expect(screen.getByRole('heading', { name: 'Crear cuenta' })).toHaveFocus();
+    expect(screen.getByRole('form', { name: 'Crear cuenta' })).toBeVisible();
+    fireEvent.click(screen.getByRole('button', { name: 'Volver al directorio' }));
+    expect(await screen.findByRole('table')).toBeVisible();
+  });
+
+  it('distingue un directorio vacío de un error de carga y permite reintentar', async () => {
+    let fallo = true;
+    vi.stubGlobal('fetch', vi.fn(async () => fallo ? response(503, {}) : response(200, { elementos: [], hayMas: false })));
+    render(<RolesPanel onRefresh={vi.fn()} onExpired={vi.fn()} />);
+    expect(await screen.findByRole('alert')).toBeVisible();
+    expect(screen.queryByText(/No hay cuentas que coincidan/)).not.toBeInTheDocument();
+    fallo = false;
+    fireEvent.click(screen.getByRole('button', { name: /^Buscar$/ }));
+    expect(await screen.findByText(/No hay cuentas que coincidan/)).toBeVisible();
+    expect(screen.queryByRole('alert')).not.toBeInTheDocument();
+  });
+
 });

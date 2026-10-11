@@ -1,0 +1,934 @@
+{
+  "fileKey": "CfWGA410YlwAtGY1FBJRVK",
+  "pageId": "23:2",
+  "date": "2026-10-11",
+  "data": [
+    {
+      "id": "23:10",
+      "name": "Sistema Administrativo de Centro de Salu",
+      "type": "TEXT",
+      "w": 900,
+      "h": 29,
+      "fills": [
+        {
+          "type": "SOLID",
+          "hex": "#2d3a5e",
+          "opacity": 1
+        }
+      ],
+      "radius": null,
+      "text": "Sistema Administrativo de Centro de Salud",
+      "font": {
+        "family": "Inter",
+        "style": "Semi Bold",
+        "variationSettings": {
+          "wght": 600,
+          "slnt": 0
+        }
+      },
+      "size": 24,
+      "lineHeight": {
+        "unit": "AUTO"
+      },
+      "letterSpacing": {
+        "unit": "PERCENT",
+        "value": 0
+      }
+    },
+    {
+      "id": "23:11",
+      "name": "Fundamentos visuales · interfaz interna ",
+      "type": "TEXT",
+      "w": 900,
+      "h": 16,
+      "fills": [
+        {
+          "type": "SOLID",
+          "hex": "#475569",
+          "opacity": 1
+        }
+      ],
+      "radius": null,
+      "text": "Fundamentos visuales · interfaz interna · datos de demostración · sin información clínica",
+      "font": {
+        "family": "Inter",
+        "style": "Regular",
+        "variationSettings": {
+          "wght": 400,
+          "slnt": 0
+        }
+      },
+      "size": 13,
+      "lineHeight": {
+        "unit": "AUTO"
+      },
+      "letterSpacing": {
+        "unit": "PERCENT",
+        "value": 0
+      }
+    },
+    {
+      "id": "23:12",
+      "name": "Token / Primary",
+      "type": "RECTANGLE",
+      "w": 132,
+      "h": 62,
+      "fills": [
+        {
+          "type": "SOLID",
+          "hex": "#2d3a5e",
+          "opacity": 1
+        }
+      ],
+      "radius": 8
+    },
+    {
+      "id": "23:13",
+      "name": "Primary",
+      "type": "TEXT",
+      "w": 132,
+      "h": 13,
+      "fills": [
+        {
+          "type": "SOLID",
+          "hex": "#475569",
+          "opacity": 1
+        }
+      ],
+      "radius": null,
+      "text": "Primary",
+      "font": {
+        "family": "Inter",
+        "style": "Medium",
+        "variationSettings": {
+          "wght": 500,
+          "slnt": 0
+        }
+      },
+      "size": 11,
+      "lineHeight": {
+        "unit": "AUTO"
+      },
+      "letterSpacing": {
+        "unit": "PERCENT",
+        "value": 0
+      }
+    },
+    {
+      "id": "23:14",
+      "name": "Token / Accent",
+      "type": "RECTANGLE",
+      "w": 132,
+      "h": 62,
+      "fills": [
+        {
+          "type": "SOLID",
+          "hex": "#8fa9ff",
+          "opacity": 1
+        }
+      ],
+      "radius": 8
+    },
+    {
+      "id": "23:15",
+      "name": "Accent",
+      "type": "TEXT",
+      "w": 132,
+      "h": 13,
+      "fills": [
+        {
+          "type": "SOLID",
+          "hex": "#475569",
+          "opacity": 1
+        }
+      ],
+      "radius": null,
+      "text": "Accent",
+      "font": {
+        "family": "Inter",
+        "style": "Medium",
+        "variationSettings": {
+          "wght": 500,
+          "slnt": 0
+        }
+      },
+      "size": 11,
+      "lineHeight": {
+        "unit": "AUTO"
+      },
+      "letterSpacing": {
+        "unit": "PERCENT",
+        "value": 0
+      }
+    },
+    {
+      "id": "23:16",
+      "name": "Token / Surface",
+      "type": "RECTANGLE",
+      "w": 132,
+      "h": 62,
+      "fills": [
+        {
+          "type": "SOLID",
+          "hex": "#fffdfb",
+          "opacity": 1
+        }
+      ],
+      "radius": 8
+    },
+    {
+      "id": "23:17",
+      "name": "Surface",
+      "type": "TEXT",
+      "w": 132,
+      "h": 13,
+      "fills": [
+        {
+          "type": "SOLID",
+          "hex": "#475569",
+          "opacity": 1
+        }
+      ],
+      "radius": null,
+      "text": "Surface",
+      "font": {
+        "family": "Inter",
+        "style": "Medium",
+        "variationSettings": {
+          "wght": 500,
+          "slnt": 0
+        }
+      },
+      "size": 11,
+      "lineHeight": {
+        "unit": "AUTO"
+      },
+      "letterSpacing": {
+        "unit": "PERCENT",
+        "value": 0
+      }
+    },
+    {
+      "id": "23:18",
+      "name": "Token / Background",
+      "type": "RECTANGLE",
+      "w": 132,
+      "h": 62,
+      "fills": [
+        {
+          "type": "SOLID",
+          "hex": "#fffdfb",
+          "opacity": 1
+        }
+      ],
+      "radius": 8
+    },
+    {
+      "id": "23:19",
+      "name": "Background",
+      "type": "TEXT",
+      "w": 132,
+      "h": 13,
+      "fills": [
+        {
+          "type": "SOLID",
+          "hex": "#475569",
+          "opacity": 1
+        }
+      ],
+      "radius": null,
+      "text": "Background",
+      "font": {
+        "family": "Inter",
+        "style": "Medium",
+        "variationSettings": {
+          "wght": 500,
+          "slnt": 0
+        }
+      },
+      "size": 11,
+      "lineHeight": {
+        "unit": "AUTO"
+      },
+      "letterSpacing": {
+        "unit": "PERCENT",
+        "value": 0
+      }
+    },
+    {
+      "id": "23:20",
+      "name": "Token / Success",
+      "type": "RECTANGLE",
+      "w": 132,
+      "h": 62,
+      "fills": [
+        {
+          "type": "SOLID",
+          "hex": "#15803d",
+          "opacity": 1
+        }
+      ],
+      "radius": 8
+    },
+    {
+      "id": "23:21",
+      "name": "Success",
+      "type": "TEXT",
+      "w": 132,
+      "h": 13,
+      "fills": [
+        {
+          "type": "SOLID",
+          "hex": "#475569",
+          "opacity": 1
+        }
+      ],
+      "radius": null,
+      "text": "Success",
+      "font": {
+        "family": "Inter",
+        "style": "Medium",
+        "variationSettings": {
+          "wght": 500,
+          "slnt": 0
+        }
+      },
+      "size": 11,
+      "lineHeight": {
+        "unit": "AUTO"
+      },
+      "letterSpacing": {
+        "unit": "PERCENT",
+        "value": 0
+      }
+    },
+    {
+      "id": "23:22",
+      "name": "Token / Warning",
+      "type": "RECTANGLE",
+      "w": 132,
+      "h": 62,
+      "fills": [
+        {
+          "type": "SOLID",
+          "hex": "#b45309",
+          "opacity": 1
+        }
+      ],
+      "radius": 8
+    },
+    {
+      "id": "23:23",
+      "name": "Warning",
+      "type": "TEXT",
+      "w": 132,
+      "h": 13,
+      "fills": [
+        {
+          "type": "SOLID",
+          "hex": "#475569",
+          "opacity": 1
+        }
+      ],
+      "radius": null,
+      "text": "Warning",
+      "font": {
+        "family": "Inter",
+        "style": "Medium",
+        "variationSettings": {
+          "wght": 500,
+          "slnt": 0
+        }
+      },
+      "size": 11,
+      "lineHeight": {
+        "unit": "AUTO"
+      },
+      "letterSpacing": {
+        "unit": "PERCENT",
+        "value": 0
+      }
+    },
+    {
+      "id": "23:24",
+      "name": "Token / Danger",
+      "type": "RECTANGLE",
+      "w": 132,
+      "h": 62,
+      "fills": [
+        {
+          "type": "SOLID",
+          "hex": "#b91c1c",
+          "opacity": 1
+        }
+      ],
+      "radius": 8
+    },
+    {
+      "id": "23:25",
+      "name": "Danger",
+      "type": "TEXT",
+      "w": 132,
+      "h": 13,
+      "fills": [
+        {
+          "type": "SOLID",
+          "hex": "#475569",
+          "opacity": 1
+        }
+      ],
+      "radius": null,
+      "text": "Danger",
+      "font": {
+        "family": "Inter",
+        "style": "Medium",
+        "variationSettings": {
+          "wght": 500,
+          "slnt": 0
+        }
+      },
+      "size": 11,
+      "lineHeight": {
+        "unit": "AUTO"
+      },
+      "letterSpacing": {
+        "unit": "PERCENT",
+        "value": 0
+      }
+    },
+    {
+      "id": "23:26",
+      "name": "Token / Info",
+      "type": "RECTANGLE",
+      "w": 132,
+      "h": 62,
+      "fills": [
+        {
+          "type": "SOLID",
+          "hex": "#0369a1",
+          "opacity": 1
+        }
+      ],
+      "radius": 8
+    },
+    {
+      "id": "23:27",
+      "name": "Info",
+      "type": "TEXT",
+      "w": 132,
+      "h": 13,
+      "fills": [
+        {
+          "type": "SOLID",
+          "hex": "#475569",
+          "opacity": 1
+        }
+      ],
+      "radius": null,
+      "text": "Info",
+      "font": {
+        "family": "Inter",
+        "style": "Medium",
+        "variationSettings": {
+          "wght": 500,
+          "slnt": 0
+        }
+      },
+      "size": 11,
+      "lineHeight": {
+        "unit": "AUTO"
+      },
+      "letterSpacing": {
+        "unit": "PERCENT",
+        "value": 0
+      }
+    },
+    {
+      "id": "23:28",
+      "name": "Tipografía · Inter",
+      "type": "TEXT",
+      "w": 240,
+      "h": 17,
+      "fills": [
+        {
+          "type": "SOLID",
+          "hex": "#2d3a5e",
+          "opacity": 1
+        }
+      ],
+      "radius": null,
+      "text": "Tipografía · Inter",
+      "font": {
+        "family": "Inter",
+        "style": "Semi Bold",
+        "variationSettings": {
+          "wght": 600,
+          "slnt": 0
+        }
+      },
+      "size": 14,
+      "lineHeight": {
+        "unit": "AUTO"
+      },
+      "letterSpacing": {
+        "unit": "PERCENT",
+        "value": 0
+      }
+    },
+    {
+      "id": "23:29",
+      "name": "Títulos 26 / Semi Bold     Sección 15 / ",
+      "type": "TEXT",
+      "w": 600,
+      "h": 15,
+      "fills": [
+        {
+          "type": "SOLID",
+          "hex": "#475569",
+          "opacity": 1
+        }
+      ],
+      "radius": null,
+      "text": "Títulos 26 / Semi Bold     Sección 15 / Semi Bold     Cuerpo 13 / Regular",
+      "font": {
+        "family": "Inter",
+        "style": "Regular",
+        "variationSettings": {
+          "wght": 400,
+          "slnt": 0
+        }
+      },
+      "size": 12,
+      "lineHeight": {
+        "unit": "AUTO"
+      },
+      "letterSpacing": {
+        "unit": "PERCENT",
+        "value": 0
+      }
+    },
+    {
+      "id": "23:30",
+      "name": "Button · Acción primaria",
+      "type": "INSTANCE",
+      "w": 148,
+      "h": 40,
+      "fills": [
+        {
+          "type": "SOLID",
+          "hex": "#2d3a5e",
+          "opacity": 1
+        }
+      ],
+      "radius": 10
+    },
+    {
+      "id": "I23:30;23:4",
+      "name": "Acción",
+      "type": "TEXT",
+      "w": 99,
+      "h": 16,
+      "fills": [
+        {
+          "type": "SOLID",
+          "hex": "#fffdfb",
+          "opacity": 1
+        }
+      ],
+      "radius": null,
+      "text": "Acción primaria",
+      "font": {
+        "family": "Inter",
+        "style": "Semi Bold",
+        "variationSettings": {
+          "wght": 600,
+          "slnt": 0
+        }
+      },
+      "size": 13,
+      "lineHeight": {
+        "unit": "AUTO"
+      },
+      "letterSpacing": {
+        "unit": "PERCENT",
+        "value": 0
+      }
+    },
+    {
+      "id": "23:32",
+      "name": "Button · Acción secundaria",
+      "type": "INSTANCE",
+      "w": 148,
+      "h": 40,
+      "fills": [
+        {
+          "type": "SOLID",
+          "hex": "#fffdfb",
+          "opacity": 1
+        }
+      ],
+      "radius": 10
+    },
+    {
+      "id": "I23:32;23:6",
+      "name": "Acción",
+      "type": "TEXT",
+      "w": 117,
+      "h": 16,
+      "fills": [
+        {
+          "type": "SOLID",
+          "hex": "#2d3a5e",
+          "opacity": 1
+        }
+      ],
+      "radius": null,
+      "text": "Acción secundaria",
+      "font": {
+        "family": "Inter",
+        "style": "Semi Bold",
+        "variationSettings": {
+          "wght": 600,
+          "slnt": 0
+        }
+      },
+      "size": 13,
+      "lineHeight": {
+        "unit": "AUTO"
+      },
+      "letterSpacing": {
+        "unit": "PERCENT",
+        "value": 0
+      }
+    },
+    {
+      "id": "23:34",
+      "name": "Button · Acción crítica",
+      "type": "INSTANCE",
+      "w": 148,
+      "h": 40,
+      "fills": [
+        {
+          "type": "SOLID",
+          "hex": "#b91c1c",
+          "opacity": 1
+        }
+      ],
+      "radius": 10
+    },
+    {
+      "id": "I23:34;23:8",
+      "name": "Acción",
+      "type": "TEXT",
+      "w": 86,
+      "h": 16,
+      "fills": [
+        {
+          "type": "SOLID",
+          "hex": "#fffdfb",
+          "opacity": 1
+        }
+      ],
+      "radius": null,
+      "text": "Acción crítica",
+      "font": {
+        "family": "Inter",
+        "style": "Semi Bold",
+        "variationSettings": {
+          "wght": 600,
+          "slnt": 0
+        }
+      },
+      "size": 13,
+      "lineHeight": {
+        "unit": "AUTO"
+      },
+      "letterSpacing": {
+        "unit": "PERCENT",
+        "value": 0
+      }
+    },
+    {
+      "id": "23:36",
+      "name": "Status / Confirmada",
+      "type": "RECTANGLE",
+      "w": 104,
+      "h": 26,
+      "fills": [
+        {
+          "type": "SOLID",
+          "hex": "#f0fdf4",
+          "opacity": 1
+        }
+      ],
+      "radius": 13
+    },
+    {
+      "id": "23:37",
+      "name": "Confirmada",
+      "type": "TEXT",
+      "w": 88,
+      "h": 13,
+      "fills": [
+        {
+          "type": "SOLID",
+          "hex": "#15803d",
+          "opacity": 1
+        }
+      ],
+      "radius": null,
+      "text": "Confirmada",
+      "font": {
+        "family": "Inter",
+        "style": "Medium",
+        "variationSettings": {
+          "wght": 500,
+          "slnt": 0
+        }
+      },
+      "size": 11,
+      "lineHeight": {
+        "unit": "AUTO"
+      },
+      "letterSpacing": {
+        "unit": "PERCENT",
+        "value": 0
+      }
+    },
+    {
+      "id": "23:38",
+      "name": "Status / En espera",
+      "type": "RECTANGLE",
+      "w": 94,
+      "h": 26,
+      "fills": [
+        {
+          "type": "SOLID",
+          "hex": "#fffbeb",
+          "opacity": 1
+        }
+      ],
+      "radius": 13
+    },
+    {
+      "id": "23:39",
+      "name": "En espera",
+      "type": "TEXT",
+      "w": 78,
+      "h": 13,
+      "fills": [
+        {
+          "type": "SOLID",
+          "hex": "#b45309",
+          "opacity": 1
+        }
+      ],
+      "radius": null,
+      "text": "En espera",
+      "font": {
+        "family": "Inter",
+        "style": "Medium",
+        "variationSettings": {
+          "wght": 500,
+          "slnt": 0
+        }
+      },
+      "size": 11,
+      "lineHeight": {
+        "unit": "AUTO"
+      },
+      "letterSpacing": {
+        "unit": "PERCENT",
+        "value": 0
+      }
+    },
+    {
+      "id": "23:40",
+      "name": "Status / Pendiente",
+      "type": "RECTANGLE",
+      "w": 94,
+      "h": 26,
+      "fills": [
+        {
+          "type": "SOLID",
+          "hex": "#f0f9ff",
+          "opacity": 1
+        }
+      ],
+      "radius": 13
+    },
+    {
+      "id": "23:41",
+      "name": "Pendiente",
+      "type": "TEXT",
+      "w": 78,
+      "h": 13,
+      "fills": [
+        {
+          "type": "SOLID",
+          "hex": "#0369a1",
+          "opacity": 1
+        }
+      ],
+      "radius": null,
+      "text": "Pendiente",
+      "font": {
+        "family": "Inter",
+        "style": "Medium",
+        "variationSettings": {
+          "wght": 500,
+          "slnt": 0
+        }
+      },
+      "size": 11,
+      "lineHeight": {
+        "unit": "AUTO"
+      },
+      "letterSpacing": {
+        "unit": "PERCENT",
+        "value": 0
+      }
+    },
+    {
+      "id": "23:3",
+      "name": "Button / Primary",
+      "type": "COMPONENT",
+      "w": 144,
+      "h": 40,
+      "fills": [
+        {
+          "type": "SOLID",
+          "hex": "#2d3a5e",
+          "opacity": 1
+        }
+      ],
+      "radius": 10
+    },
+    {
+      "id": "23:4",
+      "name": "Acción",
+      "type": "TEXT",
+      "w": 44,
+      "h": 16,
+      "fills": [
+        {
+          "type": "SOLID",
+          "hex": "#fffdfb",
+          "opacity": 1
+        }
+      ],
+      "radius": null,
+      "text": "Acción",
+      "font": {
+        "family": "Inter",
+        "style": "Semi Bold",
+        "variationSettings": {
+          "wght": 600,
+          "slnt": 0
+        }
+      },
+      "size": 13,
+      "lineHeight": {
+        "unit": "AUTO"
+      },
+      "letterSpacing": {
+        "unit": "PERCENT",
+        "value": 0
+      }
+    },
+    {
+      "id": "23:5",
+      "name": "Button / Secondary",
+      "type": "COMPONENT",
+      "w": 144,
+      "h": 40,
+      "fills": [
+        {
+          "type": "SOLID",
+          "hex": "#fffdfb",
+          "opacity": 1
+        }
+      ],
+      "radius": 10
+    },
+    {
+      "id": "23:6",
+      "name": "Acción",
+      "type": "TEXT",
+      "w": 44,
+      "h": 16,
+      "fills": [
+        {
+          "type": "SOLID",
+          "hex": "#2d3a5e",
+          "opacity": 1
+        }
+      ],
+      "radius": null,
+      "text": "Acción",
+      "font": {
+        "family": "Inter",
+        "style": "Semi Bold",
+        "variationSettings": {
+          "wght": 600,
+          "slnt": 0
+        }
+      },
+      "size": 13,
+      "lineHeight": {
+        "unit": "AUTO"
+      },
+      "letterSpacing": {
+        "unit": "PERCENT",
+        "value": 0
+      }
+    },
+    {
+      "id": "23:7",
+      "name": "Button / Danger",
+      "type": "COMPONENT",
+      "w": 144,
+      "h": 40,
+      "fills": [
+        {
+          "type": "SOLID",
+          "hex": "#b91c1c",
+          "opacity": 1
+        }
+      ],
+      "radius": 10
+    },
+    {
+      "id": "23:8",
+      "name": "Acción",
+      "type": "TEXT",
+      "w": 44,
+      "h": 16,
+      "fills": [
+        {
+          "type": "SOLID",
+          "hex": "#fffdfb",
+          "opacity": 1
+        }
+      ],
+      "radius": null,
+      "text": "Acción",
+      "font": {
+        "family": "Inter",
+        "style": "Semi Bold",
+        "variationSettings": {
+          "wght": 600,
+          "slnt": 0
+        }
+      },
+      "size": 13,
+      "lineHeight": {
+        "unit": "AUTO"
+      },
+      "letterSpacing": {
+        "unit": "PERCENT",
+        "value": 0
+      }
+    }
+  ]
+}
