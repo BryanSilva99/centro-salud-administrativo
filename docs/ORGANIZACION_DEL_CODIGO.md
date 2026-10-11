@@ -1,6 +1,6 @@
 # Organización del código
 
-Estado: consulta de Cuenta, login, gestión de cuentas, administración de roles y registro de pacientes implementados. Ver [login](LOGIN_COMPLETO.md), [gestión de cuentas y roles](GESTION_CUENTAS.md) y [registro de pacientes](PACIENTES.md).
+Estado: consulta de Cuenta, login, gestión de cuentas, administración de roles, registro de pacientes y catálogo de servicios implementados. Ver [login](LOGIN_COMPLETO.md), [gestión de cuentas y roles](GESTION_CUENTAS.md), [registro de pacientes](PACIENTES.md) y [servicios](SERVICIOS.md).
 
 Backend en Java con Spring Boot y frontend en React, según la elección del usuario. El dominio se mantendrá independiente de Spring y JPA.
 
@@ -87,6 +87,6 @@ Una reserva entrará por HTTP, invocará un caso de uso de `appointments`, compr
 
 ## Estado y límite actual
 
-Identidad y acceso contiene login React/HTTP, sesiones, límite de intentos, consulta/creación/edición/activación/desactivación de cuentas, asignación de roles y auditoría, con pruebas. El módulo administrativo implementa el registro de pacientes (RF-04); su búsqueda y edición (RF-05) siguen pendientes. Los módulos de profesionales, citas y caja conservan su estructura preparada; esto no implica que estén implementados. RF-02 incluye el vínculo con fichas profesionales básicas del módulo administrativo. RF-03 sigue fuera de este alcance.
+Identidad y acceso contiene login React/HTTP, sesiones, límite de intentos, consulta/creación/edición/activación/desactivación de cuentas, asignación de roles y auditoría, con pruebas. El módulo administrativo implementa el registro de pacientes (RF-04) y los servicios con sus modalidades económicas (RF-08, sin profesionales ni consultorios habilitados); la búsqueda y edición de pacientes (RF-05) siguen pendientes. Los módulos de profesionales, citas y caja conservan su estructura preparada; esto no implica que estén implementados. RF-02 incluye el vínculo con fichas profesionales básicas del módulo administrativo. RF-03 sigue fuera de este alcance.
 
 La cuenta de desarrollo y sus credenciales se mantienen en archivos locales ignorados por Git. Ver [gestión de cuentas](GESTION_CUENTAS.md) para el recorrido por capas y [Inicio del desarrollo](INICIO_DESARROLLO.md) para comandos. Solo se amplía la implementación con autorización del usuario.

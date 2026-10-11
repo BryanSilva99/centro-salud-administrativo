@@ -207,7 +207,7 @@ class SesionHttpTest {
             assertEquals(seleccion.stream().sorted().toList(), read(acceso.body(), "$.roles"));
             boolean admin = seleccion.contains("ADM");
             List<String> permisos = new ArrayList<>();
-            if (admin) permisos.addAll(List.of("CUENTAS_CONSULTAR", "CUENTAS_GESTIONAR", "ROLES_GESTIONAR"));
+            if (admin) permisos.addAll(List.of("CUENTAS_CONSULTAR", "CUENTAS_GESTIONAR", "ROLES_GESTIONAR", "SERVICIOS_GESTIONAR"));
             if (seleccion.contains("REC")) permisos.add("PACIENTES_GESTIONAR");
             assertEquals(permisos.stream().sorted().toList(), read(acceso.body(), "$.permisos"));
             assertEquals(admin ? 200 : 403, enviar("GET", "/api/cuentas/" + id, null, false).statusCode());

@@ -14,8 +14,14 @@ class PermisosCuentaTest {
         assertEquals(Set.of(), PermisosCuenta.para(Set.of(Rol.CAJ, Rol.PRO)));
     }
 
+    @Test void soloAdministracionGestionaServicios() {
+        assertTrue(PermisosCuenta.para(Set.of(Rol.ADM)).contains(Permiso.SERVICIOS_GESTIONAR));
+        assertFalse(PermisosCuenta.para(Set.of(Rol.REC, Rol.CAJ, Rol.PRO)).contains(Permiso.SERVICIOS_GESTIONAR));
+    }
+
     @Test void variosRolesSumanSusPermisos() {
-        assertEquals(Set.of(Permiso.CUENTAS_CONSULTAR, Permiso.CUENTAS_GESTIONAR, Permiso.ROLES_GESTIONAR, Permiso.PACIENTES_GESTIONAR),
+        assertEquals(Set.of(Permiso.CUENTAS_CONSULTAR, Permiso.CUENTAS_GESTIONAR, Permiso.ROLES_GESTIONAR,
+                        Permiso.SERVICIOS_GESTIONAR, Permiso.PACIENTES_GESTIONAR),
                 PermisosCuenta.para(Set.of(Rol.ADM, Rol.REC)));
     }
 }

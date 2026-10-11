@@ -15,3 +15,5 @@ Flyway aplica y registra las migraciones al arrancar. Hibernate usa `ddl-auto=va
 V5–V6 añaden roles, versión de edición, bloqueo y auditoría de roles. V7 añade auditoría de cuentas e incrementa la versión de edición al cambiar identificador o estado. V8 añade fichas profesionales y el vínculo con cuentas. No se modifican migraciones aplicadas.
 
 `V9__pacientes.sql` añade pacientes con documento único (tipo + número), un código interno `P` + 8 dígitos generado por secuencia (puede tener huecos si un alta se revierte) y la auditoría de altas sin datos personales.
+
+`V10__servicios.sql` añade servicios (nombre único sin distinguir mayúsculas, duración de 1 a 480 minutos y versión de edición), sus modalidades económicas (tarifa `NUMERIC(10,2)` no negativa; con cargo exige tarifa mayor que cero y sin cargo, tarifa cero) y la auditoría con la foto JSON anterior y nueva. No hay borrado físico: se desactivan.
