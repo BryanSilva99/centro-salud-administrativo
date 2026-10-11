@@ -9,6 +9,10 @@ import pe.centrosalud.modules.administration.domain.FichaProfesional;
 public interface FichasProfesionales {
   List<FichaProfesional> buscar(String texto);
 
+  default List<FichaProfesional> listar() {
+    return buscar("");
+  }
+
   Optional<FichaProfesional> buscarPorId(UUID id);
 
   /** Guarda la ficha, sus servicios habilitados y la auditoría en una transacción. */

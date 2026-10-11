@@ -81,12 +81,12 @@ Las flechas indican dependencias del código, no el orden temporal de una solici
 
 Reportes y auditoría se separan en carpetas porque tienen responsabilidades diferentes, aunque el ADD los agrupe en E-06. Los módulos solo deben colaborar mediante contratos explícitos; no escribirán directamente en tablas ajenas.
 
-## Ejemplo de recorrido futuro
+## Recorrido de una reserva
 
-Una reserva entrará por HTTP, invocará un caso de uso de `appointments`, comprobará reglas del dominio y utilizará los puertos necesarios para persistencia, disponibilidad y auditoría. PostgreSQL implementará las garantías de concurrencia. Este recorrido se describe para ubicar responsabilidades: no está programado.
+Una reserva entra por HTTP, invoca el caso de uso de `appointments` y consulta los contratos públicos de administración e identidad. El adaptador PostgreSQL persiste la cita y el trigger de V15 impide reservas solapadas, incluso concurrentes. La auditoría global sigue pendiente.
 
 ## Estado y límite actual
 
-Identidad y acceso contiene login React/HTTP, sesiones, límite de intentos, consulta/creación/edición/activación/desactivación de cuentas, asignación de roles y auditoría, con pruebas. El módulo administrativo implementa el registro, búsqueda y edición de pacientes (RF-04, RF-05; la lectura mínima de caja y de profesionales de RF-05/CA-3 depende de caja y citas), los servicios con sus modalidades económicas (RF-08), los consultorios con sus servicios compatibles (RF-09), los profesionales completos con sus servicios habilitados (RF-07) y los turnos de disponibilidad de ambos recursos (RF-10, solo el turno crudo; la consulta combinada depende de RF-13). Los módulos de citas y caja conservan su estructura preparada; esto no implica que estén implementados. RF-02 incluye el vínculo con fichas profesionales básicas del módulo administrativo. RF-03 sigue fuera de este alcance.
+Identidad y acceso contiene login React/HTTP, sesiones, límite de intentos, consulta/creación/edición/activación/desactivación de cuentas, asignación de roles y auditoría, con pruebas. El módulo administrativo implementa el registro, búsqueda y edición de pacientes (RF-04, RF-05; la lectura mínima de caja y de profesionales de RF-05/CA-3 depende de caja y citas), los servicios con sus modalidades económicas (RF-08), los consultorios con sus servicios compatibles (RF-09), los profesionales completos con sus servicios habilitados (RF-07) y los turnos de disponibilidad de ambos recursos (RF-10, solo el turno crudo; la consulta combinada depende de RF-13). Citas incorpora agenda diaria, reservas, reprogramación, admisión, atención y dashboard; ver [integración](INTEGRACION_CITAS.md). Caja sigue pendiente de integrar. RF-02 incluye el vínculo con fichas profesionales básicas del módulo administrativo. RF-03 sigue fuera de este alcance.
 
 La cuenta de desarrollo y sus credenciales se mantienen en archivos locales ignorados por Git. Ver [gestión de cuentas](GESTION_CUENTAS.md) para el recorrido por capas y [Inicio del desarrollo](INICIO_DESARROLLO.md) para comandos. Solo se amplía la implementación con autorización del usuario.

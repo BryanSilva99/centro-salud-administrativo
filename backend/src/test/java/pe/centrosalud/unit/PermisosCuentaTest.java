@@ -11,9 +11,11 @@ import pe.centrosalud.modules.identity.domain.Rol;
 class PermisosCuentaTest {
   @Test
   void soloRecepcionGestionaPacientes() {
-    assertEquals(Set.of(Permiso.PACIENTES_GESTIONAR), PermisosCuenta.para(Set.of(Rol.REC)));
+    assertEquals(
+        Set.of(Permiso.PACIENTES_GESTIONAR, Permiso.CITAS_CONSULTAR),
+        PermisosCuenta.para(Set.of(Rol.REC)));
     assertFalse(PermisosCuenta.para(Set.of(Rol.ADM)).contains(Permiso.PACIENTES_GESTIONAR));
-    assertEquals(Set.of(), PermisosCuenta.para(Set.of(Rol.CAJ, Rol.PRO)));
+    assertEquals(Set.of(Permiso.CITAS_CONSULTAR), PermisosCuenta.para(Set.of(Rol.CAJ, Rol.PRO)));
   }
 
   @Test
@@ -52,6 +54,7 @@ class PermisosCuentaTest {
   void variosRolesSumanSusPermisos() {
     assertEquals(
         Set.of(
+            Permiso.CITAS_CONSULTAR,
             Permiso.CUENTAS_CONSULTAR,
             Permiso.CUENTAS_GESTIONAR,
             Permiso.ROLES_GESTIONAR,

@@ -330,6 +330,8 @@ class SesionHttpTest {
                 "PROFESIONALES_GESTIONAR",
                 "DISPONIBILIDAD_GESTIONAR"));
       }
+      if (seleccion.contains("REC") || seleccion.contains("ADM") || seleccion.contains("PRO"))
+        permisos.add("CITAS_CONSULTAR");
       if (seleccion.contains("REC")) permisos.add("PACIENTES_GESTIONAR");
       assertEquals(permisos.stream().sorted().toList(), read(acceso.body(), "$.permisos"));
       assertEquals(
@@ -353,7 +355,7 @@ class SesionHttpTest {
     var me = enviar("GET", "/api/auth/me", null, false);
     assertEquals(200, me.statusCode());
     assertEquals(List.of("CAJ", "REC"), read(me.body(), "$.roles"));
-    assertEquals(List.of("PACIENTES_GESTIONAR"), read(me.body(), "$.permisos"));
+    assertEquals(List.of("CITAS_CONSULTAR", "PACIENTES_GESTIONAR"), read(me.body(), "$.permisos"));
     assertEquals(403, enviar("GET", "/api/cuentas/" + id, null, false).statusCode());
     assertEquals(original, cookie());
     asignarRoles("ADM", "PRO");
@@ -373,7 +375,8 @@ class SesionHttpTest {
     var acceso = enviar("POST", "/api/auth/login", body, true);
     assertEquals(200, acceso.statusCode());
     assertEquals(List.of("REC"), read(acceso.body(), "$.roles"));
-    assertEquals(List.of("PACIENTES_GESTIONAR"), read(acceso.body(), "$.permisos"));
+    assertEquals(
+        List.of("CITAS_CONSULTAR", "PACIENTES_GESTIONAR"), read(acceso.body(), "$.permisos"));
     assertEquals(403, enviar("GET", "/api/cuentas/" + id, null, false).statusCode());
   }
 

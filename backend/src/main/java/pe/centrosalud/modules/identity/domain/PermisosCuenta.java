@@ -21,6 +21,8 @@ public final class PermisosCuenta {
               Permiso.DISPONIBILIDAD_GESTIONAR));
     }
     if (roles.contains(Rol.REC)) permisos.add(Permiso.PACIENTES_GESTIONAR);
+    if (roles.contains(Rol.REC) || roles.contains(Rol.PRO) || roles.contains(Rol.ADM))
+      permisos.add(Permiso.CITAS_CONSULTAR);
     return Set.copyOf(permisos);
   }
 }

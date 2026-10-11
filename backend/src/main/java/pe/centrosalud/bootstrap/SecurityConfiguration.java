@@ -115,6 +115,8 @@ public class SecurityConfiguration {
                     .requestMatchers(
                         HttpMethod.PUT, "/api/disponibilidad/{tipo}/{recursoId}/{turnoId}")
                     .hasAuthority("DISPONIBILIDAD_GESTIONAR")
+                    .requestMatchers("/api/citas/**")
+                    .hasAuthority("CITAS_CONSULTAR")
                     .anyRequest()
                     .denyAll())
         .exceptionHandling(

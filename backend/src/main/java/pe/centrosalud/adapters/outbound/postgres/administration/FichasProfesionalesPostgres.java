@@ -49,6 +49,18 @@ public class FichasProfesionalesPostgres implements FichasProfesionales {
   }
 
   @Override
+  public List<FichaProfesional> listar() {
+    var ids =
+        jdbc.query(
+            "SELECT id FROM profesionales ORDER BY nombre,id",
+            (fila, n) -> fila.getObject("id", UUID.class));
+    var relaciones = relaciones(ids);
+    return jdbc.query(
+        "SELECT * FROM profesionales ORDER BY nombre,id",
+        (fila, n) -> ficha(fila, relaciones.get(fila.getObject("id", UUID.class))));
+  }
+
+  @Override
   public Optional<FichaProfesional> buscarPorId(UUID id) {
     var servicios = new HashSet<UUID>();
     jdbc.query(
