@@ -10,14 +10,14 @@ import pe.centrosalud.modules.identity.domain.Cuenta;
 @Repository
 @Transactional(readOnly = true)
 public class ConsultarCuentasPostgres implements ConsultarCuentas {
-    private final CuentaJpaRepository repository;
+  private final CuentaJpaRepository repository;
 
-    public ConsultarCuentasPostgres(CuentaJpaRepository repository) {
-        this.repository = repository;
-    }
+  public ConsultarCuentasPostgres(CuentaJpaRepository repository) {
+    this.repository = repository;
+  }
 
-    @Override
-    public Optional<Cuenta> buscarPorId(UUID id) {
-        return repository.findById(id).map(CuentaJpaEntity::toDomain);
-    }
+  @Override
+  public Optional<Cuenta> buscarPorId(UUID id) {
+    return repository.findById(id).map(CuentaJpaEntity::toDomain);
+  }
 }

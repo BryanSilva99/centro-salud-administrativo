@@ -10,13 +10,13 @@ import pe.centrosalud.modules.administration.application.usecases.RegistrarPacie
 
 @Configuration
 public class AdministrationConfiguration {
-    @Bean
-    GestionarServicios gestionarServicios(Servicios servicios) {
-        return new GestionarServicios(servicios);
-    }
+  @Bean
+  GestionarServicios gestionarServicios(Servicios servicios) {
+    return new GestionarServicios(servicios);
+  }
 
-    @Bean
-    RegistrarPaciente registrarPaciente(Pacientes pacientes, Clock clock) {
-        return new RegistrarPaciente(pacientes, clock);
-    }
+  @Bean
+  RegistrarPaciente registrarPaciente(Pacientes pacientes, Clock clock) {
+    return new RegistrarPaciente(pacientes, clock);
+  }
 }

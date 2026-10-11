@@ -10,30 +10,30 @@ import pe.centrosalud.modules.identity.domain.Cuenta;
 @Entity
 @Table(name = "cuentas")
 public class CuentaJpaEntity {
-    @Id
-    private UUID id;
+  @Id private UUID id;
 
-    @Column(nullable = false, unique = true, columnDefinition = "text")
-    private String identificador;
+  @Column(nullable = false, unique = true, columnDefinition = "text")
+  private String identificador;
 
-    @Column(nullable = false)
-    private boolean activa;
+  @Column(nullable = false)
+  private boolean activa;
 
-    @Column(name = "contrasena_hash", columnDefinition = "text")
-    private String contrasenaHash;
+  @Column(name = "contrasena_hash", columnDefinition = "text")
+  private String contrasenaHash;
 
-    @Column(name = "version_acceso", nullable = false)
-    private long versionAcceso;
+  @Column(name = "version_acceso", nullable = false)
+  private long versionAcceso;
 
-    protected CuentaJpaEntity() {
-        // JPA necesita un constructor sin argumentos para reconstruir la fila.
-    }
+  protected CuentaJpaEntity() {
+    // JPA necesita un constructor sin argumentos para reconstruir la fila.
+  }
 
-    pe.centrosalud.modules.identity.application.ports.CredencialesCuenta toCredenciales() {
-        return new pe.centrosalud.modules.identity.application.ports.CredencialesCuenta(toDomain(), contrasenaHash, versionAcceso);
-    }
+  pe.centrosalud.modules.identity.application.ports.CredencialesCuenta toCredenciales() {
+    return new pe.centrosalud.modules.identity.application.ports.CredencialesCuenta(
+        toDomain(), contrasenaHash, versionAcceso);
+  }
 
-    Cuenta toDomain() {
-        return new Cuenta(id, identificador, activa);
-    }
+  Cuenta toDomain() {
+    return new Cuenta(id, identificador, activa);
+  }
 }

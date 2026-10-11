@@ -124,6 +124,8 @@ Respetar los principios hexagonales establecidos para el proyecto.
 
 ### Consistencia
 
+Después de modificar código Java, ejecutar desde `backend` `./mvnw spotless:check`; si falla por formato, aplicar `./mvnw spotless:apply` y volver a comprobar. `verify` comprueba el formato sin reescribir archivos.
+
 Antes de crear un archivo o componente:
 1. Revisar cómo se resuelven responsabilidades equivalentes.
 2. Respetar nombres y convenciones establecidos.
