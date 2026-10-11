@@ -1,5 +1,7 @@
 # Catálogo de vistas y plan incremental
 
+> Actualización funcional (11/10/2026): la rama `integration/administracion` incorpora pacientes y recursos al menú de main. El inventario histórico siguiente describe la extracción anterior; consultar [estado y comprobaciones de la integración](../INTEGRACION_ADMINISTRACION.md). Esto no declara adaptación visual de las nuevas pantallas a Figma.
+
 Fecha de inspección: 11 de octubre de 2026. Base común: `main`, commit `d7aca93`. Referencia adicional revisada: `feature/pacientes`, commit `fe559f3`, pendiente de integrar en main.
 
 Esta documentación es transversal al proyecto. Las referencias a código de pacientes describen la rama revisada, no funcionalidad ya disponible en main.

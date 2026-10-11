@@ -1,4 +1,4 @@
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor, within } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 import axe from 'axe-core';
 import { RolesPanel } from '../src/features/identity/components/RolesPanel';
@@ -91,6 +91,34 @@ describe('Administración de roles', () => {
     fireEvent.click(screen.getByRole('button', { name: /^Buscar$/ }));
     expect(await screen.findByText(/No hay cuentas que coincidan/)).toBeVisible();
     expect(screen.queryByRole('alert')).not.toBeInTheDocument();
+  });
+
+  it('integra pacientes y cuentas en el menú sin mostrar dos áreas a la vez', async () => {
+    install(() => response(200, cuenta));
+    render(<SessionView cuenta={{ ...admin, roles: ['ADM', 'REC'], permisos: ['ROLES_GESTIONAR', 'PACIENTES_GESTIONAR'] } as Cuenta} onRefresh={vi.fn()} onExit={vi.fn()} />);
+    fireEvent.click(screen.getByRole('button', { name: 'Registrar paciente' }));
+    expect(screen.getByRole('form', { name: 'Registrar paciente' })).toBeVisible();
+    expect(within(screen.getByRole('navigation', { name: 'Navegación principal' })).getByRole('button', { name: 'Registrar paciente' })).toHaveAttribute('aria-current', 'page');
+    fireEvent.click(screen.getByRole('button', { name: 'Administrar roles' }));
+    expect(await screen.findByRole('heading', { name: 'Administrar roles' })).toBeVisible();
+    expect(screen.queryByRole('form', { name: 'Registrar paciente' })).not.toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: 'Inicio' }));
+    expect(screen.getByRole('heading', { name: 'Hola, recepcion' })).toHaveFocus();
+  });
+
+  it('retira el formulario de pacientes cuando se revoca el permiso y no lo reabre al recuperarlo', () => {
+    install(() => response(200, cuenta));
+    const props = { onRefresh: vi.fn(), onExit: vi.fn() };
+    const recepcion = { ...cuenta, permisos: ['PACIENTES_GESTIONAR'] } as Cuenta;
+    const { rerender } = render(<SessionView cuenta={recepcion} {...props} />);
+    fireEvent.click(screen.getByRole('button', { name: 'Registrar paciente' }));
+    expect(screen.getByRole('form', { name: 'Registrar paciente' })).toBeVisible();
+    rerender(<SessionView cuenta={{ ...recepcion, roles: [], permisos: [] }} {...props} />);
+    expect(screen.queryByRole('form', { name: 'Registrar paciente' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'Buscar pacientes' })).not.toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Hola, recepcion' })).toHaveFocus();
+    rerender(<SessionView cuenta={recepcion} {...props} />);
+    expect(screen.queryByRole('form', { name: 'Registrar paciente' })).not.toBeInTheDocument();
   });
 
 });

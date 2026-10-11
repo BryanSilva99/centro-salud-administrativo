@@ -1,23 +1,38 @@
 import { RolesPanel } from './RolesPanel';
+import { RegistrarPacienteForm } from '../../administration/components/RegistrarPacienteForm';
+import { BuscarPacientesPanel } from '../../administration/components/BuscarPacientesPanel';
+import { ServiciosPanel } from '../../administration/components/ServiciosPanel';
+import { ConsultoriosPanel } from '../../administration/components/ConsultoriosPanel';
+import { ProfesionalesPanel } from '../../administration/components/ProfesionalesPanel';
+import { DisponibilidadPanel } from '../../administration/components/DisponibilidadPanel';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { auth, type Cuenta, type Rol } from '../api/auth';
+import { auth, type Cuenta, type Rol, type Permiso } from '../api/auth';
 import { ApiError } from '../../../shared/api/http';
 import { useSessionActivity } from '../hooks/useSessionActivity';
 
 const nombresRoles: Record<Rol, string> = { REC: 'Recepción / admisión', CAJ: 'Caja', ADM: 'Administrador del centro', PRO: 'Profesional de salud' };
 
 export function SessionView({ cuenta, onExit, onRefresh }: { cuenta: Cuenta; onExit: (message: string) => void; onRefresh: (cuenta: Cuenta) => void }) {
-  const [showRoles, setShowRoles] = useState(false);
+  const [vista, setVista] = useState('inicio');
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
   const [connected, setConnected] = useState(true);
   const title = useRef<HTMLHeadingElement>(null);
   const expired = useCallback(() => onExit('Tu sesión terminó. Vuelve a ingresar para continuar.'), [onExit]);
   useSessionActivity(cuenta.id, expired, setConnected, onRefresh);
-  const puedeAdministrar = cuenta.permisos.includes('ROLES_GESTIONAR');
-  const administracionAbierta = showRoles && puedeAdministrar;
-  useEffect(() => { if (!administracionAbierta) title.current?.focus(); }, [administracionAbierta]);
-  useEffect(() => { if (!puedeAdministrar) setShowRoles(false); }, [puedeAdministrar]);
+  const accesos = [
+    { id: 'roles', nombre: 'Usuarios y roles', permiso: 'ROLES_GESTIONAR' },
+    { id: 'registro', nombre: 'Registrar paciente', permiso: 'PACIENTES_GESTIONAR' },
+    { id: 'pacientes', nombre: 'Buscar pacientes', permiso: 'PACIENTES_GESTIONAR' },
+    { id: 'servicios', nombre: 'Gestionar servicios', permiso: 'SERVICIOS_GESTIONAR' },
+    { id: 'consultorios', nombre: 'Gestionar consultorios', permiso: 'CONSULTORIOS_GESTIONAR' },
+    { id: 'profesionales', nombre: 'Gestionar profesionales', permiso: 'PROFESIONALES_GESTIONAR' },
+    { id: 'disponibilidad', nombre: 'Gestionar disponibilidad', permiso: 'DISPONIBILIDAD_GESTIONAR' },
+  ].filter(acceso => cuenta.permisos.includes(acceso.permiso as Permiso));
+  const accesoActual = accesos.find(acceso => acceso.id === vista);
+  const vistaActual = accesoActual?.id ?? 'inicio';
+  useEffect(() => { if (vistaActual === 'inicio') title.current?.focus(); }, [vistaActual]);
+  useEffect(() => { if (vista !== vistaActual) setVista(vistaActual); }, [vista, vistaActual]);
 
   async function logout() {
     setBusy(true); setError('');
@@ -33,18 +48,25 @@ export function SessionView({ cuenta, onExit, onRefresh }: { cuenta: Cuenta; onE
       <a className="brand" href="/" aria-label="Centro de Salud, inicio"><span className="brand-mark" aria-hidden="true">+</span><span>Centro de Salud<small>Sistema administrativo</small></span></a>
       <p className="nav-caption">Operación</p>
       <nav aria-label="Navegación principal">
-        <button type="button" aria-current={!administracionAbierta ? 'page' : undefined} onClick={() => setShowRoles(false)}>Inicio</button>
-        {puedeAdministrar && <button type="button" aria-label={cuenta.permisos.includes('CUENTAS_GESTIONAR') ? 'Administrar cuentas y roles' : 'Administrar roles'} aria-current={administracionAbierta ? 'page' : undefined} onClick={() => setShowRoles(true)}>Usuarios y roles</button>}
+        <button type="button" aria-current={vistaActual === 'inicio' ? 'page' : undefined} onClick={() => setVista('inicio')}>Inicio</button>
+        {accesos.map(acceso => <button key={acceso.id} type="button" aria-label={acceso.id === 'roles' ? (cuenta.permisos.includes('CUENTAS_GESTIONAR') ? 'Administrar cuentas y roles' : 'Administrar roles') : undefined} aria-current={vistaActual === acceso.id ? 'page' : undefined} onClick={() => setVista(acceso.id)}>{acceso.nombre}</button>)}
       </nav>
       <div className="sidebar-profile"><span className="avatar" aria-hidden="true">{cuenta.identificador.slice(0, 2).toUpperCase()}</span><div><strong>{cuenta.identificador}</strong><small>Sesión interna</small></div></div>
       <button className="logout-button" type="button" data-no-activity disabled={busy} onClick={logout}>{busy ? 'Cerrando sesión…' : 'Cerrar sesión'}</button>
     </aside>
     <div className="workspace-body">
-      <header className="workspace-header"><span>Inicio{administracionAbierta && ' / Usuarios y roles'}</span><span className="avatar" aria-label={`Cuenta: ${cuenta.identificador}`}>{cuenta.identificador.slice(0, 2).toUpperCase()}</span></header>
+      <header className="workspace-header"><span>Inicio{accesoActual && ` / ${accesoActual.nombre}`}</span><span className="avatar" aria-label={`Cuenta: ${cuenta.identificador}`}>{cuenta.identificador.slice(0, 2).toUpperCase()}</span></header>
       <main id="main-content" className="workspace-content" tabIndex={-1}>
         {!connected && <p className="error" role="status">No pudimos comprobar la sesión. Revisa tu conexión; volveremos a comprobarla.</p>}
         {error && <p className="error" role="alert">{error}</p>}
-        {administracionAbierta ? <RolesPanel gestionarCuentas={cuenta.permisos.includes('CUENTAS_GESTIONAR')} onRefresh={onRefresh} onExpired={expired} /> : <section className="session-card" aria-labelledby="session-title">
+        {vistaActual === 'roles' && <RolesPanel gestionarCuentas={cuenta.permisos.includes('CUENTAS_GESTIONAR')} onRefresh={onRefresh} onExpired={expired} />}
+        {vistaActual === 'registro' && <RegistrarPacienteForm onExpired={expired} />}
+        {vistaActual === 'pacientes' && <BuscarPacientesPanel onExpired={expired} />}
+        {vistaActual === 'servicios' && <ServiciosPanel onExpired={expired} />}
+        {vistaActual === 'consultorios' && <ConsultoriosPanel onExpired={expired} />}
+        {vistaActual === 'profesionales' && <ProfesionalesPanel onExpired={expired} />}
+        {vistaActual === 'disponibilidad' && <DisponibilidadPanel onExpired={expired} />}
+        {vistaActual === 'inicio' && <section className="session-card" aria-labelledby="session-title">
     <span className="status-badge"><span aria-hidden="true">●</span> Sesión iniciada</span>
     <h1 id="session-title" tabIndex={-1} ref={title}>Hola, {cuenta.identificador}</h1>
     <p className="intro">Ya accediste al sistema del centro de salud.</p>
@@ -56,7 +78,7 @@ export function SessionView({ cuenta, onExit, onRefresh }: { cuenta: Cuenta; onE
         : <p className="notice">Tu cuenta todavía no tiene roles asignados. Comunícate con la administración.</p>}
       {(cuenta.permisos ?? []).includes('CUENTAS_CONSULTAR') && <p className="permission-note">Tu cuenta tiene permiso para consultar cuentas de acceso.</p>}
     </div>
-    <p className="access-help">Las funciones de cada área se habilitarán conforme se integren sus módulos. Tu acceso se limita a los permisos de tu cuenta.</p>
+    <p className="access-help">Usa el menú para acceder a las funciones disponibles según los permisos de tu cuenta.</p>
     <p className="access-help">Cierra tu sesión cuando termines, especialmente en equipos compartidos.</p>
         </section>}
       </main>

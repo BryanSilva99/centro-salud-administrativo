@@ -1,7 +1,7 @@
 import { ApiError, request } from '../../../shared/api/http';
 
 export type Rol = 'REC' | 'CAJ' | 'ADM' | 'PRO';
-export type Permiso = 'CUENTAS_CONSULTAR' | 'CUENTAS_GESTIONAR' | 'ROLES_GESTIONAR';
+export type Permiso = 'CUENTAS_CONSULTAR' | 'CUENTAS_GESTIONAR' | 'ROLES_GESTIONAR' | 'PACIENTES_GESTIONAR' | 'SERVICIOS_GESTIONAR' | 'CONSULTORIOS_GESTIONAR' | 'PROFESIONALES_GESTIONAR' | 'DISPONIBILIDAD_GESTIONAR';
 
 export interface Cuenta {
   id: string;
