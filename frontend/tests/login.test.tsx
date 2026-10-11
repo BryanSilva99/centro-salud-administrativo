@@ -4,7 +4,7 @@ import axe from 'axe-core';
 import { App } from '../src/app/App';
 import { auth } from '../src/features/identity/api/auth';
 
-const cuenta = { id: 'f12e50d4-1dfa-4aa1-9c1d-b37ccbf6ab55', identificador: 'prueba', activa: true };
+const cuenta = { id: 'f12e50d4-1dfa-4aa1-9c1d-b37ccbf6ab55', identificador: 'prueba', activa: true, roles: ['REC'], permisos: [] };
 const response = (status: number, body?: unknown) => new Response(body === undefined ? null : JSON.stringify(body), { status, headers: { 'Content-Type': 'application/json' } });
 function install(server: (url: string, options: RequestInit) => Response | Promise<Response>) {
   const fetch = vi.fn((url: string, options: RequestInit = {}) => Promise.resolve(server(url, options)));
@@ -101,6 +101,27 @@ describe('Acceso del personal', () => {
     fireEvent(document, new Event('visibilitychange'));
     await waitFor(() => expect(fetch.mock.calls.filter(([url]) => url.endsWith('/me')).length).toBeGreaterThan(1));
     expect(fetch.mock.calls.filter(([url]) => url.endsWith('/activity'))).toHaveLength(0);
+  });
+
+  it('refleja cambios de rol al volver a la pestaña sin mantener privilegios visuales anteriores', async () => {
+    let actual = { ...cuenta, roles: ['ADM'], permisos: ['CUENTAS_CONSULTAR'] };
+    install(() => response(200, actual));
+    render(<App />);
+    expect(await screen.findByText('Administrador del centro')).toBeVisible();
+    expect(screen.getByText('Tu cuenta tiene permiso para consultar cuentas de acceso.')).toBeVisible();
+    actual = { ...cuenta, roles: ['REC', 'CAJ'], permisos: [] };
+    fireEvent(document, new Event('visibilitychange'));
+    expect(await screen.findByText('Caja')).toBeVisible();
+    expect(screen.getByText('Recepción / admisión')).toBeVisible();
+    expect(screen.queryByText('Administrador del centro')).not.toBeInTheDocument();
+    expect(screen.queryByText('Tu cuenta tiene permiso para consultar cuentas de acceso.')).not.toBeInTheDocument();
+  });
+
+  it('una cuenta sin roles no muestra permisos administrativos', async () => {
+    install(() => response(200, { ...cuenta, roles: [], permisos: [] }));
+    render(<App />);
+    expect(await screen.findByText(/Tu cuenta todavía no tiene roles asignados/)).toBeVisible();
+    expect(screen.queryByText('Tu cuenta tiene permiso para consultar cuentas de acceso.')).not.toBeInTheDocument();
   });
 
   it('no presenta infracciones Axe en el formulario y su estado de error (sin evaluar contraste en jsdom)', async () => {

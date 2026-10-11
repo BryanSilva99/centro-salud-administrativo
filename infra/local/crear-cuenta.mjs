@@ -6,6 +6,10 @@ import { parseEnv } from 'node:util';
 import { fileURLToPath } from 'node:url';
 import { resolve } from 'node:path';
 
+const args = process.argv.slice(2);
+const rol = args.length === 0 ? null : args.length === 2 && args[0] === '--rol' ? args[1] : undefined;
+if (rol === undefined || (rol !== null && !['REC', 'CAJ', 'ADM', 'PRO'].includes(rol))) throw new Error('Uso: npm run cuenta -- --rol REC|CAJ|ADM|PRO');
+
 const root = fileURLToPath(new URL('../../', import.meta.url));
 const env = parseEnv(readFileSync(resolve(root, 'backend/.env'), 'utf8'));
 if (!/^jdbc:postgresql:\/\/(localhost|127\.0\.0\.1):5432\/centro_salud$/.test(env.DB_URL ?? '') || env.DB_USERNAME !== 'centro_salud') {
@@ -31,5 +35,9 @@ try {
   if (!current || current.id !== account.id || !current.activa || !current.contrasena_hash?.startsWith(prefix)) throw new Error('La cuenta existente no coincide con este archivo local. No se modificó.');
   const stored = Buffer.from(current.contrasena_hash.slice(prefix.length), 'hex');
   if (stored.length !== 48 || !timingSafeEqual(stored.subarray(16), pbkdf2Sync(account.contrasena, stored.subarray(0, 16), 600_000, 32, 'sha256'))) throw new Error('La contraseña existente fue modificada. No se restableció automáticamente.');
+  if (rol) {
+    await client.query('INSERT INTO cuenta_roles(cuenta_id, rol) VALUES ($1, $2) ON CONFLICT DO NOTHING', [account.id, rol]);
+    console.log(`Rol local asignado: ${rol}.`);
+  }
   console.log('Cuenta local disponible: bryan.local. Credenciales en .data/cuenta-local.json (fuera de Git).');
 } finally { await client.end(); }

@@ -18,6 +18,7 @@ export function App() {
     }).catch(() => { if (!controller.signal.aborted) setState({ kind: 'unavailable' }); });
     return () => controller.abort();
   }, [retry]);
+  const refresh = useCallback((cuenta: Cuenta) => setState({ kind: 'authenticated', cuenta, verBilling: false }), []);
   const exit = useCallback((notice: string) => setState({ kind: 'anonymous', notice }), []);
 
   return <div className="app-shell">
@@ -39,6 +40,7 @@ export function App() {
           <SessionView
             cuenta={state.cuenta}
             onExit={exit}
+            onRefresh={refresh}
             onOpenBilling={() => setState({ ...state, verBilling: true })}
           />
         )}

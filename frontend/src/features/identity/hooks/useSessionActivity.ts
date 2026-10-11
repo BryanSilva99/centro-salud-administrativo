@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
 import { ApiError } from '../../../shared/api/http';
-import { auth } from '../api/auth';
+import { auth, type Cuenta } from '../api/auth';
 
-export function useSessionActivity(accountId: string, onExpired: () => void, onConnection: (connected: boolean) => void) {
+export function useSessionActivity(accountId: string, onExpired: () => void, onConnection: (connected: boolean) => void, onRefresh: (cuenta: Cuenta) => void) {
   useEffect(() => {
     const controller = new AbortController();
     let lastActivity = Date.now();
@@ -20,7 +20,7 @@ export function useSessionActivity(accountId: string, onExpired: () => void, onC
         const cuenta = await auth.me(controller.signal);
         if (!controller.signal.aborted) {
           if (!cuenta || cuenta.id !== accountId) onExpired();
-          else onConnection(true);
+          else { onConnection(true); onRefresh(cuenta); }
         }
       } catch (error) { handleError(error); }
       finally { checking = false; }
@@ -48,5 +48,5 @@ export function useSessionActivity(accountId: string, onExpired: () => void, onC
       document.removeEventListener('pointerdown', activity);
       document.removeEventListener('keydown', activity);
     };
-  }, [accountId, onExpired, onConnection]);
+  }, [accountId, onExpired, onConnection, onRefresh]);
 }

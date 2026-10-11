@@ -9,13 +9,14 @@ import pe.centrosalud.modules.identity.application.ports.CredencialesCuenta;
 @Repository
 @Transactional(readOnly = true)
 public class ConsultarCredencialesPostgres implements ConsultarCredenciales {
-    private final CuentaJpaRepository repository;
+  private final CuentaJpaRepository repository;
 
-    public ConsultarCredencialesPostgres(CuentaJpaRepository repository) {
-        this.repository = repository;
-    }
+  public ConsultarCredencialesPostgres(CuentaJpaRepository repository) {
+    this.repository = repository;
+  }
 
-    @Override public Optional<CredencialesCuenta> buscarPorIdentificador(String identificador) {
-        return repository.findByIdentificador(identificador).map(CuentaJpaEntity::toCredenciales);
-    }
+  @Override
+  public Optional<CredencialesCuenta> buscarPorIdentificador(String identificador) {
+    return repository.findByIdentificador(identificador).map(CuentaJpaEntity::toCredenciales);
+  }
 }

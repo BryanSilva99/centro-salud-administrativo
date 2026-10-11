@@ -1,5 +1,5 @@
 export class ApiError extends Error {
-  constructor(public readonly status: number, message: string) {
+  constructor(public readonly status: number, message: string, public readonly code?: string) {
     super(message);
     this.name = 'ApiError';
   }
@@ -23,7 +23,8 @@ export async function request<T>(path: string, options: RequestInit = {}): Promi
         : response.status === 400
           ? 'Revisa los datos e inténtalo de nuevo.'
           : 'El servicio no está disponible en este momento. Inténtalo de nuevo.';
-    throw new ApiError(response.status, message);
+    const problem = await response.json().catch(() => ({})) as { code?: string };
+    throw new ApiError(response.status, message, problem.code);
   }
   if (response.status === 204) return undefined as T;
   try { return await response.json() as T; }

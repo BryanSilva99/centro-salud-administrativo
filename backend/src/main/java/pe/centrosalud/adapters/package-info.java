@@ -1,5 +1,2 @@
-/**
- * Adaptadores hexagonales.
- * Estructura únicamente: implementación pendiente.
- */
+/** Adaptadores hexagonales. Estructura únicamente: implementación pendiente. */
 package pe.centrosalud.adapters;

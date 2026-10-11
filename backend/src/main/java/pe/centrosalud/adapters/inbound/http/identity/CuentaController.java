@@ -14,22 +14,22 @@ import pe.centrosalud.modules.identity.application.usecases.CuentaNoEncontrada;
 @RestController
 @RequestMapping("/api/cuentas")
 public class CuentaController {
-    private final ConsultarCuenta consultarCuenta;
+  private final ConsultarCuenta consultarCuenta;
 
-    public CuentaController(ConsultarCuenta consultarCuenta) {
-        this.consultarCuenta = consultarCuenta;
-    }
+  public CuentaController(ConsultarCuenta consultarCuenta) {
+    this.consultarCuenta = consultarCuenta;
+  }
 
-    @GetMapping("/{id}")
-    public CuentaResponse consultar(@PathVariable("id") UUID id) {
-        var cuenta = consultarCuenta.ejecutar(id);
-        return new CuentaResponse(cuenta.id(), cuenta.identificador(), cuenta.activa());
-    }
+  @GetMapping("/{id}")
+  public CuentaResponse consultar(@PathVariable("id") UUID id) {
+    var cuenta = consultarCuenta.ejecutar(id);
+    return new CuentaResponse(cuenta.id(), cuenta.identificador(), cuenta.activa());
+  }
 
-    @ExceptionHandler(CuentaNoEncontrada.class)
-    public ProblemDetail cuentaNoEncontrada(CuentaNoEncontrada error) {
-        return ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, error.getMessage());
-    }
+  @ExceptionHandler(CuentaNoEncontrada.class)
+  public ProblemDetail cuentaNoEncontrada(CuentaNoEncontrada error) {
+    return ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, error.getMessage());
+  }
 
-    public record CuentaResponse(UUID id, String identificador, boolean activa) {}
+  public record CuentaResponse(UUID id, String identificador, boolean activa) {}
 }

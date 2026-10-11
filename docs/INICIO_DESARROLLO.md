@@ -25,9 +25,9 @@ Spring Boot 4.1.1 administra las versiones compatibles mediante su POM padre.
 | Spring Session JDBC | Persistencia futura de sesiones |
 | Starters de pruebas | Herramientas de pruebas para las tecnologías seleccionadas |
 
-`CentroSaludApplication` solo inicia Spring. `bootstrap/SecurityConfiguration` habilita solo autenticación, consulta de sesión y actividad; las rutas de negocio siguen cerradas. No habilita un formulario automático ni HTTP Basic. El logout es POST con CSRF. La protección CSRF permanece activa. Spring puede emitir su credencial automática de desarrollo al arrancar: no se usa como cuenta del sistema ni habilita acceso con esta configuración.
+`CentroSaludApplication` solo inicia Spring. `bootstrap/SecurityConfiguration` habilita solo autenticación, consulta de sesión y actividad; la consulta de cuentas exige el permiso de ADM y las demás rutas de negocio siguen cerradas. No habilita un formulario automático ni HTTP Basic. El logout es POST con CSRF. La protección CSRF permanece activa. Spring puede emitir su credencial automática de desarrollo al arrancar: no se usa como cuenta del sistema ni habilita acceso con esta configuración.
 
-La migración V2 añade cuentas y existe un adaptador JPA de consulta. V3 añade almacenamiento de hash y existe verificación interna de credenciales. No hay cuentas precargadas ni roles implementados; ver [paso 2](CREDENCIALES_PASO_2.md). La migración V1 crea únicamente las dos tablas técnicas de Spring Session, usando el esquema oficial de Spring Session JDBC 4.1.1. Flyway registra su aplicación; esto no implementa el login. La expiración absoluta de ocho horas, inactividad de 30 minutos y limitación de intentos están implementadas.
+La migración V2 añade cuentas y existe un adaptador JPA de consulta. V3 añade almacenamiento de hash y existe verificación interna de credenciales. No hay cuentas precargadas por migraciones; V5 almacena roles y se aplican en cada solicitud; ver [paso 2](CREDENCIALES_PASO_2.md). La migración V1 crea únicamente las dos tablas técnicas de Spring Session, usando el esquema oficial de Spring Session JDBC 4.1.1. Flyway registra su aplicación; esto no implementa el login. La expiración absoluta de ocho horas, inactividad de 30 minutos y limitación de intentos están implementadas.
 
 ## Preparar PostgreSQL
 
@@ -94,3 +94,5 @@ React 19.3.0, Vite 8.3.4 y TypeScript 7.0.2 están fijados en `package.json`; `p
 - Verificado: PostgreSQL 18.4, cuenta sin superusuario, lectura/escritura temporal con rollback, migración V1 y arranque de Spring Boot conectado a la base. React contiene el login conectado. La API de autenticación se verificó con HTTP real; las rutas protegidas devuelven 401 sin sesión y las rutas de negocio denegadas devuelven 403 con sesión. Esto verifica el entorno, no funcionalidades. Docker sigue siendo una alternativa no probada en este equipo.
 
 Fuentes técnicas: [Spring Initializr](https://start.spring.io/), [requisitos de Spring Boot](https://docs.spring.io/spring-boot/system-requirements.html) y [guía de Vite](https://vite.dev/guide/).
+
+Contrato final de sesión, roles y pruebas: [Login completo](LOGIN_COMPLETO.md).
