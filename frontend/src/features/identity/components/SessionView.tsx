@@ -1,5 +1,10 @@
 import { RolesPanel } from './RolesPanel';
 import { RegistrarPacienteForm } from '../../administration/components/RegistrarPacienteForm';
+import { BuscarPacientesPanel } from '../../administration/components/BuscarPacientesPanel';
+import { ServiciosPanel } from '../../administration/components/ServiciosPanel';
+import { ConsultoriosPanel } from '../../administration/components/ConsultoriosPanel';
+import { ProfesionalesPanel } from '../../administration/components/ProfesionalesPanel';
+import { DisponibilidadPanel } from '../../administration/components/DisponibilidadPanel';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { auth, type Cuenta, type Rol } from '../api/auth';
 import { ApiError } from '../../../shared/api/http';
@@ -10,6 +15,11 @@ const nombresRoles: Record<Rol, string> = { REC: 'Recepción / admisión', CAJ: 
 export function SessionView({ cuenta, onExit, onRefresh }: { cuenta: Cuenta; onExit: (message: string) => void; onRefresh: (cuenta: Cuenta) => void }) {
   const [showRoles, setShowRoles] = useState(false);
   const [showPacientes, setShowPacientes] = useState(false);
+  const [showBuscarPacientes, setShowBuscarPacientes] = useState(false);
+  const [showServicios, setShowServicios] = useState(false);
+  const [showConsultorios, setShowConsultorios] = useState(false);
+  const [showProfesionales, setShowProfesionales] = useState(false);
+  const [showDisponibilidad, setShowDisponibilidad] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
   const [connected, setConnected] = useState(true);
@@ -59,6 +69,11 @@ export function SessionView({ cuenta, onExit, onRefresh }: { cuenta: Cuenta; onE
       {(cuenta.permisos ?? []).includes('CUENTAS_CONSULTAR') && <p className="permission-note">Tu cuenta tiene permiso para consultar cuentas de acceso.</p>}
     </div>
     {cuenta.permisos.includes('PACIENTES_GESTIONAR') && <><button type="button" onClick={() => setShowPacientes(v => !v)} aria-expanded={showPacientes}>{showPacientes ? 'Ocultar registro de pacientes' : 'Registrar paciente'}</button>{showPacientes && <RegistrarPacienteForm onExpired={expired} /></>}
+    {cuenta.permisos.includes('PACIENTES_GESTIONAR') && <><button type="button" onClick={() => setShowBuscarPacientes(v => !v)} aria-expanded={showBuscarPacientes}>{showBuscarPacientes ? 'Ocultar búsqueda de pacientes' : 'Buscar pacientes'}</button>{showBuscarPacientes && <BuscarPacientesPanel onExpired={expired} /></>}
+    {cuenta.permisos.includes('SERVICIOS_GESTIONAR') && <><button type="button" onClick={() => setShowServicios(v => !v)} aria-expanded={showServicios}>{showServicios ? 'Ocultar servicios' : 'Gestionar servicios'}</button>{showServicios && <ServiciosPanel onExpired={expired} /></>}
+    {cuenta.permisos.includes('CONSULTORIOS_GESTIONAR') && <><button type="button" onClick={() => setShowConsultorios(v => !v)} aria-expanded={showConsultorios}>{showConsultorios ? 'Ocultar consultorios' : 'Gestionar consultorios'}</button>{showConsultorios && <ConsultoriosPanel onExpired={expired} /></>}
+    {cuenta.permisos.includes('PROFESIONALES_GESTIONAR') && <><button type="button" onClick={() => setShowProfesionales(v => !v)} aria-expanded={showProfesionales}>{showProfesionales ? 'Ocultar profesionales' : 'Gestionar profesionales'}</button>{showProfesionales && <ProfesionalesPanel onExpired={expired} /></>}
+    {cuenta.permisos.includes('DISPONIBILIDAD_GESTIONAR') && <><button type="button" onClick={() => setShowDisponibilidad(v => !v)} aria-expanded={showDisponibilidad}>{showDisponibilidad ? 'Ocultar disponibilidad' : 'Gestionar disponibilidad'}</button>{showDisponibilidad && <DisponibilidadPanel onExpired={expired} /></>}
     <p className="access-help">Las funciones de cada área se habilitarán conforme se integren sus módulos. Tu acceso se limita a los permisos de tu cuenta.</p>
     <p className="access-help">Cierra tu sesión cuando termines, especialmente en equipos compartidos.</p>
         </section>}

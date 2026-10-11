@@ -77,6 +77,8 @@ La escritura reutiliza el bloqueo y la transacción de cuentas/roles. Dos cuenta
 
 El contrato público `FichasProfesionales` permite que identidad consulte el módulo administrativo sin acceder directamente a sus tablas. El registro básico es una sola inserción validada por `FichaProfesional`; no se añadió una clase intermedia que solo delegue esa llamada. La ficha registra quién la creó y cuándo. La búsqueda devuelve hasta 50 resultados y permite refinar por nombre o identificación; una ficha ya vinculada se consulta por ID aunque no aparezca en esos 50 resultados.
 
+RF-07 amplió esta ficha básica con edición, estado, versión y servicios habilitados — ver [docs/PROFESIONALES.md](PROFESIONALES.md). Las rutas `/api/profesionales/fichas*` exigen ahora el permiso `PROFESIONALES_GESTIONAR` en lugar de `CUENTAS_GESTIONAR`; el vínculo de esta sección (`PUT /api/cuentas/{id}/profesional`) no cambió y sigue exigiendo `CUENTAS_GESTIONAR`.
+
 ### Rutas del vínculo
 
 | Método | Ruta | Función |
@@ -86,7 +88,7 @@ El contrato público `FichasProfesionales` permite que identidad consulte el mó
 | POST | `/api/profesionales/fichas` | Registrar identificación, nombre y especialidad/función. |
 | PUT | `/api/cuentas/{id}/profesional` | Guardar `{ "profesionalId": null, "version": 4 }`; null desvincula. |
 
-Todas exigen ADM; las escrituras requieren CSRF. Se informa si la ficha no existe/está inactiva, está ocupada, falta PRO o la versión quedó obsoleta. Se probaron alta/consulta, reemplazo/desvinculación, permisos, CSRF, duplicación, concurrencia y reversión ante fallo de auditoría.
+Todas exigen ADM (las tres rutas de `/api/profesionales/fichas` con `PROFESIONALES_GESTIONAR` desde RF-07; el vínculo con `CUENTAS_GESTIONAR`); las escrituras requieren CSRF. Se informa si la ficha no existe/está inactiva, está ocupada, falta PRO o la versión quedó obsoleta. Se probaron alta/consulta, reemplazo/desvinculación, permisos, CSRF, duplicación, concurrencia y reversión ante fallo de auditoría.
 
 ### Dónde cambiar cada comportamiento
 

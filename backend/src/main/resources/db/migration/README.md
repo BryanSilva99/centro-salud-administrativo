@@ -15,3 +15,13 @@ Flyway aplica y registra las migraciones al arrancar. Hibernate usa `ddl-auto=va
 V5–V6 añaden roles, versión de edición, bloqueo y auditoría de roles. V7 añade auditoría de cuentas e incrementa la versión de edición al cambiar identificador o estado. V8 añade fichas profesionales y el vínculo con cuentas. No se modifican migraciones aplicadas.
 
 `V9__pacientes.sql` añade pacientes con documento único (tipo + número), un código interno `P` + 8 dígitos generado por secuencia (puede tener huecos si un alta se revierte) y la auditoría de altas sin datos personales.
+
+`V10__servicios.sql` añade servicios (nombre único sin distinguir mayúsculas, duración de 1 a 480 minutos y versión de edición), sus modalidades económicas (tarifa `NUMERIC(10,2)` no negativa; con cargo exige tarifa mayor que cero y sin cargo, tarifa cero) y la auditoría con la foto JSON anterior y nueva. No hay borrado físico: se desactivan.
+
+`V11__consultorios.sql` añade consultorios (código único sin distinguir mayúsculas, escrito por ADM, y versión de edición), la relación `consultorio_servicios` (reemplazada por completo en cada edición) y su auditoría con foto JSON. Mismo criterio de V10: no hay borrado físico.
+
+`V12__profesionales_completo.sql` añade una versión de edición a `profesionales` (tabla creada en V8), la relación `profesional_servicios` (reemplazada por completo en cada edición) y su auditoría. A diferencia de V10/V11, la foto JSON de esta auditoría no incluye nombre ni identificación (RF-28/CA-2, RN-17): solo estado, versión y los IDs de servicios habilitados.
+
+`V13__disponibilidad.sql` añade `turnos_profesional` y `turnos_consultorio` (intervalos con tipo DISPONIBLE/DESCANSO, sin solape entre turnos activos del mismo recurso y fecha) y `auditoria_turnos` con un registro mínimo por alta/baja. No usa `CREATE EXTENSION` ni restricciones `EXCLUDE`/GiST: la superposición se impide en la aplicación, no en el esquema (ver `docs/DISPONIBILIDAD.md`).
+
+`V14__pacientes_version.sql` añade una versión de edición a `pacientes` (tabla creada en V9) y amplía el tipo permitido en `auditoria_pacientes` para incluir `ACTUALIZACION`. La auditoría sigue sin copiar datos personales.

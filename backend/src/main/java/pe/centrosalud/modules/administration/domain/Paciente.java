@@ -14,7 +14,8 @@ public record Paciente(
     String apellidos,
     LocalDate fechaNacimiento,
     String telefono,
-    String correo) {
+    String correo,
+    long version) {
   private static final LocalDate NACIMIENTO_MINIMO = LocalDate.of(1900, 1, 1);
 
   public Paciente {

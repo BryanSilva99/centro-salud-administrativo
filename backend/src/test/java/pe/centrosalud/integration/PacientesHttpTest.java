@@ -16,8 +16,11 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
-import pe.centrosalud.modules.administration.application.usecases.PacienteDuplicado;
+import pe.centrosalud.modules.administration.application.ports.Pacientes;
+import pe.centrosalud.modules.administration.application.usecases.ActualizarPaciente;
+import pe.centrosalud.modules.administration.application.usecases.ErrorPacientes;
 import pe.centrosalud.modules.administration.application.usecases.RegistrarPaciente;
+import pe.centrosalud.modules.administration.domain.Paciente;
 import pe.centrosalud.modules.administration.domain.TipoDocumento;
 import pe.centrosalud.modules.identity.application.ports.HashContrasenas;
 
@@ -38,6 +41,8 @@ class PacientesHttpTest {
   @Autowired JdbcTemplate jdbc;
   @Autowired HashContrasenas hashes;
   @Autowired RegistrarPaciente registrar;
+  @Autowired ActualizarPaciente actualizarCasoUso;
+  @Autowired Pacientes pacientes;
   String password, csrf;
   HttpClient client;
 
@@ -182,15 +187,15 @@ class PacientesHttpTest {
                         null,
                         null);
                     return "OK";
-                  } catch (PacienteDuplicado e) {
-                    return "DUPLICADO";
+                  } catch (ErrorPacientes e) {
+                    return e.codigo().name();
                   }
                 }));
       inicio.countDown();
       List<String> resultados = new ArrayList<>();
       for (var tarea : tareas) resultados.add(tarea.get(15, TimeUnit.SECONDS));
       assertEquals(1, Collections.frequency(resultados, "OK"));
-      assertEquals(9, Collections.frequency(resultados, "DUPLICADO"));
+      assertEquals(9, Collections.frequency(resultados, "DOCUMENTO_DUPLICADO"));
     }
     assertEquals(1, pacientes());
     assertEquals(1, jdbc.queryForObject("SELECT count(*) FROM auditoria_pacientes", Integer.class));
@@ -263,17 +268,21 @@ class PacientesHttpTest {
             .build();
     token();
     assertEquals(401, alta("DNI", "12345678", "Ana").statusCode());
+    assertEquals(401, send("GET", "/api/pacientes", null, false).statusCode());
     UUID rec = ingresar("REC");
     assertEquals(
         403,
         send("POST", "/api/pacientes", json("DNI", "12345678", "Ana", "1990-05-20"), false)
             .statusCode());
-    assertEquals(403, send("GET", "/api/pacientes", null, false).statusCode());
+    // La búsqueda (RF-05) no exige CSRF, pero sí el permiso: con REC ya autenticado, se permite.
+    assertEquals(200, send("GET", "/api/pacientes", null, false).statusCode());
     jdbc.update("DELETE FROM cuenta_roles WHERE cuenta_id=?", rec);
     assertEquals(403, alta("DNI", "12345678", "Ana").statusCode());
+    assertEquals(403, send("GET", "/api/pacientes", null, false).statusCode());
     UUID otra = ingresar("REC");
     jdbc.update("UPDATE cuentas SET activa=false WHERE id=?", otra);
     assertEquals(401, alta("DNI", "12345678", "Ana").statusCode());
+    assertEquals(401, send("GET", "/api/pacientes", null, false).statusCode());
     assertEquals(0, pacientes());
   }
 
@@ -292,5 +301,223 @@ class PacientesHttpTest {
       assertEquals(400, send("POST", "/api/pacientes", body, true).statusCode(), body);
     }
     assertEquals(0, pacientes());
+  }
+
+  HttpResponse<String> editarHttp(UUID id, String tipo, String numero, String nombres, long version)
+      throws Exception {
+    return send(
+        "PUT",
+        "/api/pacientes/" + id,
+        "{\"tipoDocumento\":\""
+            + tipo
+            + "\",\"numeroDocumento\":\""
+            + numero
+            + "\",\"nombres\":\""
+            + nombres
+            + "\",\"apellidos\":\"Quispe Rojas\",\"fechaNacimiento\":\"1990-05-20\",\"telefono\":null,\"correo\":null,\"version\":"
+            + version
+            + "}",
+        true);
+  }
+
+  @Test
+  void buscaPorCodigoDocumentoONombreConPaginacion() throws Exception {
+    ingresar("REC");
+    var pacienteA = alta("DNI", "10000001", "Ana María Soto");
+    alta("DNI", "10000002", "Luis Soto");
+    String codigoA = read(pacienteA.body(), "$.codigo");
+    assertEquals(201, pacienteA.statusCode());
+    var porDocumento = send("GET", "/api/pacientes?busqueda=10000001", null, false);
+    assertEquals(1, ((List<?>) read(porDocumento.body(), "$.elementos")).size());
+    var porNombre = send("GET", "/api/pacientes?busqueda=Soto", null, false);
+    assertEquals(2, ((List<?>) read(porNombre.body(), "$.elementos")).size());
+    var porCodigo = send("GET", "/api/pacientes?busqueda=" + codigoA, null, false);
+    assertEquals(1, ((List<?>) read(porCodigo.body(), "$.elementos")).size());
+    assertFalse((Boolean) read(porCodigo.body(), "$.hayMas"));
+  }
+
+  @Test
+  void actualizarConservaCodigoYVuelveAVerificarUnicidad() throws Exception {
+    ingresar("REC");
+    var a = alta("DNI", "20000001", "Ana");
+    var b = alta("DNI", "20000002", "Luis");
+    String codigoOriginal = read(a.body(), "$.codigo");
+    UUID idA = UUID.fromString(read(a.body(), "$.id"));
+    assertEquals(201, b.statusCode());
+    var editado = editarHttp(idA, "DNI", "20000001", "Ana María", 0);
+    assertEquals(200, editado.statusCode(), editado.body());
+    assertEquals(codigoOriginal, read(editado.body(), "$.codigo"), "El código interno no cambia");
+    assertEquals(1, (Integer) read(editado.body(), "$.version"));
+    // Cambiar el documento al de otro paciente existente vuelve a verificar unicidad (CA-2).
+    var duplicado = editarHttp(idA, "DNI", "20000002", "Ana María", 1);
+    assertEquals(409, duplicado.statusCode());
+    assertEquals("DOCUMENTO_DUPLICADO", read(duplicado.body(), "$.code"));
+    assertFalse(duplicado.body().contains("20000002"));
+    // Un cambio de documento a uno nuevo se acepta y mantiene el código.
+    var nuevoDocumento = editarHttp(idA, "CE", "ab1234567", "Ana María", 1);
+    assertEquals(200, nuevoDocumento.statusCode(), nuevoDocumento.body());
+    assertEquals(codigoOriginal, read(nuevoDocumento.body(), "$.codigo"));
+  }
+
+  @Test
+  void versionObsoletaRecibeConflictoYGuardadoIdenticoNoAudita() throws Exception {
+    ingresar("REC");
+    // alta() fija el teléfono en "987654321"; repetir esos mismos datos es un guardado idéntico.
+    var alta = alta("DNI", "30000001", "Ana");
+    UUID id = UUID.fromString(read(alta.body(), "$.id"));
+    var identico =
+        send(
+            "PUT",
+            "/api/pacientes/" + id,
+            "{\"tipoDocumento\":\"DNI\",\"numeroDocumento\":\"30000001\",\"nombres\":\"Ana\",\"apellidos\":\"Quispe Rojas\","
+                + "\"fechaNacimiento\":\"1990-05-20\",\"telefono\":\"987654321\",\"correo\":null,\"version\":0}",
+            true);
+    assertEquals(200, identico.statusCode(), identico.body());
+    assertEquals(
+        0,
+        (Integer) read(identico.body(), "$.version"),
+        "Un guardado idéntico no incrementa la versión");
+    assertEquals(200, editarHttp(id, "DNI", "30000001", "Ana", 0).statusCode());
+    var obsoleta = editarHttp(id, "DNI", "30000001", "Otro Nombre", 0);
+    assertEquals(409, obsoleta.statusCode());
+    assertEquals("CONFLICTO", read(obsoleta.body(), "$.code"));
+    assertEquals(1L, pacientes.buscarPorId(id).orElseThrow().version());
+    assertEquals(200, editarHttp(id, "DNI", "30000001", "Ana María", 1).statusCode());
+    assertEquals(2L, pacientes.buscarPorId(id).orElseThrow().version());
+    assertEquals(
+        3,
+        jdbc.queryForObject("SELECT count(*) FROM auditoria_pacientes", Integer.class),
+        "Alta + dos ediciones reales; el guardado idéntico y el conflicto no auditan");
+  }
+
+  @Test
+  void diezEdicionesConcurrentesConLaMismaVersionSoloAplicanUna() throws Exception {
+    UUID rec = cuenta("REC");
+    var paciente =
+        registrar.registrar(
+            rec,
+            TipoDocumento.DNI,
+            "40000001",
+            "Ana",
+            "Quispe",
+            LocalDate.of(1990, 1, 1),
+            null,
+            null);
+    var inicio = new CountDownLatch(1);
+    try (var pool = Executors.newFixedThreadPool(10)) {
+      List<Future<String>> tareas = new ArrayList<>();
+      for (int i = 0; i < 10; i++) {
+        String nombre = "Edicion-" + i;
+        tareas.add(
+            pool.submit(
+                () -> {
+                  inicio.await();
+                  try {
+                    actualizarCasoUso.actualizar(
+                        rec,
+                        paciente.id(),
+                        TipoDocumento.DNI,
+                        "40000001",
+                        nombre,
+                        "Quispe",
+                        LocalDate.of(1990, 1, 1),
+                        null,
+                        null,
+                        0);
+                    return "OK";
+                  } catch (ErrorPacientes e) {
+                    return e.codigo().name();
+                  }
+                }));
+      }
+      inicio.countDown();
+      List<String> resultados = new ArrayList<>();
+      for (var tarea : tareas) resultados.add(tarea.get(15, TimeUnit.SECONDS));
+      assertEquals(1, Collections.frequency(resultados, "OK"), resultados.toString());
+      assertEquals(9, Collections.frequency(resultados, "CONFLICTO"), resultados.toString());
+    }
+    assertEquals(1, pacientes.buscarPorId(paciente.id()).orElseThrow().version());
+  }
+
+  @Test
+  void diezEdicionesConcurrentesQueCambianElDocumentoAlMismoValorSoloAplicanUna() throws Exception {
+    UUID rec = cuenta("REC");
+    var destino = "50000099";
+    List<Paciente> pacientesCreados = new ArrayList<>();
+    for (int i = 0; i < 10; i++) {
+      pacientesCreados.add(
+          registrar.registrar(
+              rec,
+              TipoDocumento.DNI,
+              "5000000" + i,
+              "Ana" + i,
+              "Quispe",
+              LocalDate.of(1990, 1, 1),
+              null,
+              null));
+    }
+    var inicio = new CountDownLatch(1);
+    try (var pool = Executors.newFixedThreadPool(10)) {
+      List<Future<String>> tareas = new ArrayList<>();
+      for (Paciente paciente : pacientesCreados) {
+        tareas.add(
+            pool.submit(
+                () -> {
+                  inicio.await();
+                  try {
+                    actualizarCasoUso.actualizar(
+                        rec,
+                        paciente.id(),
+                        TipoDocumento.DNI,
+                        destino,
+                        paciente.nombres(),
+                        paciente.apellidos(),
+                        paciente.fechaNacimiento(),
+                        null,
+                        null,
+                        0);
+                    return "OK";
+                  } catch (ErrorPacientes e) {
+                    return e.codigo().name();
+                  }
+                }));
+      }
+      inicio.countDown();
+      List<String> resultados = new ArrayList<>();
+      for (var tarea : tareas) resultados.add(tarea.get(15, TimeUnit.SECONDS));
+      assertEquals(1, Collections.frequency(resultados, "OK"), resultados.toString());
+      assertEquals(
+          9, Collections.frequency(resultados, "DOCUMENTO_DUPLICADO"), resultados.toString());
+    }
+    assertEquals(
+        1,
+        jdbc.queryForObject(
+            "SELECT count(*) FROM pacientes WHERE numero_documento=?", Integer.class, destino));
+  }
+
+  @Test
+  void soloRecepcionBuscaYActualizaPacientes() throws Exception {
+    UUID rec = cuenta("REC");
+    var paciente =
+        registrar.registrar(
+            rec,
+            TipoDocumento.DNI,
+            "60000001",
+            "Ana",
+            "Quispe",
+            LocalDate.of(1990, 1, 1),
+            null,
+            null);
+    String editar = "/api/pacientes/" + paciente.id();
+    for (String rol : List.of("ADM", "CAJ", "PRO", "")) {
+      if (rol.isEmpty()) ingresar();
+      else ingresar(rol);
+      assertEquals(403, send("GET", "/api/pacientes", null, false).statusCode(), rol);
+      assertEquals(403, editarHttp(paciente.id(), "DNI", "60000001", "Ana", 0).statusCode(), rol);
+    }
+    assertEquals(0L, pacientes.buscarPorId(paciente.id()).orElseThrow().version());
+    ingresar("ADM", "REC");
+    assertEquals(200, send("GET", "/api/pacientes", null, false).statusCode());
+    assertEquals(200, editarHttp(paciente.id(), "DNI", "60000001", "Ana María", 0).statusCode());
   }
 }

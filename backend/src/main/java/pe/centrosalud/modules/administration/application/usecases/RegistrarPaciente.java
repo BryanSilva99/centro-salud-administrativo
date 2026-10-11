@@ -42,7 +42,8 @@ public final class RegistrarPaciente {
             apellidos,
             nacimiento,
             telefono,
-            correo);
+            correo,
+            0);
     return pacientes.registrar(nuevo, autor);
   }
 }
