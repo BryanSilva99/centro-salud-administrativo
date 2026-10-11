@@ -4,5 +4,6 @@ package pe.centrosalud.modules.identity.domain;
 public enum Permiso {
   CUENTAS_CONSULTAR,
   CUENTAS_GESTIONAR,
-  ROLES_GESTIONAR
+  ROLES_GESTIONAR,
+  PACIENTES_GESTIONAR
 }

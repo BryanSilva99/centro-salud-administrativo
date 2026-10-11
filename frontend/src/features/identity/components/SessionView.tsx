@@ -1,4 +1,5 @@
 import { RolesPanel } from './RolesPanel';
+import { RegistrarPacienteForm } from '../../administration/components/RegistrarPacienteForm';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { auth, type Cuenta, type Rol } from '../api/auth';
 import { ApiError } from '../../../shared/api/http';
@@ -8,6 +9,7 @@ const nombresRoles: Record<Rol, string> = { REC: 'Recepción / admisión', CAJ: 
 
 export function SessionView({ cuenta, onExit, onRefresh }: { cuenta: Cuenta; onExit: (message: string) => void; onRefresh: (cuenta: Cuenta) => void }) {
   const [showRoles, setShowRoles] = useState(false);
+  const [showPacientes, setShowPacientes] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
   const [connected, setConnected] = useState(true);
@@ -56,6 +58,7 @@ export function SessionView({ cuenta, onExit, onRefresh }: { cuenta: Cuenta; onE
         : <p className="notice">Tu cuenta todavía no tiene roles asignados. Comunícate con la administración.</p>}
       {(cuenta.permisos ?? []).includes('CUENTAS_CONSULTAR') && <p className="permission-note">Tu cuenta tiene permiso para consultar cuentas de acceso.</p>}
     </div>
+    {cuenta.permisos.includes('PACIENTES_GESTIONAR') && <><button type="button" onClick={() => setShowPacientes(v => !v)} aria-expanded={showPacientes}>{showPacientes ? 'Ocultar registro de pacientes' : 'Registrar paciente'}</button>{showPacientes && <RegistrarPacienteForm onExpired={expired} /></>}
     <p className="access-help">Las funciones de cada área se habilitarán conforme se integren sus módulos. Tu acceso se limita a los permisos de tu cuenta.</p>
     <p className="access-help">Cierra tu sesión cuando termines, especialmente en equipos compartidos.</p>
         </section>}

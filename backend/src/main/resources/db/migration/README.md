@@ -12,4 +12,6 @@ Flyway aplica y registra las migraciones al arrancar. Hibernate usa `ddl-auto=va
 
 `V5__roles_cuenta.sql` añade roles por cuenta sin asignaciones automáticas. Sus cambios se leen en cada solicitud; no se confía en los roles antiguos guardados en la sesión.
 
-V5–V6 añaden roles, versión de edición, bloqueo y auditoría de roles. V7 añade auditoría de cuentas e incrementa la versión de edición al cambiar identificador o estado. No se modifican migraciones aplicadas.
+V5–V6 añaden roles, versión de edición, bloqueo y auditoría de roles. V7 añade auditoría de cuentas e incrementa la versión de edición al cambiar identificador o estado. V8 añade fichas profesionales y el vínculo con cuentas. No se modifican migraciones aplicadas.
+
+`V9__pacientes.sql` añade pacientes con documento único (tipo + número), un código interno `P` + 8 dígitos generado por secuencia (puede tener huecos si un alta se revierte) y la auditoría de altas sin datos personales.

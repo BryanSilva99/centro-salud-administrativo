@@ -88,6 +88,8 @@ public class SecurityConfiguration {
                     .hasAuthority("ROLES_GESTIONAR")
                     .requestMatchers(HttpMethod.GET, "/api/cuentas/{id}")
                     .hasAuthority("CUENTAS_CONSULTAR")
+                    .requestMatchers(HttpMethod.POST, "/api/pacientes")
+                    .hasAuthority("PACIENTES_GESTIONAR")
                     .anyRequest()
                     .denyAll())
         .exceptionHandling(
