@@ -1,4 +1,4 @@
-import { ApiError, request } from '../../../shared/api/http';
+import { ApiError, mutate, request } from '../../../shared/api/http';
 
 export type Rol = 'REC' | 'CAJ' | 'ADM' | 'PRO';
 export type Permiso = 'CUENTAS_CONSULTAR' | 'CUENTAS_GESTIONAR' | 'ROLES_GESTIONAR' | 'PACIENTES_GESTIONAR' | 'SERVICIOS_GESTIONAR' | 'CONSULTORIOS_GESTIONAR' | 'PROFESIONALES_GESTIONAR' | 'DISPONIBILIDAD_GESTIONAR';
@@ -10,6 +10,7 @@ export interface Cuenta {
   roles: Rol[];
   permisos: Permiso[];
 }
+
 interface Csrf { headerName: string; token: string }
 
 // Obtener el token antes de cada escritura evita reutilizarlo tras login/logout.

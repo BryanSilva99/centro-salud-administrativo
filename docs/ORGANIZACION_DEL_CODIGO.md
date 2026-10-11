@@ -1,6 +1,6 @@
 # Organización del código
 
-Estado: consulta de Cuenta, login, gestión de cuentas, administración de roles, registro/búsqueda/edición de pacientes, catálogo de servicios, catálogo de consultorios, gestión completa de profesionales y turnos de disponibilidad implementados. Ver [login](LOGIN_COMPLETO.md), [gestión de cuentas y roles](GESTION_CUENTAS.md), [pacientes](PACIENTES.md), [servicios](SERVICIOS.md), [consultorios](CONSULTORIOS.md), [profesionales](PROFESIONALES.md) y [disponibilidad](DISPONIBILIDAD.md).
+Estado: estructura técnica, identidad y dos iteraciones de appointments implementadas. Ver [recorrido de Cuenta](CUENTA_PASO_1.md) y [módulo de citas](../backend/src/main/java/pe/centrosalud/modules/appointments/README.md).
 
 Backend en Java con Spring Boot y frontend en React, según la elección del usuario. El dominio se mantendrá independiente de Spring y JPA.
 
@@ -83,10 +83,10 @@ Reportes y auditoría se separan en carpetas porque tienen responsabilidades dif
 
 ## Ejemplo de recorrido futuro
 
-Una reserva entrará por HTTP, invocará un caso de uso de `appointments`, comprobará reglas del dominio y utilizará los puertos necesarios para persistencia, disponibilidad y auditoría. PostgreSQL implementará las garantías de concurrencia. Este recorrido se describe para ubicar responsabilidades: no está programado.
+Una reserva entra por HTTP, invoca un caso de uso de `appointments`, comprueba reglas del dominio y utiliza puertos para persistencia y disponibilidad. PostgreSQL implementa las garantías de concurrencia mediante rangos y restricciones de solapamiento. El catálogo y la autorización actuales son fixtures locales reemplazables; la integración con los módulos externos y la auditoría global quedan pendientes.
 
 ## Estado y límite actual
 
-Identidad y acceso contiene login React/HTTP, sesiones, límite de intentos, consulta/creación/edición/activación/desactivación de cuentas, asignación de roles y auditoría, con pruebas. El módulo administrativo implementa el registro, búsqueda y edición de pacientes (RF-04, RF-05; la lectura mínima de caja y de profesionales de RF-05/CA-3 depende de caja y citas), los servicios con sus modalidades económicas (RF-08), los consultorios con sus servicios compatibles (RF-09), los profesionales completos con sus servicios habilitados (RF-07) y los turnos de disponibilidad de ambos recursos (RF-10, solo el turno crudo; la consulta combinada depende de RF-13). Los módulos de citas y caja conservan su estructura preparada; esto no implica que estén implementados. RF-02 incluye el vínculo con fichas profesionales básicas del módulo administrativo. RF-03 sigue fuera de este alcance.
+Los archivos `package-info.java` solo declaran paquetes Java y documentan su responsabilidad. Los `.gitkeep` permiten conservar carpetas vacías en Git. Cuenta tiene dominio, caso de uso, puerto, persistencia JPA, controlador de consulta y pruebas. Se implementó login HTTP con sesiones, límite de intentos y pruebas; ver [paso 3](LOGIN_PASO_3.md). `appointments` contiene dominio independiente, puertos, adaptador PostgreSQL, API autenticada, fixtures locales opt-in y el workspace React de agenda, llegada, atención, cierres y dashboard. Las fixtures no representan datos permanentes de pacientes o personal. Vista semanal, reaperturas, caja, auditoría global y RF-26 siguen pendientes. Dependencias y comandos: [Inicio del desarrollo](INICIO_DESARROLLO.md).
 
-La cuenta de desarrollo y sus credenciales se mantienen en archivos locales ignorados por Git. Ver [gestión de cuentas](GESTION_CUENTAS.md) para el recorrido por capas y [Inicio del desarrollo](INICIO_DESARROLLO.md) para comandos. Solo se amplía la implementación con autorización del usuario.
+Antes de comenzar la implementación, el usuario decidirá qué parte desarrollar. No se presupone autorización por la fecha de entrega.

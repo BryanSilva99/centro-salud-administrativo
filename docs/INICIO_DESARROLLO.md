@@ -1,6 +1,6 @@
 # Preparación del entorno de desarrollo
 
-Actualizado el 9 de octubre de 2026. Se prepararon dependencias y puntos de arranque. Existe una primera consulta de Cuenta por ID, con acceso HTTP cerrado; ver [recorrido y pruebas](CUENTA_PASO_1.md). Login HTTP, consulta de sesión y logout están implementados; la gestión completa de usuarios sigue pendiente. React ya dispone de formulario de acceso y vista de sesión; ver [paso 4](LOGIN_PASO_4_REACT.md). Ver [paso 3](LOGIN_PASO_3.md).
+Actualizado el 10 de octubre de 2026. Se prepararon dependencias y puntos de arranque. Existe una primera consulta de Cuenta por ID, con acceso HTTP cerrado; ver [recorrido y pruebas](CUENTA_PASO_1.md). Login HTTP, consulta de sesión y logout están implementados; la gestión completa de usuarios sigue pendiente. React ya dispone de formulario de acceso y workspace de appointments para agenda, programación, reprogramación, llegada, atención, cancelación, ausencia, retiro de espera y dashboard; ver [paso 4](LOGIN_PASO_4_REACT.md). Ver [paso 3](LOGIN_PASO_3.md).
 
 ## Herramientas
 
@@ -25,9 +25,9 @@ Spring Boot 4.1.1 administra las versiones compatibles mediante su POM padre.
 | Spring Session JDBC | Persistencia futura de sesiones |
 | Starters de pruebas | Herramientas de pruebas para las tecnologías seleccionadas |
 
-`CentroSaludApplication` solo inicia Spring. `bootstrap/SecurityConfiguration` habilita solo autenticación, consulta de sesión y actividad; la consulta de cuentas exige el permiso de ADM y las demás rutas de negocio siguen cerradas. No habilita un formulario automático ni HTTP Basic. El logout es POST con CSRF. La protección CSRF permanece activa. Spring puede emitir su credencial automática de desarrollo al arrancar: no se usa como cuenta del sistema ni habilita acceso con esta configuración.
+`CentroSaludApplication` solo inicia Spring. `bootstrap/SecurityConfiguration` habilita autenticación, consulta de sesión, actividad y las rutas autenticadas de appointments. El módulo de citas requiere `APPOINTMENTS_MOCK_ENABLED=true` para habilitar fixtures y autorización temporal local; con el valor predeterminado responde `403`. No habilita un formulario automático ni HTTP Basic. El logout y las escrituras de citas usan CSRF; las transiciones de atención usan `PUT`.
 
-La migración V2 añade cuentas y existe un adaptador JPA de consulta. V3 añade almacenamiento de hash y existe verificación interna de credenciales. No hay cuentas precargadas por migraciones; V5 almacena roles y se aplican en cada solicitud; ver [paso 2](CREDENCIALES_PASO_2.md). La migración V1 crea únicamente las dos tablas técnicas de Spring Session, usando el esquema oficial de Spring Session JDBC 4.1.1. Flyway registra su aplicación; esto no implementa el login. La expiración absoluta de ocho horas, inactividad de 30 minutos y limitación de intentos están implementadas.
+La migración V2 añade cuentas y existe un adaptador JPA de consulta. V3 añade almacenamiento de hash y existe verificación interna de credenciales. No hay cuentas precargadas ni roles implementados; ver [paso 2](CREDENCIALES_PASO_2.md). La migración V1 crea únicamente las dos tablas técnicas de Spring Session, usando el esquema oficial de Spring Session JDBC 4.1.1. Flyway registra su aplicación; esto no implementa el login. La expiración absoluta de ocho horas, inactividad de 30 minutos y limitación de intentos están implementadas.
 
 ## Preparar PostgreSQL
 
@@ -68,7 +68,7 @@ Desde `backend/`:
 
 En Windows usar `mvnw.cmd` en lugar de `./mvnw`. El arranque requiere PostgreSQL y las variables configuradas. Compilar no necesita conexión a una base.
 
-El servidor usa el puerto 8080. Existen `/api/auth/login`, `/api/auth/me` y `/api/auth/logout`, además de `/api/auth/csrf` y `/api/auth/activity`. Contratos en la guía del paso 3; visitar la raíz del servidor no muestra una pantalla.
+El servidor usa el puerto 8080. Existen `/api/auth/login`, `/api/auth/me` y `/api/auth/logout`, además de `/api/auth/csrf` y `/api/auth/activity`. Con `APPOINTMENTS_MOCK_ENABLED=true` también están disponibles `/api/citas/contexto`, `/api/citas/agenda`, `/api/citas/disponibilidad`, `POST /api/citas`, `POST /api/citas/{id}/reprogramaciones`, `/api/citas/atencion`, las transiciones de llegada, atención, cancelación, ausencia y retiro, y `/api/citas/dashboard`. Contratos en el README de appointments; visitar la raíz del servidor no muestra una pantalla.
 
 ## Preparar e iniciar frontend
 
@@ -80,19 +80,17 @@ npm run build
 npm run dev
 ```
 
-El servidor de desarrollo usa `http://127.0.0.1:5173`. React muestra el formulario de acceso, recupera la sesión al recargar y permite cerrarla. La cuenta local se prepara siguiendo el paso 4. Las futuras solicitudes relativas a `/api` se enviarán al backend mediante el proxy de Vite.
+El servidor de desarrollo usa `http://127.0.0.1:5173`. React muestra el formulario de acceso, recupera la sesión al recargar, permite cerrarla y, con el mock de appointments activo, carga la agenda y los formularios de reserva. La cuenta local se prepara siguiendo el paso 4. Las solicitudes relativas a `/api` se envían al backend mediante el proxy de Vite.
 
 Se puede copiar `.env.example` a `.env` para cambiar `API_PROXY_TARGET`. No colocar secretos en variables `VITE_*`: son públicas en el navegador.
 
-React 19.3.0, Vite 8.3.4 y TypeScript 7.0.2 están fijados en `package.json`; `package-lock.json` conserva la resolución completa. Se incluyen Vitest, Testing Library, jsdom y Axe-core como herramientas de desarrollo. Hay 10 pruebas del login y análisis Axe sobre formulario y error en jsdom (sin evaluación de contraste). `npm test` exige pruebas presentes.
+React 19.3.0, Vite 8.3.4 y TypeScript 7.0.2 están fijados en `package.json`; `package-lock.json` conserva la resolución completa. Se incluyen Vitest, Testing Library, jsdom y Axe-core como herramientas de desarrollo. La suite cubre login, agenda, sala de espera, transiciones de atención, cierres y dashboard. `npm test` exige pruebas presentes.
 
 ## Límites de esta preparación
 
-- Se implementa autenticación por sesión y su límite de intentos. No hay gestión de cuentas/roles ni otros procesos del negocio.
+- Se implementa autenticación por sesión y su límite de intentos, además de agenda/programación/reprogramación, llegada, espera, atención, cancelación, ausencia, retiro de espera y dashboard operativo opt-in de appointments. No hay gestión de cuentas/roles ni caja, auditoría global, reaperturas, vista semanal u otros procesos del negocio.
 - No se despliega la aplicación ni se integra SigNoz todavía.
 - PIT y la instrumentación se configurarán al desarrollar las primeras reglas y recorridos verificables; no se atribuye su uso a esta preparación.
-- Verificado: PostgreSQL 18.4, cuenta sin superusuario, lectura/escritura temporal con rollback, migración V1 y arranque de Spring Boot conectado a la base. React contiene el login conectado. La API de autenticación se verificó con HTTP real; las rutas protegidas devuelven 401 sin sesión y las rutas de negocio denegadas devuelven 403 con sesión. Esto verifica el entorno, no funcionalidades. Docker sigue siendo una alternativa no probada en este equipo.
+- Verificado: compilación Maven y pruebas unitarias/integración PostgreSQL de appointments con `RUN_POSTGRES_TESTS=true`; typecheck, pruebas Vitest con Axe y build de producción. La configuración demo y las credenciales locales permanecen fuera del repositorio.
 
 Fuentes técnicas: [Spring Initializr](https://start.spring.io/), [requisitos de Spring Boot](https://docs.spring.io/spring-boot/system-requirements.html) y [guía de Vite](https://vite.dev/guide/).
-
-Contrato final de sesión, roles y pruebas: [Login completo](LOGIN_COMPLETO.md).

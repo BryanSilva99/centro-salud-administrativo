@@ -30,3 +30,5 @@ server:
         http-only: true
         same-site: strict
         secure: ${SESSION_COOKIE_SECURE:true}
+appointments:
+  mock-enabled: ${APPOINTMENTS_MOCK_ENABLED:false}

@@ -7,4 +7,6 @@
 
 Usar una sola alternativa en el puerto 5432. Los datos de la herramienta local se conservan en `.data/postgres`, fuera de Git. Credenciales en `backend/.env` y `.data/postgres-admin.json`, también excluidas. Instrucciones completas en [Inicio del desarrollo](../docs/INICIO_DESARROLLO.md).
 
+La herramienta local genera `APPOINTMENTS_MOCK_ENABLED=true` en `backend/.env` cuando crea ese archivo por primera vez, para habilitar la revisión de agenda con fixtures sintéticas.
+
 `deployment/` y `observability/` siguen reservadas para trabajo futuro. No hay despliegue de la aplicación ni de SigNoz implementado.

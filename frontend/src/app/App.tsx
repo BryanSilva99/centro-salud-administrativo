@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { auth, type Cuenta } from '../features/identity/api/auth';
 import { LoginForm } from '../features/identity/components/LoginForm';
 import { SessionView } from '../features/identity/components/SessionView';
+import { AppointmentsWorkspace } from '../features/appointments/components/AppointmentsWorkspace';
 import './styles.css';
 
 type State = { kind: 'loading' } | { kind: 'unavailable' } | { kind: 'anonymous'; notice: string } | { kind: 'authenticated'; cuenta: Cuenta };
