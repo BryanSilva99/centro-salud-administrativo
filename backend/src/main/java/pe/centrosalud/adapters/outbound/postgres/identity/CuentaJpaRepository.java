@@ -5,6 +5,7 @@ import java.util.UUID;
 import org.springframework.data.repository.Repository;
 
 public interface CuentaJpaRepository extends Repository<CuentaJpaEntity, UUID> {
-    Optional<CuentaJpaEntity> findById(UUID id);
-    Optional<CuentaJpaEntity> findByIdentificador(String identificador);
+  Optional<CuentaJpaEntity> findById(UUID id);
+
+  Optional<CuentaJpaEntity> findByIdentificador(String identificador);
 }

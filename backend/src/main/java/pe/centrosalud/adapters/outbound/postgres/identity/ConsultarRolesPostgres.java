@@ -9,10 +9,18 @@ import pe.centrosalud.modules.identity.domain.Rol;
 
 @Repository
 public class ConsultarRolesPostgres implements ConsultarRoles {
-    private final JdbcTemplate jdbc;
-    public ConsultarRolesPostgres(JdbcTemplate jdbc) { this.jdbc = jdbc; }
-    @Override public Set<Rol> deCuenta(UUID id) {
-        return Set.copyOf(jdbc.query("SELECT rol FROM cuenta_roles WHERE cuenta_id = ?",
-                (rs, row) -> Rol.valueOf(rs.getString(1)), id));
-    }
+  private final JdbcTemplate jdbc;
+
+  public ConsultarRolesPostgres(JdbcTemplate jdbc) {
+    this.jdbc = jdbc;
+  }
+
+  @Override
+  public Set<Rol> deCuenta(UUID id) {
+    return Set.copyOf(
+        jdbc.query(
+            "SELECT rol FROM cuenta_roles WHERE cuenta_id = ?",
+            (rs, row) -> Rol.valueOf(rs.getString(1)),
+            id));
+  }
 }

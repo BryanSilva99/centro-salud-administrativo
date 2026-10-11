@@ -7,7 +7,9 @@ import pe.centrosalud.modules.administration.domain.FichaProfesional;
 
 /** Contrato público usado por identidad para consultar fichas reales, sin conocer sus tablas. */
 public interface FichasProfesionales {
-    List<FichaProfesional> buscar(String texto);
-    Optional<FichaProfesional> buscarPorId(UUID id);
-    FichaProfesional registrar(FichaProfesional ficha, UUID autor);
+  List<FichaProfesional> buscar(String texto);
+
+  Optional<FichaProfesional> buscarPorId(UUID id);
+
+  FichaProfesional registrar(FichaProfesional ficha, UUID autor);
 }
