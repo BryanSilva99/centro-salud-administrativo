@@ -25,6 +25,30 @@ class PermisosCuentaTest {
   }
 
   @Test
+  void soloAdministracionGestionaConsultorios() {
+    assertTrue(PermisosCuenta.para(Set.of(Rol.ADM)).contains(Permiso.CONSULTORIOS_GESTIONAR));
+    assertFalse(
+        PermisosCuenta.para(Set.of(Rol.REC, Rol.CAJ, Rol.PRO))
+            .contains(Permiso.CONSULTORIOS_GESTIONAR));
+  }
+
+  @Test
+  void soloAdministracionGestionaProfesionales() {
+    assertTrue(PermisosCuenta.para(Set.of(Rol.ADM)).contains(Permiso.PROFESIONALES_GESTIONAR));
+    assertFalse(
+        PermisosCuenta.para(Set.of(Rol.REC, Rol.CAJ, Rol.PRO))
+            .contains(Permiso.PROFESIONALES_GESTIONAR));
+  }
+
+  @Test
+  void soloAdministracionGestionaDisponibilidad() {
+    assertTrue(PermisosCuenta.para(Set.of(Rol.ADM)).contains(Permiso.DISPONIBILIDAD_GESTIONAR));
+    assertFalse(
+        PermisosCuenta.para(Set.of(Rol.REC, Rol.CAJ, Rol.PRO))
+            .contains(Permiso.DISPONIBILIDAD_GESTIONAR));
+  }
+
+  @Test
   void variosRolesSumanSusPermisos() {
     assertEquals(
         Set.of(
@@ -32,6 +56,9 @@ class PermisosCuentaTest {
             Permiso.CUENTAS_GESTIONAR,
             Permiso.ROLES_GESTIONAR,
             Permiso.SERVICIOS_GESTIONAR,
+            Permiso.CONSULTORIOS_GESTIONAR,
+            Permiso.PROFESIONALES_GESTIONAR,
+            Permiso.DISPONIBILIDAD_GESTIONAR,
             Permiso.PACIENTES_GESTIONAR),
         PermisosCuenta.para(Set.of(Rol.ADM, Rol.REC)));
   }

@@ -1,6 +1,6 @@
 # Servicios y condiciones económicas — RF-08
 
-Actualizado: 10 de octubre de 2026. **RF-08 implementado parcialmente:** crear, listar, editar y activar/desactivar servicios con nombre, duración, estado y modalidades económicas con o sin cargo. Los profesionales habilitados (RF-07) y los consultorios compatibles (RF-09) se agregarán con esos requisitos.
+Actualizado: 11 de octubre de 2026. **RF-08 implementado parcialmente:** crear, listar, editar y activar/desactivar servicios con nombre, duración, estado y modalidades económicas con o sin cargo. Los profesionales habilitados (RF-07) se agregarán con ese requisito; los consultorios compatibles (RF-09) ya están implementados — ver [docs/CONSULTORIOS.md](CONSULTORIOS.md).
 
 ## Pendiente para la reserva de citas (RN-12, RF-08/CA-3)
 
@@ -92,7 +92,7 @@ Errores:
 
 - Intercambiar los nombres de dos modalidades en una misma edición viola momentáneamente el índice único y responde 503. Se puede hacer en dos ediciones.
 - La comparación sin mayúsculas usa `lower()` de PostgreSQL y `toLowerCase(Locale.ROOT)` de Java. Pueden diferir en caracteres poco comunes; la base es la garantía final.
-- Todavía no existe un contrato de lectura para RF-13. Se agregará en `application/ports` cuando se implemente la reserva, con REC como lector.
+- Hoy `GET /api/servicios` exige `SERVICIOS_GESTIONAR` (solo ADM), igual que las escrituras. Todavía no existe un contrato de lectura para recepción; se agregará cuando se implemente la programación de citas (RF-12/RF-13), con REC como lector.
 
 ## Dónde cambiar cada comportamiento
 
@@ -100,4 +100,4 @@ Errores:
 - **Versión, modalidades omitidas o guardados idénticos:** `GestionarServicios.java`.
 - **SQL, concurrencia y auditoría:** `ServiciosPostgres.java`.
 - **Quién gestiona servicios:** `PermisosCuenta.java` y las rutas en `SecurityConfiguration.java`.
-- **Profesionales y consultorios habilitados (RF-07, RF-09):** nuevas tablas de relación en otra migración; no editar V10.
+- **Profesionales habilitados (RF-07):** nueva tabla de relación en otra migración; no editar V10. Los consultorios compatibles ya se gestionan en `Consultorio.java`/`docs/CONSULTORIOS.md` (RF-09).

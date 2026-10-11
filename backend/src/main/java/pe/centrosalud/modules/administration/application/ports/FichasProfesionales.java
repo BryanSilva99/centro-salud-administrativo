@@ -11,5 +11,12 @@ public interface FichasProfesionales {
 
   Optional<FichaProfesional> buscarPorId(UUID id);
 
+  /** Guarda la ficha, sus servicios habilitados y la auditoría en una transacción. */
   FichaProfesional registrar(FichaProfesional ficha, UUID autor);
+
+  /**
+   * Aplica el cambio solo si la versión sigue siendo la de {@code anterior}; si no, CONFLICTO sin
+   * escribir nada.
+   */
+  FichaProfesional actualizar(FichaProfesional anterior, FichaProfesional nuevo, UUID autor);
 }

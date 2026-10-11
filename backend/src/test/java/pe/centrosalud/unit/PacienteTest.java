@@ -22,7 +22,8 @@ class PacienteTest {
         "Quispe Rojas",
         NACIMIENTO,
         telefono,
-        correo);
+        correo,
+        0);
   }
 
   @Test
@@ -71,7 +72,8 @@ class PacienteTest {
                 " ",
                 NACIMIENTO,
                 null,
-                null));
+                null,
+                0));
     assertThrows(
         IllegalArgumentException.class,
         () ->
@@ -84,7 +86,8 @@ class PacienteTest {
                 "Quispe",
                 NACIMIENTO,
                 null,
-                null));
+                null,
+                0));
   }
 
   @Test
@@ -121,5 +124,24 @@ class PacienteTest {
         IllegalArgumentException.class,
         () -> Paciente.validarNacimiento(LocalDate.of(1899, 12, 31), hoy));
     assertThrows(IllegalArgumentException.class, () -> Paciente.validarNacimiento(null, hoy));
+  }
+
+  @Test
+  void laVersionInicialSeConservaTalCual() {
+    assertEquals(0, paciente(TipoDocumento.DNI, "12345678", "Ana", null, null).version());
+    assertEquals(
+        5,
+        new Paciente(
+                UUID.randomUUID(),
+                "P00000001",
+                TipoDocumento.DNI,
+                "12345678",
+                "Ana",
+                "Quispe",
+                NACIMIENTO,
+                null,
+                null,
+                5)
+            .version());
   }
 }

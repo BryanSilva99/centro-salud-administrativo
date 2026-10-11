@@ -15,7 +15,10 @@ public final class PermisosCuenta {
               Permiso.CUENTAS_CONSULTAR,
               Permiso.CUENTAS_GESTIONAR,
               Permiso.ROLES_GESTIONAR,
-              Permiso.SERVICIOS_GESTIONAR));
+              Permiso.SERVICIOS_GESTIONAR,
+              Permiso.CONSULTORIOS_GESTIONAR,
+              Permiso.PROFESIONALES_GESTIONAR,
+              Permiso.DISPONIBILIDAD_GESTIONAR));
     }
     if (roles.contains(Rol.REC)) permisos.add(Permiso.PACIENTES_GESTIONAR);
     return Set.copyOf(permisos);

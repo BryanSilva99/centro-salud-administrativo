@@ -6,7 +6,7 @@ import java.time.*;
 import java.util.UUID;
 import org.junit.jupiter.api.Test;
 import pe.centrosalud.modules.administration.application.ports.Pacientes;
-import pe.centrosalud.modules.administration.application.usecases.PacienteDuplicado;
+import pe.centrosalud.modules.administration.application.usecases.ErrorPacientes;
 import pe.centrosalud.modules.administration.application.usecases.RegistrarPaciente;
 import pe.centrosalud.modules.administration.domain.Paciente;
 import pe.centrosalud.modules.administration.domain.TipoDocumento;
@@ -36,7 +36,23 @@ class RegistrarPacienteTest {
           nuevo.apellidos(),
           nuevo.fechaNacimiento(),
           nuevo.telefono(),
-          nuevo.correo());
+          nuevo.correo(),
+          0);
+    }
+
+    @Override
+    public java.util.Optional<Paciente> buscarPorId(UUID id) {
+      throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public Pagina<Paciente> buscar(String texto, int pagina) {
+      throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public Paciente actualizar(Paciente anterior, Paciente nuevo, UUID autor) {
+      throw new UnsupportedOperationException();
     }
   }
 
@@ -94,9 +110,9 @@ class RegistrarPacienteTest {
   @Test
   void propagaElDuplicadoInformadoPorPersistencia() {
     var puerto = new PacientesFalsos();
-    puerto.error = new PacienteDuplicado();
+    puerto.error = new ErrorPacientes(ErrorPacientes.Codigo.DOCUMENTO_DUPLICADO);
     assertThrows(
-        PacienteDuplicado.class,
+        ErrorPacientes.class,
         () ->
             new RegistrarPaciente(puerto, RELOJ)
                 .registrar(
