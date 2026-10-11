@@ -1,4 +1,5 @@
 import { RolesPanel } from './RolesPanel';
+import { RegistrarPacienteForm } from '../../administration/components/RegistrarPacienteForm';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { auth, type Cuenta, type Rol } from '../api/auth';
 import { ApiError } from '../../../shared/api/http';
@@ -8,6 +9,7 @@ const nombresRoles: Record<Rol, string> = { REC: 'Recepción / admisión', CAJ: 
 
 export function SessionView({ cuenta, onExit, onRefresh }: { cuenta: Cuenta; onExit: (message: string) => void; onRefresh: (cuenta: Cuenta) => void }) {
   const [showRoles, setShowRoles] = useState(false);
+  const [showPacientes, setShowPacientes] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
   const [connected, setConnected] = useState(true);
@@ -37,6 +39,7 @@ export function SessionView({ cuenta, onExit, onRefresh }: { cuenta: Cuenta; onE
       {(cuenta.permisos ?? []).includes('CUENTAS_CONSULTAR') && <p className="permission-note">Tu cuenta tiene permiso para consultar cuentas de acceso.</p>}
     </div>
     {cuenta.permisos.includes('ROLES_GESTIONAR') && <><button type="button" onClick={() => setShowRoles(v => !v)} aria-expanded={showRoles}>{showRoles ? 'Ocultar administración' : (cuenta.permisos.includes('CUENTAS_GESTIONAR') ? 'Administrar cuentas y roles' : 'Administrar roles')}</button>{showRoles && <RolesPanel gestionarCuentas={cuenta.permisos.includes('CUENTAS_GESTIONAR')} onRefresh={onRefresh} onExpired={expired} />}</>}
+    {cuenta.permisos.includes('PACIENTES_GESTIONAR') && <><button type="button" onClick={() => setShowPacientes(v => !v)} aria-expanded={showPacientes}>{showPacientes ? 'Ocultar registro de pacientes' : 'Registrar paciente'}</button>{showPacientes && <RegistrarPacienteForm onExpired={expired} />}</>}
     <p className="access-help">Las funciones de cada área se habilitarán conforme se integren sus módulos. Tu acceso se limita a los permisos de tu cuenta.</p>
     {!connected && <p className="error" role="status">No pudimos comprobar la sesión. Revisa tu conexión; volveremos a comprobarla.</p>}
     {error && <p className="error" role="alert">{error}</p>}

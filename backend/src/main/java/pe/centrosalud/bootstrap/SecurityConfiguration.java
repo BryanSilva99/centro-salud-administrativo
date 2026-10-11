@@ -52,6 +52,7 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.GET, "/api/cuentas/{id}/auditoria").hasAuthority("CUENTAS_GESTIONAR")
                         .requestMatchers(HttpMethod.PUT, "/api/cuentas/{id}/roles").hasAuthority("ROLES_GESTIONAR")
                         .requestMatchers(HttpMethod.GET, "/api/cuentas/{id}").hasAuthority("CUENTAS_CONSULTAR")
+                        .requestMatchers(HttpMethod.POST, "/api/pacientes").hasAuthority("PACIENTES_GESTIONAR")
                         .anyRequest().denyAll())
                 .exceptionHandling(errors -> errors
                         .authenticationEntryPoint((request, response, exception) -> {
