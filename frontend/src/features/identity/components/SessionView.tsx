@@ -12,7 +12,7 @@ import { useSessionActivity } from '../hooks/useSessionActivity';
 
 const nombresRoles: Record<Rol, string> = { REC: 'Recepción / admisión', CAJ: 'Caja', ADM: 'Administrador del centro', PRO: 'Profesional de salud' };
 
-export function SessionView({ cuenta, onExit, onRefresh }: { cuenta: Cuenta; onExit: (message: string) => void; onRefresh: (cuenta: Cuenta) => void }) {
+export function SessionView({ cuenta, onExit, onRefresh, onOpenBilling }: { cuenta: Cuenta; onExit: (message: string) => void; onRefresh: (cuenta: Cuenta) => void; onOpenBilling?: () => void }) {
   const [showRoles, setShowRoles] = useState(false);
   const [showPacientes, setShowPacientes] = useState(false);
   const [showBuscarPacientes, setShowBuscarPacientes] = useState(false);
@@ -74,8 +74,13 @@ export function SessionView({ cuenta, onExit, onRefresh }: { cuenta: Cuenta; onE
     {cuenta.permisos.includes('CONSULTORIOS_GESTIONAR') && <><button type="button" onClick={() => setShowConsultorios(v => !v)} aria-expanded={showConsultorios}>{showConsultorios ? 'Ocultar consultorios' : 'Gestionar consultorios'}</button>{showConsultorios && <ConsultoriosPanel onExpired={expired} /></>}
     {cuenta.permisos.includes('PROFESIONALES_GESTIONAR') && <><button type="button" onClick={() => setShowProfesionales(v => !v)} aria-expanded={showProfesionales}>{showProfesionales ? 'Ocultar profesionales' : 'Gestionar profesionales'}</button>{showProfesionales && <ProfesionalesPanel onExpired={expired} /></>}
     {cuenta.permisos.includes('DISPONIBILIDAD_GESTIONAR') && <><button type="button" onClick={() => setShowDisponibilidad(v => !v)} aria-expanded={showDisponibilidad}>{showDisponibilidad ? 'Ocultar disponibilidad' : 'Gestionar disponibilidad'}</button>{showDisponibilidad && <DisponibilidadPanel onExpired={expired} /></>}
+    {onOpenBilling && (
+      <button type="button" className="primary-button billing-button" data-no-activity onClick={onOpenBilling}>
+        Ir a Caja
+      </button>
+    )}
     <p className="access-help">Las funciones de cada área se habilitarán conforme se integren sus módulos. Tu acceso se limita a los permisos de tu cuenta.</p>
-    <p className="access-help">Cierra tu sesión cuando termines, especialmente en equipos compartidos.</p>
+    <p className="access-help">Cierra tu sesión cuando terminen, especialmente en equipos compartidos.</p>
         </section>}
       </main>
     </div>
