@@ -241,7 +241,8 @@ class AppointmentsPostgresTest {
   @Test
   void persisteAusenciaYRetiroConservandoLaLlegada() {
     var fecha = LocalDate.now(ZoneId.of("America/Lima"));
-    var inicio = fecha.atTime(8, 0).atZone(ZoneId.of("America/Lima")).toInstant();
+    // La ausencia debe estar en el pasado también cuando la prueba corre antes de las 08:30.
+    var inicio = fecha.minusDays(1).atTime(8, 0).atZone(ZoneId.of("America/Lima")).toInstant();
     var ausencia =
         Cita.programar(
             UUID.randomUUID(),

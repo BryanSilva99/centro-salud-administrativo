@@ -47,6 +47,14 @@ public final class GestionarDisponibilidad {
     disponibilidad.desactivar(tipo, turnoId, actor);
   }
 
+  /** La ruta debe identificar al recurso propietario del turno, incluso si ya está inactivo. */
+  public void desactivar(UUID actor, TipoRecurso tipo, UUID recursoId, UUID turnoId) {
+    if (disponibilidad.listar(tipo, recursoId).stream()
+        .noneMatch(turno -> turno.id().equals(turnoId)))
+      throw new ErrorDisponibilidad(ErrorDisponibilidad.Codigo.NO_EXISTE);
+    desactivar(actor, tipo, turnoId);
+  }
+
   private void validarRecurso(TipoRecurso tipo, UUID recursoId) {
     boolean existe =
         switch (tipo) {

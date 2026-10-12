@@ -63,7 +63,7 @@ public class DisponibilidadController {
       @Valid @RequestBody Desactivacion datos,
       @AuthenticationPrincipal PrincipalSesion autor) {
     if (datos.activo()) throw new IllegalArgumentException();
-    gestionar.desactivar(autor.id(), tipoRecurso(tipo), turnoId);
+    gestionar.desactivar(autor.id(), tipoRecurso(tipo), recursoId, turnoId);
   }
 
   public record NuevoTurno(

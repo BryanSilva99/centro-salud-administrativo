@@ -37,3 +37,5 @@ Ejecución backend: `RUN_POSTGRES_TESTS=true`, `SPRING_DATASOURCE_HIKARI_MAXIMUM
 - Las claves del frontend se conservan durante la vista, no después de recargar el navegador. Ante pérdida de respuesta y recarga, revisar movimientos antes de crear otra operación. El servidor conserva las claves ya registradas.
 - Continúan los pendientes de administración/citas documentados en el paso 2 (RF-11/RN-08, vista semanal y auditoría). Esta integración no equivale a la aceptación completa de todos los requisitos.
 - El paso 4 corresponde a la validación conjunta y pendientes acordados; el paso 5 a publicar la rama/PR e integrar en main. Esta etapa no modifica las ramas remotas.
+
+El recorrido conjunto fue ampliado en [Validación integrada — paso 4](VALIDACION_INTEGRADA.md); consultar sus resultados y límites de aceptación.

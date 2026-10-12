@@ -329,4 +329,30 @@ class DisponibilidadHttpTest {
     assertEquals(401, crear(profesionalId, "08:00:00", "12:00:00").statusCode());
     assertEquals(0, contar("turnos_profesional"));
   }
+
+  @Test
+  void elTurnoDebePertenecerAlRecursoDeLaRuta() throws Exception {
+    UUID actor = ingresar("ADM");
+    var turno =
+        gestionar.crear(
+            actor,
+            TipoRecurso.PROFESIONAL,
+            profesionalId,
+            LocalDate.now().plusDays(1),
+            LocalTime.of(8, 0),
+            LocalTime.of(9, 0),
+            TipoTurno.DISPONIBLE);
+    var otro =
+        gestionarProfesionales
+            .crear(actor, "OTRO-" + UUID.randomUUID(), "Otro profesional", "Medicina", Set.of())
+            .id();
+    var r =
+        send(
+            "PUT",
+            "/api/disponibilidad/profesionales/" + otro + "/" + turno.id(),
+            "{\"activo\":false}",
+            true);
+    assertEquals(404, r.statusCode(), r.body());
+    assertTrue(disponibilidad.listar(TipoRecurso.PROFESIONAL, profesionalId).getFirst().activo());
+  }
 }
