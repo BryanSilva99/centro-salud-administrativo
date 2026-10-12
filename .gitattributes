@@ -1,0 +1,5 @@
+# Evitar CRLF en scripts que se ejecutan dentro de contenedores Linux.
+*.sh text eol=lf
+backend/mvnw text eol=lf
+**/Dockerfile text eol=lf
+*.conf text eol=lf

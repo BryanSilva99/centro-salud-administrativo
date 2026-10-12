@@ -1,0 +1,61 @@
+name: centro-salud
+services:
+  postgres:
+    image: postgres:18.4-bookworm
+    environment:
+      POSTGRES_DB: centro_salud
+      POSTGRES_USER: centro_admin
+      POSTGRES_PASSWORD: ${DB_ADMIN_PASSWORD:?Configura DB_ADMIN_PASSWORD en .env}
+      DB_PASSWORD: ${DB_PASSWORD:?Configura DB_PASSWORD en .env}
+    volumes:
+      - postgres_data:/var/lib/postgresql
+      - ./infra/docker/init-db.sh:/docker-entrypoint-initdb.d/10-app-user.sh:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U centro_admin -d centro_salud"]
+      interval: 5s
+      timeout: 3s
+      retries: 15
+      start_period: 10s
+
+  backend:
+    build: ./backend
+    environment:
+      DB_URL: jdbc:postgresql://postgres:5432/centro_salud
+      DB_USERNAME: centro_salud
+      DB_PASSWORD: ${DB_PASSWORD:?Configura DB_PASSWORD en .env}
+      SERVER_PORT: "8080"
+      SPRING_SERVLET_ENCODING_CHARSET: UTF-8
+      SPRING_SERVLET_ENCODING_FORCE: "true"
+      SESSION_COOKIE_SECURE: "false"
+    depends_on:
+      postgres:
+        condition: service_healthy
+        restart: true
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "127.0.0.1:${WEB_PORT:-8088}:80"
+    depends_on:
+      backend:
+        condition: service_healthy
+        restart: true
+
+  bootstrap:
+    profiles: ["tools"]
+    build: ./infra/docker
+    environment:
+      DB_HOST: postgres
+      DB_PORT: "5432"
+      DB_NAME: centro_salud
+      DB_USERNAME: centro_salud
+      DB_PASSWORD: ${DB_PASSWORD:?Configura DB_PASSWORD en .env}
+      ADMIN_IDENTIFIER: ${ADMIN_IDENTIFIER:-admin.local}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-}
+    depends_on:
+      backend:
+        condition: service_healthy
+        restart: true
+
+volumes:
+  postgres_data:

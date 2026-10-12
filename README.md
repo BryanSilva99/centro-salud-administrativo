@@ -1,6 +1,6 @@
 # Sistema administrativo para un centro de salud
 
-**Estado: base técnica, consulta de Cuenta y verificación interna de credenciales implementadas. Login, consulta de sesión y logout están implementados; la consulta administrativa de cuentas exige ADM; las demás rutas de negocio siguen cerradas.**
+**Estado: identidad, administración, pacientes, citas y caja integrados y validados. El avance tiene pendientes de aceptación documentados; no se declara cumplimiento completo de P8.**
 
 Sistema interno para gestionar pacientes, recursos, citas, admisión, seguimiento administrativo de atención, caja, reportes y auditoría. Se contemplan dos grupos de usuarios y cuatro roles: recepción/admisión, caja, administrador y profesional de salud.
 
@@ -8,8 +8,8 @@ Sistema interno para gestionar pacientes, recursos, citas, admisión, seguimient
 
 ```text
 backend/       Monolito modular con arquitectura hexagonal
-frontend/      Estructura prevista de la aplicación React
-infra/         Ubicación futura del despliegue y observabilidad
+frontend/      Aplicación React
+infra/         Ejecución local y configuración Docker
 docs/          Contexto, requerimientos, ADD y mapa del código
 ```
 
@@ -17,13 +17,13 @@ La guía para revisar el proyecto es [Organización del código](docs/ORGANIZACI
 
 ## Decisiones de arquitectura
 
-- Interfaz prevista: React.
-- API prevista: Java con Spring Boot, dentro de un único backend modular.
-- Persistencia prevista: PostgreSQL mediante adaptadores.
+- Interfaz: React.
+- API: Java con Spring Boot, dentro de un único backend modular.
+- Persistencia: PostgreSQL mediante adaptadores.
 - Observabilidad prevista: SigNoz; separada de la auditoría del negocio.
 - Reglas y casos de uso independientes de las pantallas y de la base de datos.
 
-Las dependencias y puntos de arranque están preparados. Consulta [Inicio del desarrollo](docs/INICIO_DESARROLLO.md) para instalar, compilar y configurar el entorno. La autenticación HTTP por sesión está implementada; El formulario React ya está conectado al login. Los roles de sesión ya se aplican. La gestión de usuarios/roles y el resto de funcionalidades siguen pendientes. Ver [recorrido de Cuenta](docs/CUENTA_PASO_1.md).
+Para probar el sistema completo con Docker, consulta [la guía de arranque](docs/DOCKER.md). Para ejecutarlo sin contenedores, consulta [Inicio del desarrollo](docs/INICIO_DESARROLLO.md) para instalar, compilar y configurar el entorno. La autenticación HTTP por sesión está implementada; El formulario React ya está conectado al login. Los roles de sesión ya se aplican. La gestión de cuentas/roles, administración, citas y caja está integrada. Ver [recorrido de Cuenta](docs/CUENTA_PASO_1.md).
 
 ## Documentación
 
@@ -46,3 +46,5 @@ Administración de roles implementada: [uso, arquitectura y validación](docs/RO
 Gestión de cuentas: creación, edición y activación/desactivación disponibles para ADM. [Alcance real, explicación y pruebas](docs/GESTION_CUENTAS.md).
 
 RF-02 incluye el vínculo único con una ficha profesional y su auditoría. Ver [flujo y puntos de modificación](docs/GESTION_CUENTAS.md).
+
+Estado del flujo integrado y requisitos pendientes: [validación del paso 4](docs/VALIDACION_INTEGRADA.md).
