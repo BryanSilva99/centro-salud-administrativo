@@ -15,7 +15,9 @@ class PermisosCuentaTest {
         Set.of(Permiso.PACIENTES_GESTIONAR, Permiso.CITAS_CONSULTAR),
         PermisosCuenta.para(Set.of(Rol.REC)));
     assertFalse(PermisosCuenta.para(Set.of(Rol.ADM)).contains(Permiso.PACIENTES_GESTIONAR));
-    assertEquals(Set.of(Permiso.CITAS_CONSULTAR), PermisosCuenta.para(Set.of(Rol.CAJ, Rol.PRO)));
+    assertEquals(
+        Set.of(Permiso.CAJA_CONSULTAR, Permiso.CITAS_CONSULTAR),
+        PermisosCuenta.para(Set.of(Rol.CAJ, Rol.PRO)));
   }
 
   @Test
@@ -54,6 +56,7 @@ class PermisosCuentaTest {
   void variosRolesSumanSusPermisos() {
     assertEquals(
         Set.of(
+            Permiso.CAJA_CONSULTAR,
             Permiso.CITAS_CONSULTAR,
             Permiso.CUENTAS_CONSULTAR,
             Permiso.CUENTAS_GESTIONAR,

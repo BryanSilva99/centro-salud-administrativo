@@ -1,3 +1,4 @@
+import { BillingView } from '../../billing/components/BillingView';
 import { AppointmentsWorkspace } from '../../appointments/components/AppointmentsWorkspace';
 import { RolesPanel } from './RolesPanel';
 import { RegistrarPacienteForm } from '../../administration/components/RegistrarPacienteForm';
@@ -22,6 +23,7 @@ export function SessionView({ cuenta, onExit, onRefresh }: { cuenta: Cuenta; onE
   const expired = useCallback(() => onExit('Tu sesión terminó. Vuelve a ingresar para continuar.'), [onExit]);
   useSessionActivity(cuenta.id, expired, setConnected, onRefresh);
   const accesos = [
+    { id: 'caja', nombre: 'Caja y cobros', permiso: 'CAJA_CONSULTAR' },
     { id: 'citas', nombre: 'Agenda y citas', permiso: 'CITAS_CONSULTAR' },
     { id: 'roles', nombre: 'Usuarios y roles', permiso: 'ROLES_GESTIONAR' },
     { id: 'registro', nombre: 'Registrar paciente', permiso: 'PACIENTES_GESTIONAR' },
@@ -61,6 +63,7 @@ export function SessionView({ cuenta, onExit, onRefresh }: { cuenta: Cuenta; onE
       <main id="main-content" className="workspace-content" tabIndex={-1}>
         {!connected && <p className="error" role="status">No pudimos comprobar la sesión. Revisa tu conexión; volveremos a comprobarla.</p>}
         {error && <p className="error" role="alert">{error}</p>}
+        {vistaActual === 'caja' && <BillingView key={cuenta.roles.join(',')} cuenta={cuenta} onExpired={expired} />}
         {vistaActual === 'citas' && <AppointmentsWorkspace key={cuenta.roles.join(',') + cuenta.permisos.join(',')} cuenta={cuenta} onExit={onExit} />}
         {vistaActual === 'roles' && <RolesPanel gestionarCuentas={cuenta.permisos.includes('CUENTAS_GESTIONAR')} onRefresh={onRefresh} onExpired={expired} />}
         {vistaActual === 'registro' && <RegistrarPacienteForm onExpired={expired} />}

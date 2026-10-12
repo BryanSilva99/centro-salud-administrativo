@@ -1,2 +1,2 @@
-/** Casos de uso. Estructura únicamente: implementación pendiente. */
+/** Casos de uso. */
 package pe.centrosalud.modules.billing.application.usecases;

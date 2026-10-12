@@ -1,2 +1,2 @@
-/** Puertos de aplicación. Estructura únicamente: implementación pendiente. */
+/** Puertos de aplicación. */
 package pe.centrosalud.modules.billing.application.ports;

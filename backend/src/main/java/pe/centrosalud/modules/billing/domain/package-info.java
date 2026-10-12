@@ -1,2 +1,2 @@
-/** Dominio independiente del framework. Estructura únicamente: implementación pendiente. */
+/** Dominio independiente del framework. */
 package pe.centrosalud.modules.billing.domain;

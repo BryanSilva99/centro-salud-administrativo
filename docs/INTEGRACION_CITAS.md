@@ -1,5 +1,7 @@
 # Integración de citas — paso 2
 
+> Estado histórico de este paso. La [integración de caja](INTEGRACION_CAJA.md) reemplaza el aviso económico conservador por la consulta de cargos reales.
+
 11 de octubre de 2026. Rama `integration/citas`, sobre administración integrada (`4b2ccca`), incorporando `feat/appointments-module` (`09249fe`). Main y las ramas remotas no se modifican.
 
 ## Resultado y decisiones

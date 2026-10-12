@@ -9,6 +9,11 @@ import org.springframework.data.repository.query.Param;
 import pe.centrosalud.modules.appointments.domain.EstadoCita;
 
 interface CitaJpaRepository extends JpaRepository<CitaJpaEntity, UUID> {
+  @org.springframework.data.jpa.repository.Lock(jakarta.persistence.LockModeType.PESSIMISTIC_WRITE)
+  @org.springframework.data.jpa.repository.Query("select c from CitaJpaEntity c where c.id = :id")
+  java.util.Optional<CitaJpaEntity> bloquearParaCargo(
+      @org.springframework.data.repository.query.Param("id") UUID id);
+
   interface EstadoConteo {
     EstadoCita getEstado();
 

@@ -1,2 +1,2 @@
-/** Caja y movimientos económicos. Estructura únicamente: implementación pendiente. */
+/** Caja y movimientos económicos. */
 package pe.centrosalud.modules.billing;

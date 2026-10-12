@@ -27,3 +27,5 @@ V5–V6 añaden roles, versión de edición, bloqueo y auditoría de roles. V7 a
 `V14__pacientes_version.sql` añade una versión de edición a `pacientes` (tabla creada en V9) y amplía el tipo permitido en `auditoria_pacientes` para incluir `ACTUALIZACION`. La auditoría sigue sin copiar datos personales.
 
 V15 incorpora citas, reprogramaciones y un trigger de exclusión de solapes mediante bloqueos transaccionales por recurso; no requiere extensiones. V16 añade llegada y atención; V17 incorpora cancelación, ausencia y retiro. Las versiones V5–V7 de la rama original de citas se reubican antes de su primera aplicación en la base integrada; V1–V14 no cambian.
+
+V18 integra caja (cargos, sesiones, pagos, solicitudes, reintentos y compensaciones). La V2 de la rama billing se renumera antes de su primera aplicación integrada; no modifica V1–V17. Ver `docs/INTEGRACION_CAJA.md`.

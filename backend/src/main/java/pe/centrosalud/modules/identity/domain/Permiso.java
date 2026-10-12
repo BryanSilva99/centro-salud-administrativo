@@ -2,6 +2,7 @@ package pe.centrosalud.modules.identity.domain;
 
 /** Catálogo de operaciones ya implementadas. Ampliar al integrar nuevos módulos. */
 public enum Permiso {
+  CAJA_CONSULTAR,
   CITAS_CONSULTAR,
   CUENTAS_CONSULTAR,
   CUENTAS_GESTIONAR,

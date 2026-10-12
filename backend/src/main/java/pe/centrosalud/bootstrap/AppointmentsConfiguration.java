@@ -11,7 +11,6 @@ import pe.centrosalud.modules.appointments.application.ports.ConflictosAtencion;
 import pe.centrosalud.modules.appointments.application.ports.DisponibilidadCitas;
 import pe.centrosalud.modules.appointments.application.ports.ImpactoEconomicoCita;
 import pe.centrosalud.modules.appointments.application.usecases.CancelarCita;
-import pe.centrosalud.modules.appointments.application.usecases.CitaNoEncontrada;
 import pe.centrosalud.modules.appointments.application.usecases.ConsultarAgendaCitas;
 import pe.centrosalud.modules.appointments.application.usecases.ConsultarAtencionCitas;
 import pe.centrosalud.modules.appointments.application.usecases.ConsultarContextoCitas;
@@ -64,9 +63,11 @@ public class AppointmentsConfiguration {
   }
 
   @Bean
-  ImpactoEconomicoCita impactoEconomicoCita(Citas citas) {
-    // Hasta integrar caja, una reserva con importe requiere revisión económica; no se simula saldo.
-    return id -> citas.buscarPorId(id).orElseThrow(CitaNoEncontrada::new).importe().signum() > 0;
+  ImpactoEconomicoCita impactoEconomicoCita(
+      pe.centrosalud.modules.billing.application.ports.CargoRepository cargos) {
+    return id ->
+        cargos.buscarPorCita(id).stream()
+            .anyMatch(pe.centrosalud.modules.billing.domain.Cargo::estaVigente);
   }
 
   @Bean

@@ -311,7 +311,7 @@ class CitasIntegradasHttpTest {
               "{\"motivo\":\"Solicitud\",\"version\":0}",
               true);
       assertEquals(200, cancelada.statusCode(), cancelada.body());
-      assertEquals(true, read(cancelada.body(), "$.gestionEconomicaPendiente"));
+      assertEquals(false, read(cancelada.body(), "$.gestionEconomicaPendiente"));
       assertEquals(201, enviar(r, "POST", "/api/citas", reserva("09:00"), true).statusCode());
     }
   }

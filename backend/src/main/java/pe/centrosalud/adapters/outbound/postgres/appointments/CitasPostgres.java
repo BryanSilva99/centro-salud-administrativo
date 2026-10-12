@@ -32,6 +32,11 @@ public class CitasPostgres implements Citas {
   }
 
   @Override
+  public Optional<Cita> buscarParaCargo(UUID id) {
+    return citas.bloquearParaCargo(id).map(CitaJpaEntity::toDomain);
+  }
+
+  @Override
   public Optional<Cita> buscarPorId(UUID id) {
     return citas.findById(id).map(CitaJpaEntity::toDomain);
   }

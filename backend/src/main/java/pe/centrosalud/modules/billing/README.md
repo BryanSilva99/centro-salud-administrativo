@@ -1,9 +1,7 @@
 # Caja y movimientos económicos
 
-Módulo del monolito Spring Boot. Sin clases ni comportamiento implementados.
+Integrada mediante `CajaIntegrada`: autorización actual, citas/pacientes reales, transacciones y reintentos. El controlador solo traduce solicitudes de la sesión autenticada; los casos de uso conservan el dominio sin Spring.
 
-- `domain/`: entidades, estados y reglas en Java sin dependencias de Spring.
-- `application/usecases/`: coordinación de operaciones del módulo.
-- `application/ports/`: contratos de colaboración y persistencia.
+Los adaptadores de `outbound/modules/billing` consultan contratos de identidad/administración/citas. `RegistroCajaPostgres` coordina la transacción y el bloqueo común de caja; los repositorios persisten exclusivamente tablas de caja. V18 añade el esquema integrado.
 
-Los adaptadores concretos se ubicarán en `pe.centrosalud.adapters`; la composición de Spring en `pe.centrosalud.bootstrap`.
+Ver `docs/INTEGRACION_CAJA.md` para decisiones, comprobaciones y límites. No afirmar cumplimiento completo de RF-19–24/27 sin considerar esos pendientes.

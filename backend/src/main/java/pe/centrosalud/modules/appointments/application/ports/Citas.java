@@ -13,6 +13,11 @@ import pe.centrosalud.modules.appointments.domain.Reprogramacion;
 public interface Citas {
   Optional<Cita> buscarPorId(UUID id);
 
+  /** Lectura estable para crear un cargo dentro de la misma transacción. */
+  default Optional<Cita> buscarParaCargo(UUID id) {
+    return buscarPorId(id);
+  }
+
   List<Cita> agenda(LocalDate fecha, UUID profesionalId, UUID servicioId, UUID consultorioId);
 
   default List<Cita> atencion(LocalDate fecha, UUID profesionalId) {
