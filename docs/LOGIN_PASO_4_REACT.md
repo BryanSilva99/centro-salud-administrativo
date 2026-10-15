@@ -1,6 +1,6 @@
 # Login React conectado al backend
 
-Se implementó el formulario de acceso y una vista mínima de sesión iniciada. No se añadieron pantallas ficticias de pacientes, caja o agenda ni permisos que el backend todavía no implementa.
+Se implementó el formulario de acceso y el workspace autenticado de appointments con agenda diaria, programación, reprogramación, llegada, espera, atención y dashboard operativo con catálogo sintético opt-in.
 
 ## Archivos para revisar en IntelliJ IDEA
 
@@ -8,10 +8,11 @@ Se implementó el formulario de acceso y una vista mínima de sesión iniciada. 
 |---|---|---|
 | `frontend/src/app/App.tsx` | Decide entre comprobar sesión, mostrar formulario, mostrar cuenta autenticada o permitir reintentar conexión. | Compone la aplicación sin mezclar solicitudes HTTP con cada elemento visual. |
 | `frontend/src/features/identity/components/LoginForm.tsx` | Campos, mostrar/ocultar contraseña, envío, errores y estado de espera. | Mantiene juntos los comportamientos del formulario; no decide permisos. |
-| `frontend/src/features/identity/components/SessionView.tsx` | Muestra la cuenta actual y permite cerrar sesión. | Confirma acceso sin simular módulos todavía no disponibles. |
+| `frontend/src/features/identity/components/SessionView.tsx` | Vista mínima de identidad conservada como componente reutilizable. | El flujo autenticado principal usa ahora `AppointmentsWorkspace`. |
 | `frontend/src/features/identity/api/auth.ts` | Llama a login, sesión, logout y actividad; obtiene CSRF antes de cada escritura. | Conserva el contrato del módulo de identidad en un solo lugar. |
 | `frontend/src/shared/api/http.ts` | Cookies del mismo origen, tiempo máximo de espera y errores comprensibles. | Evita repetir manejo de conexión; no muestra trazas o cuerpos arbitrarios del servidor. |
 | `frontend/src/features/identity/hooks/useSessionActivity.ts` | Comprueba vigencia cada minuto con la página visible y al volver a la pestaña. Informa actividad solo tras eventos reales de teclado/puntero, limitada a una vez por minuto. | La consulta automática no renueva los tiempos de actividad definidos por el backend. |
+| `frontend/src/features/appointments/components/AppointmentsWorkspace.tsx` | Agenda diaria, filtros, disponibilidad, programación, reprogramación, llegada, sala de espera, atención, cancelación, ausencia, retiro y dashboard; conserva la sesión y traduce errores de negocio. | No sustituye la autorización del backend ni implementa vista semanal, reaperturas, caja o reportes detallados. |
 | `frontend/src/app/styles.css` | Diseño adaptable, estados de foco, contraste visual y presentación. | Separa apariencia y comportamiento. |
 | `frontend/tests/login.test.tsx` | Prueba comportamiento del usuario, llamadas a la API y análisis Axe de formulario/error. | Verifica resultados observables, no solo que los componentes rendericen. |
 | `infra/local/crear-cuenta.mjs` | Crea expresamente una cuenta local sin permisos de negocio. | Evita insertar usuarios o contraseñas fijas en migraciones y no expone una ruta pública de registro. |
@@ -40,7 +41,7 @@ npm run cuenta
 
 Identificador: `bryan.local`. La contraseña aleatoria se guarda en `.data/cuenta-local.json`, con permisos de lectura/escritura solo para el propietario. Esa carpeta está excluida de Git. No compartir ni subir este archivo.
 
-La herramienta usa el mismo formato PBKDF2 de la aplicación y se comprobó que Spring acepta la credencial creada. Solo admite `centro_salud` en localhost/127.0.0.1:5432. Se puede volver a ejecutar: no duplica cuentas ni restablece una contraseña existente. Si los datos existentes no coinciden, se detiene. No crea roles ni convierte la cuenta en administrador. Es una herramienta de desarrollo y no sustituye la futura gestión de cuentas y su auditoría.
+La herramienta usa el mismo formato PBKDF2 de la aplicación y se comprobó que Spring acepta la credencial creada. Solo admite la base y el usuario indicados en `backend/.env` cuando la conexión es local (`localhost`/`127.0.0.1:5432`); esto permite usar también una base local de pruebas como `centro_salud_test` sin abrir conexiones externas. Se puede volver a ejecutar: no duplica cuentas ni restablece una contraseña existente. Si los datos existentes no coinciden, se detiene. No crea roles ni convierte la cuenta en administrador. Es una herramienta de desarrollo y no sustituye la futura gestión de cuentas y su auditoría.
 
 ## Ejecución local
 
@@ -64,7 +65,7 @@ Abrir `http://127.0.0.1:5173`. Vite envía `/api` a Spring Boot en el puerto 808
 
 ## Verificación
 
-- 10 pruebas de React aprobadas: login/logout con renovación CSRF, errores y limpieza de contraseña, restauración de sesión, conexión y reintento, fallo de logout, invalidación externa, actividad y accesibilidad automatizada.
+- 15 pruebas de React aprobadas: login/logout con renovación CSRF, errores y limpieza de contraseña, restauración de sesión, conexión y reintento, invalidación externa, actividad, agenda, programación, reprogramación, sala de espera, inicio de atención, dashboard y accesibilidad automatizada del acceso y del workspace.
 - TypeScript y compilación de producción aprobados.
 - Con la cuenta local, recorrido real por el proxy de React: login 200, consulta propia 200, logout 204 y consulta posterior 401.
 - Revisión visual de escritorio y vista estrecha; sin desbordamiento horizontal en la vista móvil observada. El error de credenciales fue comprobado desde el navegador.

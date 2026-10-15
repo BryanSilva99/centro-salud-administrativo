@@ -9,3 +9,5 @@ Flyway aplica y registra las migraciones al arrancar. Hibernate usa `ddl-auto=va
 `V3__credenciales_cuenta.sql` añade un hash opcional con formato validado. Las cuentas sin hash no pueden superar la verificación. No añade contraseñas ni datos de demostración.
 
 `V4__control_acceso.sql` añade versión de acceso con revocación por cambio de hash/estado y almacenamiento del límite de intentos. No crea cuentas de demostración.
+
+`V5__citas_y_reprogramaciones.sql` crea las citas, reprogramaciones y exclusiones de solapamiento. `V6__llegadas_y_atencion.sql` añade marcas de llegada y atención. `V7__cierres_cita.sql` añade cierres de cancelación, retiro y ausencia con sus actores, momentos y restricciones de coherencia; no inserta datos demo.

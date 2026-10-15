@@ -1,23 +1,10 @@
-import { ApiError, request } from '../../../shared/api/http';
+import { ApiError, mutate, request } from '../../../shared/api/http';
 
 export interface Cuenta {
   id: string;
   identificador: string;
   activa: boolean;
 }
-interface Csrf { headerName: string; token: string }
-
-// Obtener el token antes de cada escritura evita reutilizarlo tras login/logout.
-// No reintentamos automáticamente un login: cada intento cuenta en el servidor.
-async function mutate<T>(path: string, body?: object, signal?: AbortSignal): Promise<T> {
-  const csrf = await request<Csrf>('/api/auth/csrf', { signal });
-  return request<T>(path, {
-    method: 'POST', signal,
-    headers: { [csrf.headerName]: csrf.token, ...(body ? { 'Content-Type': 'application/json' } : {}) },
-    body: body ? JSON.stringify(body) : undefined,
-  });
-}
-
 export const auth = {
   async me(signal?: AbortSignal): Promise<Cuenta | null> {
     try { return await request<Cuenta>('/api/auth/me', { signal }); }

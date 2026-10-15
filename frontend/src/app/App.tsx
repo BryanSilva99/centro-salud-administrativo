@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { auth, type Cuenta } from '../features/identity/api/auth';
 import { LoginForm } from '../features/identity/components/LoginForm';
-import { SessionView } from '../features/identity/components/SessionView';
+import { AppointmentsWorkspace } from '../features/appointments/components/AppointmentsWorkspace';
 import './styles.css';
 
 type State = { kind: 'loading' } | { kind: 'unavailable' } | { kind: 'anonymous'; notice: string } | { kind: 'authenticated'; cuenta: Cuenta };
@@ -21,7 +21,7 @@ export function App() {
 
   return <div className="app-shell">
     <header className="site-header"><a className="brand" href="/" aria-label="Centro de Salud, inicio"><span className="brand-mark" aria-hidden="true">+</span><span>Centro de Salud<small>Gestión administrativa</small></span></a><span className="header-caption">Portal del personal</span></header>
-    <main id="main-content" className="main-layout">
+    {state.kind === 'authenticated' ? <main id="main-content" className="workspace-layout"><AppointmentsWorkspace cuenta={state.cuenta} onExit={exit} /></main> : <main id="main-content" className="main-layout">
       <aside className="welcome-panel" aria-label="Presentación del sistema">
         <p className="eyebrow">Al servicio de una mejor atención</p>
         <h2>El cuidado comienza<br />con una buena gestión.</h2>
@@ -33,9 +33,8 @@ export function App() {
         {state.kind === 'loading' && <section className="access-card"><h1>Comprobando sesión</h1><p role="status">Un momento, por favor…</p></section>}
         {state.kind === 'unavailable' && <section className="access-card"><h1>No pudimos conectar</h1><p className="intro" role="alert">Comprueba tu conexión e inténtalo nuevamente.</p><button className="primary-button" onClick={() => setRetry(value => value + 1)}>Volver a intentar</button></section>}
         {state.kind === 'anonymous' && <LoginForm notice={state.notice} onLogin={cuenta => setState({ kind: 'authenticated', cuenta })} />}
-        {state.kind === 'authenticated' && <SessionView cuenta={state.cuenta} onExit={exit} />}
       </div>
-    </main>
+    </main>}
     <footer>Centro de Salud <span aria-hidden="true">·</span> Sistema de gestión administrativa</footer>
   </div>;
 }

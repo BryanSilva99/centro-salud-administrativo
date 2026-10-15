@@ -28,6 +28,7 @@ if (!existsSync(envPath)) {
     `DB_PASSWORD=${randomBytes(24).toString('hex')}`,
     'SERVER_PORT=8080',
     'SESSION_COOKIE_SECURE=false',
+    'APPOINTMENTS_MOCK_ENABLED=true',
     '',
   ].join('\n'), { mode: 0o600, flag: 'wx' });
 }

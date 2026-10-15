@@ -1,6 +1,6 @@
 # Organización del código
 
-Estado: estructura técnica y primera consulta de Cuenta implementadas. Ver [recorrido de Cuenta](CUENTA_PASO_1.md).
+Estado: estructura técnica, identidad y dos iteraciones de appointments implementadas. Ver [recorrido de Cuenta](CUENTA_PASO_1.md) y [módulo de citas](../backend/src/main/java/pe/centrosalud/modules/appointments/README.md).
 
 Backend en Java con Spring Boot y frontend en React, según la elección del usuario. El dominio se mantendrá independiente de Spring y JPA.
 
@@ -83,10 +83,10 @@ Reportes y auditoría se separan en carpetas porque tienen responsabilidades dif
 
 ## Ejemplo de recorrido futuro
 
-Una reserva entrará por HTTP, invocará un caso de uso de `appointments`, comprobará reglas del dominio y utilizará los puertos necesarios para persistencia, disponibilidad y auditoría. PostgreSQL implementará las garantías de concurrencia. Este recorrido se describe para ubicar responsabilidades: no está programado.
+Una reserva entra por HTTP, invoca un caso de uso de `appointments`, comprueba reglas del dominio y utiliza puertos para persistencia y disponibilidad. PostgreSQL implementa las garantías de concurrencia mediante rangos y restricciones de solapamiento. El catálogo y la autorización actuales son fixtures locales reemplazables; la integración con los módulos externos y la auditoría global quedan pendientes.
 
 ## Estado y límite actual
 
-Los archivos `package-info.java` solo declaran paquetes Java y documentan su responsabilidad. No contienen clases, métodos ni anotaciones de Spring. Los `.gitkeep` permiten conservar carpetas vacías en Git. Se añadieron el arranque técnico de Spring Boot, una configuración de acceso cerrado y una entrada React vacía. Cuenta ya tiene dominio, caso de uso, puerto, persistencia JPA, controlador de consulta y pruebas. Su endpoint administrativo sigue cerrado por seguridad. Se implementó login HTTP con sesiones, límite de intentos y pruebas; ver [paso 3](LOGIN_PASO_3.md). No hay pantallas ni datos permanentes de demostración. Dependencias y comandos: [Inicio del desarrollo](INICIO_DESARROLLO.md).
+Los archivos `package-info.java` solo declaran paquetes Java y documentan su responsabilidad. Los `.gitkeep` permiten conservar carpetas vacías en Git. Cuenta tiene dominio, caso de uso, puerto, persistencia JPA, controlador de consulta y pruebas. Se implementó login HTTP con sesiones, límite de intentos y pruebas; ver [paso 3](LOGIN_PASO_3.md). `appointments` contiene dominio independiente, puertos, adaptador PostgreSQL, API autenticada, fixtures locales opt-in y el workspace React de agenda, llegada, atención, cierres y dashboard. Las fixtures no representan datos permanentes de pacientes o personal. Vista semanal, reaperturas, caja, auditoría global y RF-26 siguen pendientes. Dependencias y comandos: [Inicio del desarrollo](INICIO_DESARROLLO.md).
 
 Antes de comenzar la implementación, el usuario decidirá qué parte desarrollar. No se presupone autorización por la fecha de entrega.

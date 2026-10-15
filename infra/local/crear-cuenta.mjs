@@ -7,18 +7,31 @@ import { fileURLToPath } from 'node:url';
 import { resolve } from 'node:path';
 
 const root = fileURLToPath(new URL('../../', import.meta.url));
-const env = parseEnv(readFileSync(resolve(root, 'backend/.env'), 'utf8'));
-if (!/^jdbc:postgresql:\/\/(localhost|127\.0\.0\.1):5432\/centro_salud$/.test(env.DB_URL ?? '') || env.DB_USERNAME !== 'centro_salud') {
-  throw new Error('Esta herramienta solo admite la base local centro_salud:5432.');
+const envText = readFileSync(resolve(root, 'backend/.env'), 'utf8');
+const env = parseEnv(envText);
+// Spring admite un '#' dentro de un valor .properties sin comillas, mientras
+// que parseEnv lo trata como comentario. Leer esta clave desde la línea cruda
+// evita truncar la contraseña que usará el backend.
+const passwordMatch = /^DB_PASSWORD=(.*)$/m.exec(envText);
+const rawPassword = passwordMatch?.[1]?.trimEnd();
+const databasePassword = rawPassword && rawPassword.length >= 2 &&
+  ((rawPassword.startsWith('"') && rawPassword.endsWith('"')) ||
+   (rawPassword.startsWith("'") && rawPassword.endsWith("'")))
+  ? rawPassword.slice(1, -1)
+  : rawPassword;
+const dbUrl = /^jdbc:postgresql:\/\/(localhost|127\.0\.0\.1):5432\/([A-Za-z_][A-Za-z0-9_]*)$/.exec(env.DB_URL ?? '');
+if (!dbUrl || !/^[A-Za-z_][A-Za-z0-9_]*$/.test(env.DB_USERNAME ?? '') || !databasePassword) {
+  throw new Error('Esta herramienta solo admite una base PostgreSQL local en localhost/127.0.0.1:5432.');
 }
+const databaseName = dbUrl[2];
 const data = resolve(root, '.data');
 const file = resolve(data, 'cuenta-local.json');
 mkdirSync(data, { recursive: true, mode: 0o700 });
 if (!existsSync(file)) writeFileSync(file, JSON.stringify({ id: randomUUID(), identificador: 'bryan.local', contrasena: randomBytes(18).toString('base64url') }, null, 2) + '\n', { mode: 0o600, flag: 'wx' });
 const account = JSON.parse(readFileSync(file, 'utf8'));
 if (account.identificador !== 'bryan.local' || typeof account.contrasena !== 'string' || account.contrasena.length < 12) throw new Error('Archivo local de credenciales inválido.');
-const postgres = new EmbeddedPostgres({ user: env.DB_USERNAME, password: env.DB_PASSWORD, port: 5432 });
-const client = postgres.getPgClient('centro_salud', '127.0.0.1');
+const postgres = new EmbeddedPostgres({ user: env.DB_USERNAME, password: databasePassword, port: 5432 });
+const client = postgres.getPgClient(databaseName, '127.0.0.1');
 const prefix = '{pbkdf2-sha256-v1}';
 try {
   await client.connect();

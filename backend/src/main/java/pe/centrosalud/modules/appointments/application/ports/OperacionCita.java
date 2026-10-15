@@ -1,0 +1,15 @@
+package pe.centrosalud.modules.appointments.application.ports;
+
+public enum OperacionCita {
+    CONSULTAR,
+    PROGRAMAR,
+    REPROGRAMAR,
+    REGISTRAR_LLEGADA,
+    CONSULTAR_ATENCION,
+    INICIAR_ATENCION,
+    FINALIZAR_ATENCION,
+    CONSULTAR_DASHBOARD,
+    CANCELAR,
+    REGISTRAR_AUSENCIA,
+    REGISTRAR_RETIRO
+}
