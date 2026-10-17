@@ -1,0 +1,135 @@
+GUION DE PRESENTACIÓN - EXPO PARCIAL
+Centro de Salud Administrativo
+Equipo: Bryan, Oscar, Percy, J.J.
+Fecha: Octubre 2026
+========================================
+
+DIAPOSITIVA 16 — ADD · Contexto del sistema
+Tiempo sugerido: 2 minutos
+----------------------------------------
+
+"El Attribute-Driven Design, o ADD, es un método para diseñar arquitectura de software basado en atributos de calidad. Empezamos definiendo el contexto del sistema.
+
+Nuestro sistema es una aplicación web interna para la administración integral de un centro de salud. Tiene 4 contenedores principales:
+
+1. Aplicación web — React, donde el personal interactúa con el sistema
+2. API Spring Boot — Java, maneja toda la lógica de negocio
+3. PostgreSQL — base de datos donde persiste toda la información
+4. SigNoz — plataforma de observabilidad para monitoreo
+
+Es importante mencionar las restricciones: NO incluimos historia clínica, NO hay portal para pacientes, NO hay facturación electrónica y es para UNA sola sede.
+
+Estas restricciones nos ayudaron a enfocar el diseño en lo esencial: la operación administrativa diaria del centro."
+
+
+========================================
+DIAPOSITIVA 17 — ADD · Arquitectura del software
+Tiempo sugerido: 2.5 minutos
+----------------------------------------
+
+"La arquitectura que elegimos es un monolito modular con arquitectura hexagonal.
+
+¿Por qué monolito modular? Porque necesitamos transacciones que abarcan varios módulos. Por ejemplo, cuando se registra un pago, necesitamos actualizar el cargo, la sesión de caja y la auditoría en UNA sola transacción. Si fueran servicios separados, sería mucho más complejo garantizar la consistencia.
+
+La arquitectura hexagonal nos permite que el dominio sea independiente de frameworks. Esto significa que las reglas de negocio de caja —como que un pago no puede exceder el saldo— están en el dominio, no en Spring Boot ni en PostgreSQL.
+
+Las decisiones clave son:
+
+- DA-01: Monolito modular — transacciones que abarcan módulos
+- DA-02: Arquitectura hexagonal — dominio independiente
+- DA-04: Una transacción por operación de negocio — atomicidad
+- DA-05: Movimientos compensatorios — cuando se anula algo, NO se borra, se crea un movimiento que lo compensa
+
+Esta última decisión es crucial para la auditoría: siempre queda el historial completo de lo que pasó."
+
+
+========================================
+DIAPOSITIVA 18 — ADD · Vistas del sistema
+Tiempo sugerido: 2 minutos
+----------------------------------------
+
+"Las vistas del sistema nos muestran diferentes perspectivas.
+
+Vista Lógica — son los módulos funcionales:
+- Identidad y acceso
+- Administración
+- Citas y atención
+- Caja — este es mi módulo
+- Reportes
+
+Cada módulo tiene sus propias entidades, casos de uso y puertos.
+
+Vista de Despliegue — cómo se conectan los componentes:
+- El servidor web se comunica con la API
+- La API se comunica con PostgreSQL
+- La API envía telemetría asíncrona a SigNoz
+
+Un punto importante: sin estado local en memoria. Esto significa que la aplicación puede reiniciarse sin perder datos, y múltiples instancias pueden correr simultáneamente.
+
+La telemetría es asíncrona porque si SigNoz se cae, no deben bloquearse las operaciones del centro de salud."
+
+
+========================================
+DIAPOSITIVA 20 — Conclusiones
+Tiempo sugerido: 2 minutos
+----------------------------------------
+
+"Para concluir, quiero compartir lo que aprendimos al aplicar cada tendencia:
+
+Zero Trust Architecture — nos obligó a verificar cada operación. En caja, esto significa que cada cargo, cada pago y cada anulación está autorizado por rol y permiso. Esto protege los datos sensibles del centro y del paciente.
+
+Mutation Testing — nos aseguró que las pruebas realmente verifican las reglas críticas. En mi módulo de caja, probamos que los pagos no excedan el saldo y que las anulaciones no se aprueben por el mismo solicitante. Si una prueba no detecta un error, es una prueba insuficiente.
+
+OpenAI Codex — aceleró el desarrollo del módulo de caja, pero cada línea de código fue revisada y probada por mí. El asistente no reemplaza el criterio humano.
+
+Axe-core — garantiza que la interfaz sea accesible para todo el personal, independientemente de sus capacidades.
+
+SigNoz — permite diagnosticar problemas sin afectar las operaciones del centro. Si el sistema de monitoreo falla, la atención al paciente no se detiene.
+
+React JS — nos permitió construir una interfaz moderna y mantenible que el personal puede usar con capacitación mínima.
+
+En resumen: las 6 tendencias no son solo teoría. Cada una resolvió un problema real en nuestro proyecto y nos entregó un sistema robusto, seguro y preparado para la operación diaria del centro de salud."
+
+
+========================================
+RESUMEN DE TIEMPOS
+========================================
+
+Diapositiva 16 — Contexto del sistema ........ 2 min
+Diapositiva 17 — Arquitectura del software .. 2.5 min
+Diapositiva 18 — Vistas del sistema .......... 2 min
+Diapositiva 20 — Conclusiones ................ 2 min
+                                        --------
+TOTAL ........................................ 8.5 min
+
+
+========================================
+TIPS ADICIONALES
+========================================
+
+1. Practica la transición entre diapositivas para que sea fluida
+2. Menciona "mi módulo" cuando hables de caja — así queda claro tu aporte
+3. Si te preguntan por qué no microservicios: "Porque necesitamos transacciones atómicas entre módulos"
+4. Si te preguntan por qué no borrado físico: "Por auditoría — siempre necesita quedar el historial"
+
+
+========================================
+POSIBLES PREGUNTAS Y RESPUESTAS (Q&A)
+========================================
+
+P: ¿Por qué no usaron microservicios?
+R: Porque necesitamos transacciones atómicas entre módulos. Cuando se registra un pago, necesitamos actualizar el cargo, la sesión de caja y la auditoría en una sola transacción. Con microservicios, sería mucho más complejo garantizar la consistencia.
+
+P: ¿Qué pasa si SigNoz se cae?
+R: Las operaciones del centro de salud no se ven afectadas. La telemetría es asíncrona, así que si la plataforma de observabilidad falla, los datos se pierden momentáneamente pero la operación continúa.
+
+P: ¿Cómo garantizan que no haya pagos duplicados?
+R: Usamos una combinación de restricciones en la base de datos y validaciones en el dominio. Además, implementamos idempotencia en las operaciones críticas.
+
+P: ¿Es seguro el sistema?
+R: Implementamos Zero Trust Architecture: cada operación está autorizada por rol y permiso, usamos cookies seguras, CSRF tokens y límite de intentos de login.
+
+P: ¿Pueden agregar más módulos en el futuro?
+R: Sí, la arquitectura hexagonal permite agregar nuevos módulos sin afectar los existentes. Cada módulo tiene sus propios puertos y adaptadores.
+
+========================================
