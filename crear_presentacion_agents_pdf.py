@@ -129,6 +129,19 @@ def draw_slide(sl):
         bold = line.startswith('**')
         text = line[2:-2] if bold else line
         c.setFont('Helvetica-Bold' if bold else 'Helvetica', 14 if bold else 12)
+        if line.startswith('- "') or (line.startswith('- ') and '"' in line):
+            # Recorte / cita en estilo bloque de codigo
+            text = line[2:]
+            c.setFont('Courier-Bold', 12)
+            c.setFillColorRGB(0.12, 0.12, 0.14)
+            c.setStrokeColorRGB(0.3, 0.3, 0.35)
+            c.rect(0.7 * inch, y - 12, 8.5 * inch - 0.7, 14, stroke=1, fill=0)
+            c.setFillColor(0.95, 0.95, 0.95)
+            c.setFont('Courier-Bold', 11)
+            c.drawString(0.7 * inch, y, text)
+            y -= 22
+            continue
+        c.setFillColorRGB(0.08, 0.08, 0.08)
         c.drawString(0.7 * inch, y, text)
         y -= 16
         if y < 1.0 * inch:

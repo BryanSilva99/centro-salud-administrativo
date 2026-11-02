@@ -77,6 +77,12 @@ def add_slide(title, content, bg_color=FONDO_AZUL, title_color=AZUL_OSCURO, acce
             p.text = line[2:-2]
             p.font.bold = True
             p.font.color.rgb = title_color
+        elif line.startswith('- "') or (line.startswith('- ') and '"' in line):
+            # Recorte / cita en estilo bloque de codigo
+            p.text = '  ' + line[2:]
+            p.font.size = Pt(16)
+            p.font.name = 'Consolas'
+            p.font.color.rgb = RGBColor(30, 30, 30)
         elif line.startswith('- '):
             p.text = '  ► ' + line[2:]
             p.font.color.rgb = NEGRO
