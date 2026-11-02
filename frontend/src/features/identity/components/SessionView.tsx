@@ -69,23 +69,18 @@ export function SessionView({ cuenta, onExit, onRefresh, onOpenBilling }: { cuen
       {(cuenta.permisos ?? []).includes('CUENTAS_CONSULTAR') && <p className="permission-note">Tu cuenta tiene permiso para consultar cuentas de acceso.</p>}
     </div>
     <div className="billing-actions">
-      {cuenta.permisos.includes('PACIENTES_GESTIONAR') && <><button type="button" onClick={() => setShowPacientes(v => !v)} aria-expanded={showPacientes}>{showPacientes ? 'Ocultar registro de pacientes' : 'Registrar paciente'}</button>{showPacientes && <RegistrarPacienteForm onExpired={expired} /></>}
-      {cuenta.permisos.includes('PACIENTES_GESTIONAR') && <><button type="button" onClick={() => setShowBuscarPacientes(v => !v)} aria-expanded={showBuscarPacientes}>{showBuscarPacientes ? 'Ocultar búsqueda de pacientes' : 'Buscar pacientes'}</button>{showBuscarPacientes && <BuscarPacientesPanel onExpired={expired} /></>}
-      {cuenta.permisos.includes('SERVICIOS_GESTIONAR') && <><button type="button" onClick={() => setShowServicios(v => !v)} aria-expanded={showServicios}>{showServicios ? 'Ocultar servicios' : 'Gestionar servicios'}</button>{showServicios && <ServiciosPanel onExpired={expired} /></>}
-      {cuenta.permisos.includes('CONSULTORIOS_GESTIONAR') && <><button type="button" onClick={() => setShowConsultorios(v => !v)} aria-expanded={showConsultorios}>{showConsultorios ? 'Ocultar consultorios' : 'Gestionar consultorios'}</button>{showConsultorios && <ConsultoriosPanel onExpired={expired} /></>}
-      {cuenta.permisos.includes('PROFESIONALES_GESTIONAR') && <><button type="button" onClick={() => setShowProfesionales(v => !v)} aria-expanded={showProfesionales}>{showProfesionales ? 'Ocultar profesionales' : 'Gestionar profesionales'}</button>{showProfesionales && <ProfesionalesPanel onExpired={expired} /></>}
-      {cuenta.permisos.includes('DISPONIBILIDAD_GESTIONAR') && <><button type="button" onClick={() => setShowDisponibilidad(v => !v)} aria-expanded={showDisponibilidad}>{showDisponibilidad ? 'Ocultar disponibilidad' : 'Gestionar disponibilidad'}</button>{showDisponibilidad && <DisponibilidadPanel onExpired={expired} /></>}
+      {cuenta.permisos.includes('PACIENTES_GESTIONAR') && <div><button type="button" onClick={() => setShowPacientes(v => !v)} aria-expanded={showPacientes}>{showPacientes ? 'Ocultar registro de pacientes' : 'Registrar paciente'}</button>{showPacientes && <RegistrarPacienteForm onExpired={expired} />}</div>}
+      {cuenta.permisos.includes('PACIENTES_GESTIONAR') && <div><button type="button" onClick={() => setShowBuscarPacientes(v => !v)} aria-expanded={showBuscarPacientes}>{showBuscarPacientes ? 'Ocultar búsqueda de pacientes' : 'Buscar pacientes'}</button>{showBuscarPacientes && <BuscarPacientesPanel onExpired={expired} />}</div>}
+      {cuenta.permisos.includes('SERVICIOS_GESTIONAR') && <div><button type="button" onClick={() => setShowServicios(v => !v)} aria-expanded={showServicios}>{showServicios ? 'Ocultar servicios' : 'Gestionar servicios'}</button>{showServicios && <ServiciosPanel onExpired={expired} />}</div>}
+      {cuenta.permisos.includes('CONSULTORIOS_GESTIONAR') && <div><button type="button" onClick={() => setShowConsultorios(v => !v)} aria-expanded={showConsultorios}>{showConsultorios ? 'Ocultar consultorios' : 'Gestionar consultorios'}</button>{showConsultorios && <ConsultoriosPanel onExpired={expired} />}</div>}
+      {cuenta.permisos.includes('PROFESIONALES_GESTIONAR') && <div><button type="button" onClick={() => setShowProfesionales(v => !v)} aria-expanded={showProfesionales}>{showProfesionales ? 'Ocultar profesionales' : 'Gestionar profesionales'}</button>{showProfesionales && <ProfesionalesPanel onExpired={expired} />}</div>}
+      {cuenta.permisos.includes('DISPONIBILIDAD_GESTIONAR') && <div><button type="button" onClick={() => setShowDisponibilidad(v => !v)} aria-expanded={showDisponibilidad}>{showDisponibilidad ? 'Ocultar disponibilidad' : 'Gestionar disponibilidad'}</button>{showDisponibilidad && <DisponibilidadPanel onExpired={expired} />}</div>}
       {onOpenBilling && (
         <button type="button" className="primary-button billing-button" data-no-activity onClick={onOpenBilling}>
           Ir a Caja
         </button>
       )}
     </div>
-    {onOpenBilling && (
-      <button type="button" className="primary-button billing-button" data-no-activity onClick={onOpenBilling}>
-        Ir a Caja
-      </button>
-    )}
     <p className="access-help">Las funciones de cada área se habilitarán conforme se integren sus módulos. Tu acceso se limita a los permisos de tu cuenta.</p>
     <p className="access-help">Cierra tu sesión cuando terminen, especialmente en equipos compartidos.</p>
         </section>}

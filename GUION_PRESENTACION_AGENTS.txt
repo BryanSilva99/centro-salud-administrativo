@@ -1,0 +1,147 @@
+GUION DE PRESENTACIÓN - AGENTS.md
+Centro de Salud Administrativo
+Expo Parcial - Octubre 2026
+Equipo: Bryan, Oscar, Percy, J.J.
+========================================
+
+Este guion corresponde a la sección de la presentación dedicada al
+AGENTS.md (archivo de instrucciones del asistente de IA).
+
+DIAPOSITIVA 1 — Portada del AGENTS.md
+Tiempo sugerido: 0:30
+----------------------------------------
+
+"Esta es la 'carta de navegación' que le entregamos a cualquier asistente
+de IA que trabaje en este proyecto. El AGENTS.md es un archivo de instrucciones
+que define cómo debe comportarse el asistente de IA para construir nuestro
+sistema de salud administrativo."
+
+DIAPOSITIVA 2 — ¿Qué es el AGENTS.md?
+Tiempo sugerido: 1:30
+----------------------------------------
+
+"El AGENTS.md reúne las reglas de desarrollo del proyecto. Su objetivo es
+construir un sistema mantenible, coherente, legible y técnicamente sólido,
+evitando la sobreingeniería y la complejidad innecesaria.
+
+Una idea clave: el código existente es una referencia de convenciones, no
+una garantía de que cada decisión anterior sea correcta. El asistente debe
+respetar el proyecto, pero saber que puede proponer correcciones cuando
+encuentre problemas evidentes."
+
+DIAPOSITIVA 3 — Prioridad de decisiones
+Tiempo sugerido: 1:30
+----------------------------------------
+
+"Antes de cualquier implementación, el asistente debe aplicar esta prioridad:
+
+corrección > claridad > simplicidad > mantenibilidad > optimización prematura.
+
+Es decir: primero que todo, que lo que construyamos funcione bien. Luego que
+sea claro. Después que sea simple. Y solo después optimizar."
+
+DIAPOSITIVA 4 — Control de alcance
+Tiempo sugerido: 1:30
+----------------------------------------
+
+"El control de alcance es una de las reglas más importantes para nosotros:
+
+- Implementar únicamente lo solicitado explícitamente en la tarea actual.
+- No asumir que una funcionalidad pendiente, una fecha de entrega o una
+  descripción arquitectónica autorizan su implementación.
+
+Evitamos así el sobre-ingeniería: no agregamos funcionalidades que no nos
+pidieron, ni refactorizamos lo que no hace falta."
+
+DIAPOSITIVA 5 — Reglas de arquitectura
+Tiempo sugerido: 2:00
+----------------------------------------
+
+"En cuanto a la arquitectura, el AGENTS.md fija cómo debe actuar el asistente:
+
+- En el dominio van las entidades, objetos de valor, invariantes y reglas de negocio.
+- Los controladores no deben contener reglas de negocio.
+- Los repositorios no deben decidir políticas de negocio.
+- No exponer entidades JPA directamente como respuestas HTTP.
+
+Esto nos permite mantener la lógica de negocio al nivel correcto y sin
+acoplamientos innecesarios."
+
+DIAPOSITIVA 6 — Calidad, pruebas y flujo
+Tiempo sugerido: 1:30
+----------------------------------------
+
+"Las pruebas deben verificar comportamientos y reglas relevantes, no simplemente
+aumentar su cantidad.
+
+Y tras modificar código Java, el flujo exige ejecutar desde el backend:
+./mvnw spotless:check
+
+Antes de finalizar cada tarea, el asistente debe revisar si existe una
+solución más simple, si las responsabilidades están correctamente
+distribuidas y si las pruebas relevantes pasan."
+
+DIAPOSITIVA 7 — Principio fundamental
+Tiempo sugerido: 1:00
+----------------------------------------
+
+"Y el principio que resume toda la filosofía del proyecto:
+
+'El mejor código no es el que utiliza más patrones, capas o abstracciones,
+sino el que resuelve correctamente el problema y puede ser comprendido,
+probado y modificado con el menor esfuerzo razonable.'
+
+Si dos soluciones son igualmente correctas, preferimos la de menor complejidad
+y mayor claridad."
+
+========================================
+RESUMEN DE TIEMPOS (SECCION AGENTS.MD)
+========================================
+
+Diapositiva 1 — Portada ................ 0:30
+Diapositiva 2 — ¿Qué es? ............. 1:30
+Diapositiva 3 — Prioridad ............ 1:30
+Diapositiva 4 — Control de alcance ... 1:30
+Diapositiva 5 — Arquitectura ........ 2:00
+Diapositiva 6 — Calidad/Pruebas ..... 1:30
+Diapositiva 7 — Principio ............ 1:00
+                                         --------
+TOTAL ................................. 10:30
+
+========================================
+TRANSICIONES SUGERIDAS
+========================================
+
+1. Portada -> ¿Qué es?: "Ahora que sabemos que existe el archivo, veamos de que
+   trata."
+
+2. -> Prioridad: "Una vez definida la meta, la prioridad de decisiones."
+
+3. -> Control de alcance: "Con eso en mente, cuidado el alcance de cada tarea."
+
+4. -> Arquitectura: "Y para mantener el orden, las reglas de arquitectura."
+
+5. -> Calidad/Pruebas: "Todo esto debe respaldarse con calidad y pruebas."
+
+6. -> Principio: "Y al final, la idea que resume todo."
+
+========================================
+POSIBLE PREGUNTA DEL PROFESOR (PARA PREPARARTE)
+========================================
+
+P: ¿Por que un archivo llamado AGENTS.md y no CONTRIBUTING.md o CLAUDE.md?
+R: AGENTS.md es el nombre estandar que OpenAI uso para sus asistentes de IA
+   (Codex), y ademas es el formato reconocido por otros agentes. Es el archivo
+   de instrucciones mas comun en el ecosistema de agentes de IA.
+
+P: ¿Esto reemplaza las instrucciones del equipo?
+R: No. Es una base de reglas para el asistente de IA; el equipo puede ampliarlo
+   con convenciones propias del centro de salud.
+
+P: ¿Como se actualiza este archivo?
+R: Se edita directamente en el repositorio; cualquier cambio en las reglas se
+   versiona con el codigo.
+
+========================================
+FIN DEL GUION - SECCION AGENTS.MD
+========================================
